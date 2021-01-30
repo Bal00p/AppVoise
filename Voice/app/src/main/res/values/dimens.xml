@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding_on_layout">20dp</dimen>
+    <dimen name="corners_on_layout">50dp</dimen>
+    <dimen name="width_stroke_on_layout">2dp</dimen>
+    <dimen name="test_textSize">30px</dimen>
+</resources>
