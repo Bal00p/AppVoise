@@ -180,16 +180,16 @@
                 android:layout_weight="1" />
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/lv_keywords"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
         <Button
             android:id="@+id/btn_add_keyword_settings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/add" />
+
+        <ListView
+            android:id="@+id/lv_keywords"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

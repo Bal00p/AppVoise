@@ -1,7 +1,6 @@
 package com.ilya.voice;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
@@ -19,7 +18,10 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -31,20 +33,27 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class MainActivity extends Activity implements RecognitionListener {
+public class MainActivity extends AppCompatActivity implements RecognitionListener, PhrasesFragment.onSomeEventListener{
+    //переменные
 
     EditText editText_text_to_speech;
-    Button button_text_to_speech, button_to_settings, button_select_language, button_pause;
-    Button button_fast_word_1, button_fast_word_2, button_fast_word_3, button_fast_word_4, button_fast_word_5;
+    Button button_text_to_speech, button_select_language, button_pause, button_to_settings;
+//    Button button_fast_word_1, button_fast_word_2, button_fast_word_3, button_fast_word_4, button_fast_word_5;
     public String[] fast_words = new String[10];
     public String[] keywords = new String[10];
     SQLWords sqlWords;
     LinearLayout container_journal;
+    ConstraintLayout main_container;
     ScrollView scrollView;
     View tableRow;
     TextView textView_my_message, textView_outside_message, textView_time_separator,
@@ -88,6 +97,12 @@ public class MainActivity extends Activity implements RecognitionListener {
     public static boolean PAUSE = false;
     public static int countRmsChanged = 0;
 
+    GestureDetector gestureDetector;
+    public static final int SWIPE_MIN_DISTANCE = 120;
+    public static final int SWIPE_THRESHOLD_VELOCITY = 200;
+    PhrasesFragment phrasesFragment;
+    public static boolean OPEN_FRAGMENT = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +114,7 @@ public class MainActivity extends Activity implements RecognitionListener {
                 requestPermissions(new String[]{requiredPermission}, 101);
             }
         }
+        gestureDetector = new GestureDetector(new GestureListener());
 
         speech = SpeechRecognizer.createSpeechRecognizer(getApplicationContext(),
                 ComponentName.unflattenFromString("com.google.android.googlequicksearchbox/com.google.android.voicesearch.serviceapi.GoogleRecognitionService"));
@@ -118,25 +134,34 @@ public class MainActivity extends Activity implements RecognitionListener {
         sqlWords = new SQLWords(this, SQLWords.NAME_TABLE, null,
                 SQLWords.VERSION_TABLE);
         button_text_to_speech = (Button) findViewById(R.id.btn_text_to_speech);
-        button_to_settings = (Button) findViewById(R.id.btn_to_settings);
         button_select_language = (Button)findViewById(R.id.btn_select_language);
         button_pause = (Button)findViewById(R.id.btn_pause);
-        button_fast_word_1 = (Button) findViewById(R.id.btn_fast_word1);
-        button_fast_word_2 = (Button) findViewById(R.id.btn_fast_word2);
-        button_fast_word_3 = (Button) findViewById(R.id.btn_fast_word3);
-        button_fast_word_4 = (Button) findViewById(R.id.btn_fast_word4);
-        button_fast_word_5 = (Button) findViewById(R.id.btn_fast_word5);
+        button_to_settings = (Button) findViewById(R.id.btn_to_settings);
+//        button_fast_word_1 = (Button) findViewById(R.id.btn_fast_word1);
+//        button_fast_word_2 = (Button) findViewById(R.id.btn_fast_word2);
+//        button_fast_word_3 = (Button) findViewById(R.id.btn_fast_word3);
+//        button_fast_word_4 = (Button) findViewById(R.id.btn_fast_word4);
+//        button_fast_word_5 = (Button) findViewById(R.id.btn_fast_word5);
         editText_text_to_speech = (EditText) findViewById(R.id.et_text_to_speech);
         textView_partial_result = (TextView)findViewById(R.id.tv_my_partial_result);
         textView_partial_result.setLayoutParams(new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,0));
         container_journal = (LinearLayout) findViewById(R.id.container_journal);
+        main_container = (ConstraintLayout) findViewById(R.id.main_container);
         scrollView = (ScrollView) findViewById(R.id.sv_journal);
         scrollView.getViewTreeObserver().addOnGlobalLayoutListener(keyboardLayoutListener);
         //устанавливаю текущую дату и время сеанса
         setDateAndTime();
         removeOldJournal();
-        fillFastWords();
+//        fillFastWords();
+
+        main_container.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                gestureDetector.onTouchEvent(event);
+                return true;
+            }
+        });
 
         textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
@@ -163,39 +188,28 @@ public class MainActivity extends Activity implements RecognitionListener {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.btn_text_to_speech:
-                        speech.stopListening();
-                        try {
-                            String text = editText_text_to_speech.getText().toString();
-                            if (!text.equals("")) {
-                                String utteranceId = this.hashCode() + "";
-                                textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
-                                editText_text_to_speech.setText("");
-//                                voicingEmoticons(text);
-                                addMyMessage(text);
-                                wordsRating(text);
-                            }
-                        } catch (Exception e) {
-                        }
+                        String text = editText_text_to_speech.getText().toString();
+                        speakText(text);
                         break;
                     case R.id.btn_to_settings:
                         Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                         startActivity(intent);
                         break;
-                    case R.id.btn_fast_word1:
-                        fastWord(fast_words[fast_words.length - 1]);
-                        break;
-                    case R.id.btn_fast_word2:
-                        fastWord(fast_words[fast_words.length - 2]);
-                        break;
-                    case R.id.btn_fast_word3:
-                        fastWord(fast_words[fast_words.length - 3]);
-                        break;
-                    case R.id.btn_fast_word4:
-                        fastWord(fast_words[fast_words.length - 4]);
-                        break;
-                    case R.id.btn_fast_word5:
-                        fastWord(fast_words[fast_words.length - 5]);
-                        break;
+//                    case R.id.btn_fast_word1:
+//                        fastWord(fast_words[fast_words.length - 1]);
+//                        break;
+//                    case R.id.btn_fast_word2:
+//                        fastWord(fast_words[fast_words.length - 2]);
+//                        break;
+//                    case R.id.btn_fast_word3:
+//                        fastWord(fast_words[fast_words.length - 3]);
+//                        break;
+//                    case R.id.btn_fast_word4:
+//                        fastWord(fast_words[fast_words.length - 4]);
+//                        break;
+//                    case R.id.btn_fast_word5:
+//                        fastWord(fast_words[fast_words.length - 5]);
+//                        break;
                     case R.id.btn_select_language:
                         if (HOME_LANGUAGE) {
                             HOME_LANGUAGE = false;
@@ -219,13 +233,13 @@ public class MainActivity extends Activity implements RecognitionListener {
         };
         button_text_to_speech.setOnClickListener(listener);
         button_select_language.setOnClickListener(listener);
-        button_to_settings.setOnClickListener(listener);
         button_pause.setOnClickListener(listener);
-        button_fast_word_1.setOnClickListener(listener);
-        button_fast_word_2.setOnClickListener(listener);
-        button_fast_word_3.setOnClickListener(listener);
-        button_fast_word_4.setOnClickListener(listener);
-        button_fast_word_5.setOnClickListener(listener);
+        button_to_settings.setOnClickListener(listener);
+//        button_fast_word_1.setOnClickListener(listener);
+//        button_fast_word_2.setOnClickListener(listener);
+//        button_fast_word_3.setOnClickListener(listener);
+//        button_fast_word_4.setOnClickListener(listener);
+//        button_fast_word_5.setOnClickListener(listener);
 
         button_select_language.setOnLongClickListener(new View.OnLongClickListener(){
             @Override
@@ -254,12 +268,17 @@ public class MainActivity extends Activity implements RecognitionListener {
 
         selectLanguage();
         speech.startListening(recognizerIntent);
+
+        if(OPEN_FRAGMENT){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.main_container, phrasesFragment).commit();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        saveFastWords();
+//        saveFastWords();
         if (speech != null) {
             speech.stopListening();
             Log.i(LOG_TAG, "destroy");
@@ -308,6 +327,21 @@ public class MainActivity extends Activity implements RecognitionListener {
                 break;
         }
         DEAD_DATE = dateFormat.format(c.getTime());
+    }
+
+    public void speakText(String text){
+        speech.stopListening();
+        try {
+            if (!text.equals("")) {
+                String utteranceId = this.hashCode() + "";
+                textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
+                editText_text_to_speech.setText("");
+//                                voicingEmoticons(text);
+                addMyMessage(text);
+//                wordsRating(text);
+            }
+        } catch (Exception e) {
+        }
     }
 
     public void fillJournal() {
@@ -359,8 +393,8 @@ public class MainActivity extends Activity implements RecognitionListener {
         if (KEYWORDS) {
             db = sqlWords.getReadableDatabase();
             cursor = db.query(sqlWords.NAME_TABLE, columns_words,
-                    SQLWords.COLUMN_WHAT_IS_IT + " = ?", new String[]{"1"},
-                    SQLWords.COLUMN_RATING, null, null);
+                    SQLWords.COLUMN_WHAT_IS_IT + " = ?", new String[]{"1"},null,
+                    null, null);
             int index_id = cursor.getColumnIndex(columns_words[0]);
             int index_what_it_is = cursor.getColumnIndex(columns_words[1]);
             int index_word = cursor.getColumnIndex(columns_words[2]);
@@ -369,7 +403,7 @@ public class MainActivity extends Activity implements RecognitionListener {
                 if (cursor.moveToNext()) {
                     keywords[i] = cursor.getString(index_word);
                     //без учета регистра первой буквы
-                    keywords[i] = keywords[i].substring(1, keywords[i].length());
+                    keywords[i] = keywords[i].substring(1);
                 } else {
                     keywords[i] = "";
                 }
@@ -438,36 +472,6 @@ public class MainActivity extends Activity implements RecognitionListener {
         textView_time_separator.setTextSize(TEXT_SIZE);
         container_journal.addView(tableRow);
     }
-
-    //вызываю запись текста
-    public void startSpeak() {
-        try{
-            if(SpeechRecognizer.isRecognitionAvailable(this)) {
-                Toast.makeText(getApplicationContext(), "YES", Toast.LENGTH_SHORT).show();
-            }else{
-                Toast.makeText(getApplicationContext(), "NO", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.prompt));
-                startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
-            }
-        }catch (Exception e){}
-    }
-
-    //вызываю запись голоса
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
-            ArrayList commandList = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            Toast.makeText(getApplicationContext(), commandList.get(0).toString(), Toast.LENGTH_SHORT).show();
-            addOutsideMessage(commandList.get(0).toString());
-            findKeyword(commandList.get(0).toString());
-            checkPause();
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
     //пролистываю в самый конец
     private void scrollViewDown() {
         if(!PAUSE){
@@ -479,7 +483,6 @@ public class MainActivity extends Activity implements RecognitionListener {
             });
         }
     }
-
     //заполняю переменные настройками и применяю их
     public void loadSettings() {
         try {
@@ -523,15 +526,15 @@ public class MainActivity extends Activity implements RecognitionListener {
             SECOND_LANGUAGE = sharedPreferences.getString(SettingsActivity.SETTINGS_LANGUAGE,"NO");
 
             button_text_to_speech.setTextSize(TEXT_SIZE);
-            button_to_settings.setTextSize(TEXT_SIZE);
             editText_text_to_speech.setTextSize(TEXT_SIZE);
             textToSpeech.setPitch(PITCH);
             textToSpeech.setSpeechRate(SPEECH_RATE);
-            button_fast_word_1.setTextSize(TEXT_SIZE);
-            button_fast_word_2.setTextSize(TEXT_SIZE);
-            button_fast_word_3.setTextSize(TEXT_SIZE);
-            button_fast_word_4.setTextSize(TEXT_SIZE);
-            button_fast_word_5.setTextSize(TEXT_SIZE);
+            button_to_settings.setTextSize(TEXT_SIZE);
+//            button_fast_word_1.setTextSize(TEXT_SIZE);
+//            button_fast_word_2.setTextSize(TEXT_SIZE);
+//            button_fast_word_3.setTextSize(TEXT_SIZE);
+//            button_fast_word_4.setTextSize(TEXT_SIZE);
+//            button_fast_word_5.setTextSize(TEXT_SIZE);
             button_select_language.setTextSize(TEXT_SIZE);
             button_pause.setTextSize(TEXT_SIZE);
             textView_partial_result.setTextSize(TEXT_SIZE);
@@ -574,11 +577,10 @@ public class MainActivity extends Activity implements RecognitionListener {
             }
             cursor.close();
             db.close();
-            setFastWord();
+//            setFastWord();
         } catch (Exception e) {
         }
     }
-
     public void saveFastWords() {
         db = sqlWords.getWritableDatabase();
         db.delete(SQLWords.NAME_TABLE, SQLWords.COLUMN_WHAT_IS_IT + " = ?",
@@ -592,7 +594,6 @@ public class MainActivity extends Activity implements RecognitionListener {
         }
         db.close();
     }
-
     public void fastWord(String word) {
         word = word.replace("\n", " ");
         if (!word.equals("")) {
@@ -611,9 +612,8 @@ public class MainActivity extends Activity implements RecognitionListener {
                 }
             }
         }
-        setFastWord();
+//        setFastWord();
     }
-
     public void wordsRating(String word) {
         word = word.replace("\n", " ");
         String temp_word = word.substring(1);
@@ -640,36 +640,15 @@ public class MainActivity extends Activity implements RecognitionListener {
                 }
             }
         }
-        setFastWord();
+//        setFastWord();
     }
-
     public void setFastWord() {
-        button_fast_word_1.setText(fast_words[fast_words.length - 1]);
-        button_fast_word_2.setText(fast_words[fast_words.length - 2]);
-        button_fast_word_3.setText(fast_words[fast_words.length - 3]);
-        button_fast_word_4.setText(fast_words[fast_words.length - 4]);
-        button_fast_word_5.setText(fast_words[fast_words.length - 5]);
+//        button_fast_word_1.setText(fast_words[fast_words.length - 1]);
+//        button_fast_word_2.setText(fast_words[fast_words.length - 2]);
+//        button_fast_word_3.setText(fast_words[fast_words.length - 3]);
+//        button_fast_word_4.setText(fast_words[fast_words.length - 4]);
+//        button_fast_word_5.setText(fast_words[fast_words.length - 5]);
     }
-
-    public void findKeyword(String message) {
-        String[] message_words = message.split(" ");
-        for (int i = 0; i < message_words.length; i++) {
-            //без учета регистра первой буквы
-            message_words[i] = message_words[i].substring(1, message_words[i].length());
-            for (int j = 0; j < keywords.length; j++) {
-                if (message_words[i].equals(keywords[j])) {
-                    //вибрация
-                    Vibrator vibratorManager = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                    if (vibratorManager != null) {
-                        VibrationEffect effect = VibrationEffect.createOneShot(
-                                500, VibrationEffect.DEFAULT_AMPLITUDE);
-                        vibratorManager.vibrate(effect);
-                    }
-                }
-            }
-        }
-    }
-
     public void voicingEmoticons(String text) {
         if (VOICING_EMOTICONS) {
             switch (text) {
@@ -679,6 +658,27 @@ public class MainActivity extends Activity implements RecognitionListener {
             }
             String utteranceId = this.hashCode() + "";
             textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
+        }
+    }
+
+    public void findKeyword(String message) {
+        String[] message_words = message.split(" ");
+        for (int i = 0; i < message_words.length; i++) {
+            //без учета регистра первой буквы
+            message_words[i] = message_words[i].substring(1);
+            for (int j = 0; j < keywords.length; j++) {
+                if(!keywords[j].equals("")){
+                    if (message_words[i].equals(keywords[j])) {
+                        //вибрация
+                        Vibrator vibratorManager = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                        if (vibratorManager != null) {
+                            VibrationEffect effect = VibrationEffect.createOneShot(
+                                    200, VibrationEffect.DEFAULT_AMPLITUDE);
+                            vibratorManager.vibrate(effect);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -774,13 +774,13 @@ public class MainActivity extends Activity implements RecognitionListener {
 
     @Override
     public void onResults(Bundle results) {
+        checkPause();
         Log.i(LOG_TAG, "onResults");
         textView_partial_result.setLayoutParams(new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,0));
         ArrayList commandList = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         addOutsideMessage(commandList.get(0).toString());
         findKeyword(commandList.get(0).toString());
-        checkPause();
         speech.startListening(recognizerIntent);
     }
 
@@ -838,6 +838,53 @@ public class MainActivity extends Activity implements RecognitionListener {
                 break;
         }
         return message;
+    }
+
+    public class GestureListener extends SimpleOnGestureListener {
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE &&
+                    Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+
+                return false; // справа налево
+            }  else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE &&
+                    Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                if (!OPEN_FRAGMENT) {
+                    FragmentManager fm = getSupportFragmentManager();
+                    FragmentTransaction ft = fm.beginTransaction();
+                    phrasesFragment = new PhrasesFragment();
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                    ft.add(R.id.main_container, phrasesFragment);
+                    ft.commit();
+                    OPEN_FRAGMENT = true;
+                }
+                return false; // слева направо
+            }
+            return false;
+        }
+    }
+
+    @Override
+    public void someEvent(String s) {
+        switch (s){
+            case "re_Open":
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_container, phrasesFragment).commit();
+                break;
+            default:
+                speakText(s);
+                getSupportFragmentManager().beginTransaction().remove(phrasesFragment).commit();
+                OPEN_FRAGMENT = false;
+                break;
+        }
+    }
+    @Override
+    public void onBackPressed() {
+        if(OPEN_FRAGMENT){
+            getSupportFragmentManager().beginTransaction().remove(phrasesFragment).commit();
+            OPEN_FRAGMENT = false;
+        }else{
+            super.onBackPressed();
+        }
     }
 }
 //Toast.makeText(getApplicationContext(), "YES", Toast.LENGTH_SHORT).show();

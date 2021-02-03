@@ -52,7 +52,8 @@ public class SettingsActivity extends AppCompatActivity {
     DialogFragment dialogEditWord;
     public static final String KEY_FOR_DIALOG = "key_for_dialog",
             INFO_FOR_DIALOG = "info_for_dialog";
-    public static final int ADD_WORD = 0, EDIT_WORD = 1;
+    public static final int ADD_WORD = 0, EDIT_WORD = 1, ADD_PHRASE = 2, EDIT_PHRASE = 3;
+    public static boolean FULL_KEYWORDS = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,14 +88,20 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()){
                     case R.id.btn_add_keyword_settings:
-                        //вызов диалога для создания нового слова
-                        Bundle argument = new Bundle();
-                        argument.putInt(KEY_FOR_DIALOG, ADD_WORD);
-                        argument.putString(INFO_FOR_DIALOG, "NO");
-                        dialogEditWord = new DialogEditWord();
-                        FragmentManager manager = getSupportFragmentManager();
-                        dialogEditWord.setArguments(argument);
-                        dialogEditWord.show(manager, "addWord");
+                        if(FULL_KEYWORDS){
+                            Toast.makeText(getApplicationContext(),
+                                    getString(R.string.keyword_limit),Toast.LENGTH_SHORT).show();
+                        }else{
+                            //вызов диалога для создания нового слова
+                            Bundle argument = new Bundle();
+                            argument.putInt(KEY_FOR_DIALOG, ADD_WORD);
+                            argument.putString(INFO_FOR_DIALOG, "NO");
+                            dialogEditWord = new DialogEditWord();
+                            FragmentManager manager = getSupportFragmentManager();
+                            dialogEditWord.setArguments(argument);
+                            dialogEditWord.show(manager, "addWord");
+                        }
+
                         break;
                 }
             }
@@ -215,6 +222,9 @@ public class SettingsActivity extends AppCompatActivity {
         int index_word = cursor.getColumnIndex(columns_words[2]);
         while (cursor.moveToNext()){
             list_keywords.add(cursor.getString(index_word));
+        }
+        if (list_keywords.size()==10){
+            FULL_KEYWORDS=true;
         }
         cursor.close();
         db.close();

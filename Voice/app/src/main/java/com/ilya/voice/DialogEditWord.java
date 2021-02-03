@@ -1,5 +1,6 @@
 package com.ilya.voice;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
 
@@ -22,6 +24,22 @@ public class DialogEditWord extends DialogFragment {
     ContentValues row;
     EditText editText_keyword;
     View view;
+
+    public interface onSomeEventListener {
+        public void someEvent(String s);
+    }
+
+    PhrasesFragment.onSomeEventListener someEventListener;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            someEventListener = (PhrasesFragment.onSomeEventListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");
+        }
+    }
 
     //реализую диалоговое окно
     @Override
@@ -40,22 +58,43 @@ public class DialogEditWord extends DialogFragment {
                         // cancel
                     }
                 });
-        if (argument==1){
+        if (argument==1 || argument==3){
             editText_keyword.setText(info);
             builder.setPositiveButton(R.string.edit, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    editWord(info);
+                    switch (argument){
+                        case 1:
+                            editWord(info);
+                            break;
+                        case 3:
+                            editPhrase(info);
+                            break;
+                    }
                 }
             })
             .setNeutralButton( R.string.remove, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    deleteWord(info);
+                    switch (argument){
+                        case 1:
+                            deleteWord(info);
+                            break;
+                        case 3:
+                            deletePhrase(info);
+                            break;
+                    }
                 }
             });
         }else{
             builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    addWord();
+                    switch (argument){
+                        case 0:
+                            addWord();
+                            break;
+                        case 2:
+                            addPhrase();
+                            break;
+                    }
                 }
             });
         }
@@ -67,6 +106,10 @@ public class DialogEditWord extends DialogFragment {
                 return getString(R.string.add_word);
             case 1:
                 return getString(R.string.edit_word);
+            case 2:
+                return getString(R.string.add_phrase);
+            case 3:
+                return getString(R.string.edit_phrase);
         }
         return "ERROR";
     }
@@ -101,6 +144,38 @@ public class DialogEditWord extends DialogFragment {
                 new String[]{word});
         db.close();
         Intent i = new Intent(getActivity().getApplicationContext(), SettingsActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(i);
+    }
+    public void addPhrase(){
+        db = sqlWords.getWritableDatabase();
+        row = new ContentValues();
+        row.put(SQLWords.COLUMN_WHAT_IS_IT,2);
+        row.put(SQLWords.COLUMN_RATING,0);
+        row.put(SQLWords.COLUMN_WORD,editText_keyword.getText().toString());
+        db.insert(SQLWords.NAME_TABLE,null,row);
+        db.close();
+        someEventListener.someEvent("re_Open");
+    }
+    public void editPhrase(String word){
+        db = sqlWords.getWritableDatabase();
+        row = new ContentValues();
+        row.put(SQLWords.COLUMN_WHAT_IS_IT,2);
+        row.put(SQLWords.COLUMN_RATING,0);
+        row.put(SQLWords.COLUMN_WORD,editText_keyword.getText().toString());
+        db.update(SQLWords.NAME_TABLE,row,SQLWords.COLUMN_WORD+" = ?",
+                new String[]{word});
+        db.close();
+        Intent i = new Intent(getActivity().getApplicationContext(), MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(i);
+    }
+    public void deletePhrase(String word){
+        db = sqlWords.getWritableDatabase();
+        db.delete(SQLWords.NAME_TABLE, SQLWords.COLUMN_WORD+" = ?",
+                new String[]{word});
+        db.close();
+        Intent i = new Intent(getActivity().getApplicationContext(), MainActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(i);
     }

@@ -38,4 +38,7 @@
     <string name="fast_word_4">Ok</string>
     <string name="fast_word_5">Thanks</string>
     <string name="warning_load_sound">ATTENTION!\nThere was a sharp loud sound</string>
+    <string name="keyword_limit">Keyword limit reached</string>
+    <string name="add_phrase">Add Phrase</string>
+    <string name="edit_phrase">Edit phrase</string>
 </resources>
