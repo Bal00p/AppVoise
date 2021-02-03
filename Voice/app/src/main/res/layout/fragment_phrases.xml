@@ -13,18 +13,18 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            style="@style/LinerLayot_Fragment"
-            android:layout_width="wrap_content"
+            style="@style/layot"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                style="@style/conslayot_frag"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
 
+<<<<<<< HEAD
                 <ListView
                     android:id="@+id/lv_phrases"
                     style="@style/stule_phrases"
@@ -38,6 +38,8 @@
 
                 </ListView>
 
+=======
+>>>>>>> watercolor_dev
                 <Button
                     android:id="@+id/btn_add_phrase"
                     style="@style/button_add"
@@ -45,7 +47,31 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
+                <LinearLayout
+                    style="@style/LinerLayot_Fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="60dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ListView
+                        android:id="@+id/lv_phrases"
+                        style="@style/stule_phrases"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="50dp"
+                        android:layout_weight="100">
+
+                    </ListView>
+
+                </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
 
         <Button

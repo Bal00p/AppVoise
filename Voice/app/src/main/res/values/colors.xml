@@ -9,15 +9,15 @@
     <color name="white">#FFFFFFFF</color>
     <color name="color_for_layout">#FF669944</color>
     <color name="stroke_button_pause">#FFFFFF</color>
-    <color name="color_button_pause">#2C9898</color>
-    <color name="stroke_btn_speesh">#BC0F4D6C</color>
-    <color name="color_edittext">#E6FFFFFF</color>
-    <color name="constrainltayuots_color">#1A393C</color>
+    <color name="color_button_pause">#036FA6</color>
+    <color name="stroke_btn_speesh">#05699C</color>
+    <color name="color_edittext">#C9FFFFFF</color>
+    <color name="constrainltayuots_color">#609CB3</color>
     <color name="constrainltayuots_color_1">#FFFFFF</color>
     <color name="btn_color">#A4FFFFFF</color>
     <color name="btn_empty">#00FFFFFF</color>
-    <color name="btn_add">#CE253B49</color>
+    <color name="btn_add">#9E05699C</color>
     <color name="linerlayot_frag">#B22F6771</color>
-    <color name="phrases_color">#A9515151</color>
-
+    <color name="phrases_color">#B9FFFFFF</color>
+    <color name="layout">#609CB3</color>
 </resources>
