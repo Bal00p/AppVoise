@@ -66,6 +66,21 @@ public class PhrasesFragment extends Fragment {
         listView_phrases = (ListView)view.findViewById(R.id.lv_phrases);
         fillPhrases();
 
+        listView_phrases.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                //вызвать диалог с полным редактированием данной фразы
+                Bundle argument = new Bundle();
+                argument.putInt(SettingsActivity.KEY_FOR_DIALOG, SettingsActivity.EDIT_PHRASE);
+                argument.putString(SettingsActivity.INFO_FOR_DIALOG, ((TextView)view).getText().toString());
+                dialogEditWord = new DialogEditWord();
+                FragmentManager manager = getActivity().getSupportFragmentManager();
+                dialogEditWord.setArguments(argument);
+                dialogEditWord.show(manager, "editPhrase");
+                return true;
+            }
+        });
+
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,7 +104,6 @@ public class PhrasesFragment extends Fragment {
         button_add.setOnClickListener(listener);
         button_back.setOnClickListener(listener);
 
-
         listView_phrases.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
@@ -99,20 +113,6 @@ public class PhrasesFragment extends Fragment {
             }
         });
 
-        listView_phrases.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                //вызвать диалог с полным редактированием данной фразы
-                Bundle argument = new Bundle();
-                argument.putInt(SettingsActivity.KEY_FOR_DIALOG, SettingsActivity.EDIT_PHRASE);
-                argument.putString(SettingsActivity.INFO_FOR_DIALOG, ((TextView)view).getText().toString());
-                dialogEditWord = new DialogEditWord();
-                FragmentManager manager = getActivity().getSupportFragmentManager();
-                dialogEditWord.setArguments(argument);
-                dialogEditWord.show(manager, "editPhrase");
-                return false;
-            }
-        });
         button_back.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

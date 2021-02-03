@@ -45,7 +45,6 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements RecognitionListener, PhrasesFragment.onSomeEventListener{
     //переменные
-
     EditText editText_text_to_speech;
     Button button_text_to_speech, button_select_language, button_pause, button_to_settings;
 //    Button button_fast_word_1, button_fast_word_2, button_fast_word_3, button_fast_word_4, button_fast_word_5;
@@ -868,7 +867,9 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
     public void someEvent(String s) {
         switch (s){
             case "re_Open":
-                getSupportFragmentManager().beginTransaction().replace(R.id.main_container, phrasesFragment).commit();
+                phrasesFragment = new PhrasesFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.main_container, phrasesFragment).commit();
                 break;
             default:
                 speakText(s);

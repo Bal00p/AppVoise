@@ -166,17 +166,13 @@ public class DialogEditWord extends DialogFragment {
         db.update(SQLWords.NAME_TABLE,row,SQLWords.COLUMN_WORD+" = ?",
                 new String[]{word});
         db.close();
-        Intent i = new Intent(getActivity().getApplicationContext(), MainActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivity(i);
+        someEventListener.someEvent("re_Open");
     }
     public void deletePhrase(String word){
         db = sqlWords.getWritableDatabase();
         db.delete(SQLWords.NAME_TABLE, SQLWords.COLUMN_WORD+" = ?",
                 new String[]{word});
         db.close();
-        Intent i = new Intent(getActivity().getApplicationContext(), MainActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivity(i);
+        someEventListener.someEvent("re_Open");
     }
 }
