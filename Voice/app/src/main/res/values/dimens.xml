@@ -15,5 +15,10 @@
     <dimen name="height_btn_language">50dp</dimen>
     <dimen name="main_bkg">10dp</dimen>
     <dimen name="main_bkg_top">10dp</dimen>
+    <dimen name="radius_btn_add">50dp</dimen>
+    <dimen name="btn_add">60dp</dimen>
+    <dimen name="radius_linerlayot_frag">50dp</dimen>
+    <dimen name="padding_top_ll_frag">50dp</dimen>
+    <dimen name="padding_ll_frag">30dp</dimen>
 
 </resources>

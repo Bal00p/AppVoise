@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_container"
-    style="@style/constrainLtayuots_style"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFFFF"
@@ -11,7 +10,6 @@
 
     <LinearLayout
         android:id="@+id/main_layout"
-        style="@style/main_bkg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -52,7 +50,7 @@
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                style="@style/constrainltayuots_1"
+                style="@style/conslayot"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
@@ -60,12 +58,12 @@
                 <Button
                     android:id="@+id/btn_pause"
                     style="@style/button_pause"
+                    android:layout_marginBottom="25dp"
                     android:gravity="center"
                     android:text="||"
                     app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <LinearLayout
                     android:id="@+id/linearLayout"
@@ -74,7 +72,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="horizontal"
-                    tools:layout_editor_absoluteY="73dp">
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"

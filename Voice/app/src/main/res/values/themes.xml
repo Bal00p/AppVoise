@@ -39,10 +39,21 @@
     <style name="constrainLtayuots_style" >
         <item name="android:background">@drawable/constrainltayuots</item>
     </style>
-    <style name="constrainltayuots_1">
-        <item name="android:background">@drawable/constraintlayots_1</item>
+    <style name="conslayot">
+        <item name="android:background">@drawable/conslayot</item>
     </style>
-    <style name="main_bkg">
-        <item name="android:background">@drawable/main_background</item>
+    <style name="button_empty">
+        <item name="android:background">@color/btn_empty</item>
+    </style>
+    <style name="button_add">
+        <item name="android:background">@drawable/btn_add</item>
+        <item name="android:layout_height">@dimen/btn_add</item>
+        <item name="android:layout_width">@dimen/btn_add</item>
+    </style>
+    <style name="LinerLayot_Fragment">
+        <item name="android:background">@color/linerlayot_frag</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingTop">50dp</item>
     </style>
    </resources>

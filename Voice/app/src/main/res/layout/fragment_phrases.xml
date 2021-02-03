@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_container"
     android:layout_width="match_parent"
@@ -12,30 +13,42 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            style="@style/test"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btn_add_phrase"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                style="@style/LinerLayot_Fragment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/add" />
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
-            <ListView
-                android:id="@+id/lv_phrases"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                <ListView
+                    android:id="@+id/lv_phrases"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="100"
+                    tools:layout_editor_absoluteY="329dp">
+
+                </ListView>
+
+                <Button
+                    android:id="@+id/btn_add_phrase"
+                    style="@style/button_add"
+                    android:text="@string/add"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
         <Button
             android:id="@+id/btn_back_fragment"
+            style="@style/button_empty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:text="Button" />
+            android:layout_weight="2" />
     </LinearLayout>
 
 </FrameLayout>
