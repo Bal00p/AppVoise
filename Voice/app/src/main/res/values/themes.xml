@@ -35,6 +35,8 @@
     </style>
     <style name="EditText_style">
         <item name="android:background">@drawable/edittext_style</item>
+        <item name="android:layout_height">@dimen/layout_height_edittext</item>
+        <item name="android:padding">@dimen/padding_edittext</item>
     </style>
     <style name="constrainLtayuots_style" >
         <item name="android:background">@drawable/constrainltayuots</item>
@@ -51,9 +53,14 @@
         <item name="android:layout_width">@dimen/btn_add</item>
     </style>
     <style name="LinerLayot_Fragment">
-        <item name="android:background">@color/linerlayot_frag</item>
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingRight">10dp</item>
         <item name="android:paddingTop">50dp</item>
+    </style>
+    <style name="conslayot_frag">
+        <item name="android:background">@drawable/conslayout_fragment</item>
+    </style>
+    <style name="stule_phrases">
+        <item name="android:background">@drawable/phrases_drw</item>
     </style>
    </resources>

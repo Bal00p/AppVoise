@@ -43,7 +43,6 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/constrainltayuots_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -153,7 +152,7 @@
                         android:id="@+id/et_text_to_speech"
                         style="@style/EditText_style"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+
                         android:layout_weight="100"
                         android:ems="10"
                         android:gravity="start|top"

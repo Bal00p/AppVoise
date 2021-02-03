@@ -16,7 +16,8 @@
     <color name="constrainltayuots_color_1">#FFFFFF</color>
     <color name="btn_color">#A4FFFFFF</color>
     <color name="btn_empty">#00FFFFFF</color>
-    <color name="btn_add">#8A6161</color>
-    <color name="linerlayot_frag">#D3454545</color>
+    <color name="btn_add">#CE253B49</color>
+    <color name="linerlayot_frag">#B22F6771</color>
+    <color name="phrases_color">#A9515151</color>
 
 </resources>
