@@ -8,4 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="color_for_layout">#FF669944</color>
+    <color name="stroke_button_pause">#FFFFFF</color>
+    <color name="color_button_pause">#2C9898</color>
+    <color name="stroke_btn_speesh">#BC0F4D6C</color>
+    <color name="color_edittext">#E6FFFFFF</color>
+    <color name="constrainltayuots_color">#1A393C</color>
+    <color name="constrainltayuots_color_1">#FFFFFF</color>
+    <color name="btn_color">#A4FFFFFF</color>
+
 </resources>

@@ -2,10 +2,9 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
-            <stroke android:color="@color/black" android:width="@dimen/width_stroke_on_layout"></stroke>
-            <corners android:radius="@dimen/corners_on_layout"></corners>
-            <solid android:color="@color/color_for_layout"></solid>
-            <padding android:right="@dimen/padding_on_layout" android:left="@dimen/padding_on_layout"></padding>
+            <corners android:radius="@dimen/radius_button_pause"  />
+            <stroke android:width="@dimen/stroke_button_pause" android:color="@color/stroke_button_pause"></stroke>
+            <solid android:color="@color/color_button_pause"></solid>
         </shape>
     </item>
 </selector>

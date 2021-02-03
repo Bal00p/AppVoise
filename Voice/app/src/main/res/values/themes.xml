@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Voice" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Voice" parent="Theme.Design.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -13,11 +13,36 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
-    <style name="test">
-        <item name="android:background">@drawable/test_layout</item>
+<style name="button_pause" parent="Widget.AppCompat.Button.Colored">
+    <item name="android:background">@drawable/test_layout</item>
+    <item name="android:layout_height">@dimen/height_button_pause</item>
+    <item name="android:layout_width">@dimen/width_button_pause</item>
+</style>
+    <style name="button_language" >
+        <item name="android:background">@drawable/background_btn_language</item>
+        <item name="android:layout_height">@dimen/height_btn_language</item>
+        <item name="android:layout_width">@dimen/width_btn_language</item>
     </style>
-    <style name="test_editText" parent="Widget.AppCompat.EditText">
-        <item name="android:background">@drawable/test_layout</item>
-        <item name="android:textSize">@dimen/test_textSize</item>
+    <style name="button_two">
+        <item name="android:background">@drawable/button_two</item>
     </style>
-</resources>
+    <style name="button_three">
+        <item name="android:background">@drawable/button_three</item>
+    </style>
+    <style name="btn_speesh">
+        <item name="android:background">@drawable/background_btn_speech</item>
+
+    </style>
+    <style name="EditText_style">
+        <item name="android:background">@drawable/edittext_style</item>
+    </style>
+    <style name="constrainLtayuots_style" >
+        <item name="android:background">@drawable/constrainltayuots</item>
+    </style>
+    <style name="constrainltayuots_1">
+        <item name="android:background">@drawable/constraintlayots_1</item>
+    </style>
+    <style name="main_bkg">
+        <item name="android:background">@drawable/main_background</item>
+    </style>
+   </resources>

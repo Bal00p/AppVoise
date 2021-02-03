@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="padding_on_layout">20dp</dimen>
-    <dimen name="corners_on_layout">50dp</dimen>
-    <dimen name="width_stroke_on_layout">2dp</dimen>
-    <dimen name="test_textSize">30px</dimen>
+    <dimen name="corners_on_layout">100dp</dimen>
+    <dimen name="height_button_pause">70dp</dimen>
+    <dimen name="width_button_pause">70dp</dimen>
+    <dimen name="height_button">40dp</dimen>
+    <dimen name="width_button">40dp</dimen>
+    <dimen name="radius_button_pause">60dp</dimen>
+    <dimen name="radius_button_language">60dp</dimen>
+    <dimen name="stroke_button_pause">10dp</dimen>
+    <dimen name="stroke_button_speesh">10dp</dimen>
+    <dimen name="radius_btn_speesh">30dp</dimen>
+    <dimen name="radius_edittext">20dp</dimen>
+    <dimen name="width_btn_language">50dp</dimen>
+    <dimen name="height_btn_language">50dp</dimen>
+
 </resources>
