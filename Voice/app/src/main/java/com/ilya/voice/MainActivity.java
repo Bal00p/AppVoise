@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
     public String[] fast_words = new String[10];
     public String[] keywords = new String[10];
     SQLWords sqlWords;
-    LinearLayout container_journal;
+    LinearLayout container_journal, main_layout;
     ConstraintLayout main_container;
     ScrollView scrollView;
     View tableRow;
@@ -148,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
                     ViewGroup.LayoutParams.MATCH_PARENT, 0));
             container_journal = (LinearLayout) findViewById(R.id.container_journal);
             main_container = (ConstraintLayout) findViewById(R.id.main_container);
+            main_layout = (LinearLayout) findViewById(R.id.main_layout);
             scrollView = (ScrollView) findViewById(R.id.sv_journal);
             scrollView.getViewTreeObserver().addOnGlobalLayoutListener(keyboardLayoutListener);
             //устанавливаю текущую дату и время сеанса
@@ -155,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
             removeOldJournal();
 //        fillFastWords();
 
-            main_container.setOnTouchListener(new View.OnTouchListener() {
+            main_layout.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     gestureDetector.onTouchEvent(event);
@@ -852,6 +853,7 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
             }  else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE &&
                     Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
                 if (!OPEN_FRAGMENT) {
+                    Toast.makeText(getApplicationContext(), "YES", Toast.LENGTH_SHORT).show();
                     FragmentManager fm = getSupportFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
                     phrasesFragment = new PhrasesFragment();

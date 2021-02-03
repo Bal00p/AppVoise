@@ -29,13 +29,13 @@ public class DialogEditWord extends DialogFragment {
         public void someEvent(String s);
     }
 
-    onSomeEventListener someEventListener;
+    PhrasesFragment.onSomeEventListener someEventListener;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            someEventListener = (onSomeEventListener) activity;
+            someEventListener = (PhrasesFragment.onSomeEventListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");
         }
