@@ -783,7 +783,7 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
                 ViewGroup.LayoutParams.MATCH_PARENT,0));
         ArrayList commandList = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         addOutsideMessage(commandList.get(0).toString());
-        findKeyword(commandList.get(0).toString());
+//        findKeyword(commandList.get(0).toString());
         speech.startListening(recognizerIntent);
     }
 
