@@ -104,96 +104,97 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            String requiredPermission = Manifest.permission.RECORD_AUDIO;
-            if (checkCallingOrSelfPermission(requiredPermission) == PackageManager.PERMISSION_DENIED) {
-                requestPermissions(new String[]{requiredPermission}, 101);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                String requiredPermission = Manifest.permission.RECORD_AUDIO;
+                if (checkCallingOrSelfPermission(requiredPermission) == PackageManager.PERMISSION_DENIED) {
+                    requestPermissions(new String[]{requiredPermission}, 101);
+                }
             }
-        }
-        gestureDetector = new GestureDetector(new GestureListener());
+            gestureDetector = new GestureDetector(new GestureListener());
 
-        speech = SpeechRecognizer.createSpeechRecognizer(getApplicationContext(),
-                ComponentName.unflattenFromString("com.google.android.googlequicksearchbox/com.google.android.voicesearch.serviceapi.GoogleRecognitionService"));
-        speech.setRecognitionListener(this);
-        recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+            speech = SpeechRecognizer.createSpeechRecognizer(getApplicationContext(),
+                    ComponentName.unflattenFromString("com.google.android.googlequicksearchbox/com.google.android.voicesearch.serviceapi.GoogleRecognitionService"));
+            speech.setRecognitionListener(this);
+            recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
 //        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE,Locale.getDefault());
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,this.getPackageName());
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, new Long(3000));
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.forLanguageTag("de-DE").toString());
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getPackageName());
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, new Long(3000));
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.forLanguageTag("de-DE").toString());
 
-        sharedPreferences = getSharedPreferences(SettingsActivity.PATH_TO_SETTINGS, MODE_PRIVATE);
-        sqlJournal = new SQLJournal(this, sqlJournal.NAME_TABLE, null,
-                sqlJournal.VERSION_TABLE);
-        sqlWords = new SQLWords(this, SQLWords.NAME_TABLE, null,
-                SQLWords.VERSION_TABLE);
-        button_text_to_speech = (Button) findViewById(R.id.btn_text_to_speech);
-        button_select_language = (Button)findViewById(R.id.btn_select_language);
-        button_pause = (Button)findViewById(R.id.btn_pause);
-        button_to_settings = (Button) findViewById(R.id.btn_to_settings);
+            sharedPreferences = getSharedPreferences(SettingsActivity.PATH_TO_SETTINGS, MODE_PRIVATE);
+            sqlJournal = new SQLJournal(this, sqlJournal.NAME_TABLE, null,
+                    sqlJournal.VERSION_TABLE);
+            sqlWords = new SQLWords(this, SQLWords.NAME_TABLE, null,
+                    SQLWords.VERSION_TABLE);
+            button_text_to_speech = (Button) findViewById(R.id.btn_text_to_speech);
+            button_select_language = (Button) findViewById(R.id.btn_select_language);
+            button_pause = (Button) findViewById(R.id.btn_pause);
+            button_to_settings = (Button) findViewById(R.id.btn_to_settings);
 //        button_fast_word_1 = (Button) findViewById(R.id.btn_fast_word1);
 //        button_fast_word_2 = (Button) findViewById(R.id.btn_fast_word2);
 //        button_fast_word_3 = (Button) findViewById(R.id.btn_fast_word3);
 //        button_fast_word_4 = (Button) findViewById(R.id.btn_fast_word4);
 //        button_fast_word_5 = (Button) findViewById(R.id.btn_fast_word5);
-        editText_text_to_speech = (EditText) findViewById(R.id.et_text_to_speech);
-        textView_partial_result = (TextView)findViewById(R.id.tv_my_partial_result);
-        textView_partial_result.setLayoutParams(new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,0));
-        container_journal = (LinearLayout) findViewById(R.id.container_journal);
-        main_container = (ConstraintLayout) findViewById(R.id.main_container);
-        scrollView = (ScrollView) findViewById(R.id.sv_journal);
-        scrollView.getViewTreeObserver().addOnGlobalLayoutListener(keyboardLayoutListener);
-        //устанавливаю текущую дату и время сеанса
-        setDateAndTime();
-        removeOldJournal();
+            editText_text_to_speech = (EditText) findViewById(R.id.et_text_to_speech);
+            textView_partial_result = (TextView) findViewById(R.id.tv_my_partial_result);
+            textView_partial_result.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, 0));
+            container_journal = (LinearLayout) findViewById(R.id.container_journal);
+            main_container = (ConstraintLayout) findViewById(R.id.main_container);
+            scrollView = (ScrollView) findViewById(R.id.sv_journal);
+            scrollView.getViewTreeObserver().addOnGlobalLayoutListener(keyboardLayoutListener);
+            //устанавливаю текущую дату и время сеанса
+            setDateAndTime();
+            removeOldJournal();
 //        fillFastWords();
 
-        main_container.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                gestureDetector.onTouchEvent(event);
-                return true;
-            }
-        });
-
-        textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int initStatus) {
-                if (initStatus == TextToSpeech.SUCCESS) {
-                    if (textToSpeech.isLanguageAvailable(new Locale(Locale.getDefault().getLanguage()))
-                            == TextToSpeech.LANG_AVAILABLE) {
-                        textToSpeech.setLanguage(new Locale(Locale.getDefault().getLanguage()));
-                    } else {
-                        textToSpeech.setLanguage(Locale.US);
-                    }
-                    textToSpeech.setPitch(PITCH);
-                    textToSpeech.setSpeechRate(SPEECH_RATE);
-                    readText = true;
-                } else if (initStatus == TextToSpeech.ERROR) {
-                    Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
-                    readText = false;
+            main_container.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    gestureDetector.onTouchEvent(event);
+                    return true;
                 }
-            }
-        });
+            });
 
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.btn_text_to_speech:
-                        String text = editText_text_to_speech.getText().toString();
-                        speakText(text);
-                        break;
-                    case R.id.btn_to_settings:
-                        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                        startActivity(intent);
-                        break;
+            textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int initStatus) {
+                    if (initStatus == TextToSpeech.SUCCESS) {
+                        if (textToSpeech.isLanguageAvailable(new Locale(Locale.getDefault().getLanguage()))
+                                == TextToSpeech.LANG_AVAILABLE) {
+                            textToSpeech.setLanguage(new Locale(Locale.getDefault().getLanguage()));
+                        } else {
+                            textToSpeech.setLanguage(Locale.US);
+                        }
+                        textToSpeech.setPitch(PITCH);
+                        textToSpeech.setSpeechRate(SPEECH_RATE);
+                        readText = true;
+                    } else if (initStatus == TextToSpeech.ERROR) {
+                        Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
+                        readText = false;
+                    }
+                }
+            });
+
+            View.OnClickListener listener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (v.getId()) {
+                        case R.id.btn_text_to_speech:
+                            String text = editText_text_to_speech.getText().toString();
+                            speakText(text);
+                            break;
+                        case R.id.btn_to_settings:
+                            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                            startActivity(intent);
+                            break;
 //                    case R.id.btn_fast_word1:
 //                        fastWord(fast_words[fast_words.length - 1]);
 //                        break;
@@ -209,50 +210,52 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
 //                    case R.id.btn_fast_word5:
 //                        fastWord(fast_words[fast_words.length - 5]);
 //                        break;
-                    case R.id.btn_select_language:
-                        if (HOME_LANGUAGE) {
-                            HOME_LANGUAGE = false;
-                        } else {
-                            HOME_LANGUAGE = true;
-                        }
-                        selectLanguage();
-                        speech.startListening(recognizerIntent);
-                        break;
-                    case R.id.btn_pause:
-                        if(PAUSE){
-                            //показываю всё то, что не показывал
+                        case R.id.btn_select_language:
+                            if (HOME_LANGUAGE) {
+                                HOME_LANGUAGE = false;
+                            } else {
+                                HOME_LANGUAGE = true;
+                            }
+                            selectLanguage();
+                            speech.startListening(recognizerIntent);
+                            break;
+                        case R.id.btn_pause:
+                            if (PAUSE) {
+                                //показываю всё то, что не показывал
 
-                            PAUSE = false;
-                        }else{
-                            PAUSE = true;
-                        }
-                        break;
+                                PAUSE = false;
+                            } else {
+                                PAUSE = true;
+                            }
+                            break;
+                    }
                 }
-            }
-        };
-        button_text_to_speech.setOnClickListener(listener);
-        button_select_language.setOnClickListener(listener);
-        button_pause.setOnClickListener(listener);
-        button_to_settings.setOnClickListener(listener);
+            };
+            button_text_to_speech.setOnClickListener(listener);
+            button_select_language.setOnClickListener(listener);
+            button_pause.setOnClickListener(listener);
+            button_to_settings.setOnClickListener(listener);
 //        button_fast_word_1.setOnClickListener(listener);
 //        button_fast_word_2.setOnClickListener(listener);
 //        button_fast_word_3.setOnClickListener(listener);
 //        button_fast_word_4.setOnClickListener(listener);
 //        button_fast_word_5.setOnClickListener(listener);
 
-        button_select_language.setOnLongClickListener(new View.OnLongClickListener(){
-            @Override
-            public boolean onLongClick(View v) {
-                if(HOME_LANGUAGE){
-                    HOME_LANGUAGE = false;
-                }else{
-                    HOME_LANGUAGE = true;
+            button_select_language.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (HOME_LANGUAGE) {
+                        HOME_LANGUAGE = false;
+                    } else {
+                        HOME_LANGUAGE = true;
+                    }
+                    Intent intent = new Intent(MainActivity.this, LanguageActivity.class);
+                    startActivity(intent);
+                    return false;
                 }
-                Intent intent = new Intent(MainActivity.this, LanguageActivity.class);
-                startActivity(intent);
-                return false;
-            }
-        });
+            });
+
+        }catch (Exception e){}
     }
 
     @Override

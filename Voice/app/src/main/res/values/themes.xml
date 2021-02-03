@@ -36,7 +36,6 @@
     <style name="EditText_style">
         <item name="android:background">@drawable/edittext_style</item>
         <item name="android:layout_height">@dimen/layout_height_edittext</item>
-        <item name="android:padding">@dimen/padding_edittext</item>
     </style>
     <style name="constrainLtayuots_style" >
         <item name="android:background">@drawable/constrainltayuots</item>
