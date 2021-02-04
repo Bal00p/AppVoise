@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 
 import androidx.fragment.app.DialogFragment;
 
-public class DialogEditWord extends DialogFragment {
+public class DialogEditPhrase extends DialogFragment {
 
     SQLWords sqlWords;
     SQLiteDatabase db;
@@ -24,9 +24,24 @@ public class DialogEditWord extends DialogFragment {
     EditText editText_keyword;
     View view;
 
+    PhrasesFragment.onSomeEventListenerMain someEventListener;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            someEventListener = (PhrasesFragment.onSomeEventListenerMain) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement onSomeEventListenerMain");
+        }
+    }
+
     //реализую диалоговое окно
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        if(MainActivity.OPEN_FRAGMENT){
+
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         try {
             sqlWords = new SQLWords(getActivity().getApplicationContext(), SQLWords.NAME_TABLE,
@@ -46,18 +61,18 @@ public class DialogEditWord extends DialogFragment {
                 editText_keyword.setText(info);
                 builder.setPositiveButton(R.string.edit, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        editWord(info);
+                        editPhrase(info);
                     }
                 })
                         .setNeutralButton(R.string.remove, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                deleteWord(info);
+                                deletePhrase(info);
                             }
                         });
             } else {
                 builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        addWord();
+                        addPhrase();
                     }
                 });
             }
@@ -77,38 +92,32 @@ public class DialogEditWord extends DialogFragment {
         }
         return "ERROR";
     }
-    public void addWord(){
+    public void addPhrase(){
         db = sqlWords.getWritableDatabase();
         row = new ContentValues();
-        row.put(SQLWords.COLUMN_WHAT_IS_IT,1);
+        row.put(SQLWords.COLUMN_WHAT_IS_IT,2);
         row.put(SQLWords.COLUMN_RATING,0);
         row.put(SQLWords.COLUMN_WORD,editText_keyword.getText().toString());
         db.insert(SQLWords.NAME_TABLE,null,row);
         db.close();
-        Intent i = new Intent(getActivity().getApplicationContext(), SettingsActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivity(i);
+        someEventListener.someEvent("re_Open");
     }
-    public void editWord(String word){
+    public void editPhrase(String word){
         db = sqlWords.getWritableDatabase();
         row = new ContentValues();
-        row.put(SQLWords.COLUMN_WHAT_IS_IT,1);
+        row.put(SQLWords.COLUMN_WHAT_IS_IT,2);
         row.put(SQLWords.COLUMN_RATING,0);
         row.put(SQLWords.COLUMN_WORD,editText_keyword.getText().toString());
         db.update(SQLWords.NAME_TABLE,row,SQLWords.COLUMN_WORD+" = ?",
                 new String[]{word});
         db.close();
-        Intent i = new Intent(getActivity().getApplicationContext(), SettingsActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivity(i);
+        someEventListener.someEvent("re_Open");
     }
-    public void deleteWord(String word){
+    public void deletePhrase(String word){
         db = sqlWords.getWritableDatabase();
         db.delete(SQLWords.NAME_TABLE, SQLWords.COLUMN_WORD+" = ?",
                 new String[]{word});
         db.close();
-        Intent i = new Intent(getActivity().getApplicationContext(), SettingsActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivity(i);
+        someEventListener.someEvent("re_Open");
     }
 }

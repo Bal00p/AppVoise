@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -25,7 +24,7 @@ import java.util.ArrayList;
 public class SettingsActivity extends AppCompatActivity {
 
     SeekBar seekBar_text_size, seekBar_pitch, seekBar_speech_rate, seekBar_store_days;
-//    Button button_add_keywords;
+    Button button_add_keywords;
     CheckBox checkBox_vibro_at_load_sound, checkBox_vibro_after_pause, checkBox_keywords,
             checkBox_voicing_emoticons;
     TextView tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8;
@@ -73,7 +72,7 @@ public class SettingsActivity extends AppCompatActivity {
         checkBox_vibro_after_pause = (CheckBox)findViewById(R.id.cb_vibro_after_pause_settings);
         checkBox_keywords = (CheckBox)findViewById(R.id.cb_keywords_settings);
         checkBox_voicing_emoticons = (CheckBox)findViewById(R.id.cb_voicing_emoticons_settings);
-//        button_add_keywords = (Button)findViewById(R.id.btn_add_keyword_settings);
+        button_add_keywords = (Button)findViewById(R.id.btn_add_keyword_settings);
         listView_keywords = (ListView)findViewById(R.id.lv_keywords);
         tv1 = (TextView)findViewById(R.id.tv1_settings);
         tv2 = (TextView)findViewById(R.id.tv2_settings);
@@ -84,32 +83,32 @@ public class SettingsActivity extends AppCompatActivity {
         tv7 = (TextView)findViewById(R.id.tv7_settings);
         tv8 = (TextView)findViewById(R.id.tv8_settings);
 
-//        View.OnClickListener listener = new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                switch (v.getId()){
-//                    case R.id.btn_add_keyword_settings:
-//                        if(FULL_KEYWORDS){
-//                            Toast.makeText(getApplicationContext(),
-//                                    getString(R.string.keyword_limit),Toast.LENGTH_SHORT).show();
-//                        }else{
-//                            try{
-//                                //вызов диалога для создания нового слова
-//                                Bundle argument = new Bundle();
-//                                argument.putInt(KEY_FOR_DIALOG, ADD_WORD);
-//                                argument.putString(INFO_FOR_DIALOG, "NO");
-//                                dialogEditWord = new DialogEditWord();
-//                                FragmentManager manager = getSupportFragmentManager();
-//                                dialogEditWord.setArguments(argument);
-//                                dialogEditWord.show(manager, "addWord");
-//                                Toast.makeText(getApplicationContext(), "YES", Toast.LENGTH_SHORT).show();
-//                            }catch (Exception e){}
-//                        }
-//                        break;
-//                }
-//            }
-//        };
-//        button_add_keywords.setOnClickListener(listener);
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()){
+                    case R.id.btn_add_keyword_settings:
+                        if(FULL_KEYWORDS){
+                            Toast.makeText(getApplicationContext(),
+                                    getString(R.string.keyword_limit),Toast.LENGTH_SHORT).show();
+                        }else{
+                            try{
+                                //вызов диалога для создания нового слова
+                                Bundle argument = new Bundle();
+                                argument.putInt(KEY_FOR_DIALOG, ADD_WORD);
+                                argument.putString(INFO_FOR_DIALOG, "NO");
+                                dialogEditWord = new DialogEditWord();
+                                FragmentManager manager = getSupportFragmentManager();
+                                dialogEditWord.setArguments(argument);
+                                dialogEditWord.show(manager, "addWord");
+                                Toast.makeText(getApplicationContext(), "YES", Toast.LENGTH_SHORT).show();
+                            }catch (Exception e){}
+                        }
+                        break;
+                }
+            }
+        };
+        button_add_keywords.setOnClickListener(listener);
 
         seekBar_text_size.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override

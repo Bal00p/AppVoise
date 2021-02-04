@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements RecognitionListener, PhrasesFragment.onSomeEventListener{
+public class MainActivity extends AppCompatActivity implements RecognitionListener, PhrasesFragment.onSomeEventListenerMain {
     //переменные
     EditText editText_text_to_speech;
     Button button_text_to_speech, button_select_language, button_pause, button_to_settings;

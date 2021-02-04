@@ -1,7 +1,6 @@
 package com.ilya.voice;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -19,10 +17,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -33,22 +29,22 @@ public class PhrasesFragment extends Fragment {
     SQLWords sqlWords;
     Cursor cursor;
     SQLiteDatabase db;
-    DialogFragment dialogEditWord;
+    DialogFragment dialogEditPhrase;
     GestureDetector gestureDetector;
 
-    public interface onSomeEventListener {
+    public interface onSomeEventListenerMain {
         public void someEvent(String s);
     }
 
-    onSomeEventListener someEventListener;
+    onSomeEventListenerMain someEventListenerMain;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            someEventListener = (onSomeEventListener) activity;
+            someEventListenerMain = (onSomeEventListenerMain) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");
+            throw new ClassCastException(activity.toString() + " must implement onSomeEventListenerMain");
         }
     }
 
@@ -73,10 +69,10 @@ public class PhrasesFragment extends Fragment {
                 Bundle argument = new Bundle();
                 argument.putInt(SettingsActivity.KEY_FOR_DIALOG, SettingsActivity.EDIT_PHRASE);
                 argument.putString(SettingsActivity.INFO_FOR_DIALOG, ((TextView)view).getText().toString());
-                dialogEditWord = new DialogEditWord();
+                dialogEditPhrase = new DialogEditPhrase();
                 FragmentManager manager = getActivity().getSupportFragmentManager();
-                dialogEditWord.setArguments(argument);
-                dialogEditWord.show(manager, "editPhrase");
+                dialogEditPhrase.setArguments(argument);
+                dialogEditPhrase.show(manager, "editPhrase");
                 return true;
             }
         });
@@ -90,13 +86,13 @@ public class PhrasesFragment extends Fragment {
                         Bundle argument = new Bundle();
                         argument.putInt(SettingsActivity.KEY_FOR_DIALOG, SettingsActivity.ADD_PHRASE);
                         argument.putString(SettingsActivity.INFO_FOR_DIALOG, "NO");
-                        dialogEditWord = new DialogEditWord();
+                        dialogEditPhrase = new DialogEditPhrase();
                         FragmentManager manager = getActivity().getSupportFragmentManager();
-                        dialogEditWord.setArguments(argument);
-                        dialogEditWord.show(manager, "addPhrase");
+                        dialogEditPhrase.setArguments(argument);
+                        dialogEditPhrase.show(manager, "addPhrase");
                         break;
                     case R.id.btn_back_fragment:
-                        someEventListener.someEvent("");
+                        someEventListenerMain.someEvent("");
                         break;
                 }
             }
@@ -109,7 +105,7 @@ public class PhrasesFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
                                     long id) {
                 //озвучиваю и закрываю
-                someEventListener.someEvent(((TextView)itemClicked).getText().toString());
+                someEventListenerMain.someEvent(((TextView)itemClicked).getText().toString());
             }
         });
 
@@ -152,7 +148,7 @@ public class PhrasesFragment extends Fragment {
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             if(e1.getX() - e2.getX() > MainActivity.SWIPE_MIN_DISTANCE &&
                     Math.abs(velocityX) > MainActivity.SWIPE_THRESHOLD_VELOCITY) {
-                someEventListener.someEvent("");
+                someEventListenerMain.someEvent("");
                 return false; // справа налево
             }
             return false;

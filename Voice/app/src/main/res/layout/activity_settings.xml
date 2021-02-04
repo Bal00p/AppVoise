@@ -181,8 +181,8 @@
         </LinearLayout>
 
         <Button
-            style="@style/button_pause"
-            android:id="@+id/btn_add_keyword_"
+            style="@style/button_add"
+            android:id="@+id/btn_add_keyword_settings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/add" />
