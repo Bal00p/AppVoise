@@ -41,4 +41,7 @@
     <string name="keyword_limit">Keyword limit reached</string>
     <string name="add_phrase">Add Phrase</string>
     <string name="edit_phrase">Edit phrase</string>
+    <string name="phrase_1">Hello, i have hearing problems</string>
+    <string name="phrase_2">With this application we will be able to communicate</string>
+    <string name="phrase_3">Please speak loudly and clearly into the device</string>
 </resources>

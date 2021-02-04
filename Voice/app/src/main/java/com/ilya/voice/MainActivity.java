@@ -853,7 +853,6 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
             }  else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE &&
                     Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
                 if (!OPEN_FRAGMENT) {
-                    Toast.makeText(getApplicationContext(), "YES", Toast.LENGTH_SHORT).show();
                     FragmentManager fm = getSupportFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
                     phrasesFragment = new PhrasesFragment();

@@ -133,18 +133,18 @@ public class SettingsActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        listView_keywords.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView_keywords.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
-                                    long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 //вызвать диалог с полным редактированием данного слова
                 Bundle argument = new Bundle();
                 argument.putInt(KEY_FOR_DIALOG, EDIT_WORD);
-                argument.putString(INFO_FOR_DIALOG, ((TextView)itemClicked).getText().toString());
+                argument.putString(INFO_FOR_DIALOG, ((TextView)view).getText().toString());
                 dialogEditWord = new DialogEditWord();
                 FragmentManager manager = getSupportFragmentManager();
                 dialogEditWord.setArguments(argument);
                 dialogEditWord.show(manager, "editWord");
+                return true;
             }
         });
     }

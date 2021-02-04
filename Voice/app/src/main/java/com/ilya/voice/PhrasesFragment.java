@@ -131,6 +131,11 @@ public class PhrasesFragment extends Fragment {
         }
         cursor.close();
         db.close();
+        if(list_phrases.size()==0){
+            list_phrases.add(getString(R.string.phrase_1));
+            list_phrases.add(getString(R.string.phrase_2));
+            list_phrases.add(getString(R.string.phrase_3));
+        }
         listView_phrases.setAdapter(new ArrayAdapter(getActivity().getApplicationContext(),
                 android.R.layout.simple_list_item_1, list_phrases) {
             @Override
