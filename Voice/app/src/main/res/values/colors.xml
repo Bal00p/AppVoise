@@ -20,4 +20,7 @@
     <color name="linerlayot_frag">#B22F6771</color>
     <color name="phrases_color">#B9FFFFFF</color>
     <color name="layout">#609CB3</color>
+    <color name="wave_center">#60ffff</color>
+    <color name="wave_wave">#7760ffff</color>
+    <color name="wave_stroke">#0060ffff</color>
 </resources>

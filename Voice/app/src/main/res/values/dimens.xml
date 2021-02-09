@@ -23,5 +23,7 @@
     <dimen name="layout_height_edittext">30dp</dimen>
     <dimen name="padding_edittext">10dp</dimen>
     <dimen name="radius_phrases">30dp</dimen>
+    <dimen name="wave_radius">120dp</dimen>
+    <dimen name="wave_center">60dp</dimen>
 
 </resources>

@@ -65,4 +65,9 @@
     <style name="layot">
         <item name="android:background">@color/layout</item>
     </style>
+    <style name="wave_style">
+        <item name="android:layout_height">@dimen/wave_radius</item>
+        <item name="android:layout_width">@dimen/wave_radius</item>
+        <item name="android:background">@drawable/background_wave</item>
+    </style>
    </resources>

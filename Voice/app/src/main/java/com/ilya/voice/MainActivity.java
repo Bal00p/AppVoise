@@ -1,6 +1,7 @@
 package com.ilya.voice;
 
 import android.Manifest;
+import android.app.Notification;
 import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,6 +10,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Paint;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
@@ -47,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
     //переменные
     EditText editText_text_to_speech;
     Button button_text_to_speech, button_select_language, button_pause, button_to_settings;
+    Button button_wave;
 //    Button button_fast_word_1, button_fast_word_2, button_fast_word_3, button_fast_word_4, button_fast_word_5;
     public String[] fast_words = new String[10];
     public String[] keywords = new String[10];
@@ -137,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
             button_select_language = (Button) findViewById(R.id.btn_select_language);
             button_pause = (Button) findViewById(R.id.btn_pause);
             button_to_settings = (Button) findViewById(R.id.btn_to_settings);
+            button_wave = (Button)findViewById(R.id.btn_wave);
 //        button_fast_word_1 = (Button) findViewById(R.id.btn_fast_word1);
 //        button_fast_word_2 = (Button) findViewById(R.id.btn_fast_word2);
 //        button_fast_word_3 = (Button) findViewById(R.id.btn_fast_word3);
@@ -790,6 +797,15 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
     @Override
     public void onRmsChanged(float rmsdB) {
         Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
+
+        int size = (int)(getResources().getDimension(R.dimen.wave_radius)
+                -getResources().getDimension(R.dimen.wave_center)-rmsdB*10);
+        GradientDrawable gradientDrawable = new GradientDrawable();
+        gradientDrawable.setColor(getColor(R.color.wave_wave));
+        gradientDrawable.setCornerRadius(getResources().getDimension(R.dimen.wave_radius));
+        gradientDrawable.setStroke(size, getColor(R.color.wave_stroke));
+        button_wave.setBackground(gradientDrawable);
+
         if (rmsdB==10.0 && countRmsChanged==0) {
             countRmsChanged++;
         }

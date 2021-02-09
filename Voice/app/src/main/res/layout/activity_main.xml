@@ -8,6 +8,24 @@
     android:background="#FFFFFFFF"
     tools:context=".MainActivity">
 
+    <Button
+        android:id="@+id/btn_wave_center"
+        style="@style/wave_style"
+        android:layout_width="@dimen/wave_center"
+        android:layout_height="@dimen/wave_center"
+        app:layout_constraintBottom_toTopOf="@+id/main_layout"
+        app:layout_constraintEnd_toStartOf="@+id/main_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_wave"
+        style="@style/wave_style"
+        app:layout_constraintBottom_toTopOf="@+id/main_layout"
+        app:layout_constraintEnd_toStartOf="@+id/main_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/main_layout"
         android:layout_width="match_parent"
