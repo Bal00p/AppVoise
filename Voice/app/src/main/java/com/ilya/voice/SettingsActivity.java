@@ -4,10 +4,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -16,18 +29,22 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class SettingsActivity extends AppCompatActivity {
 
     SeekBar seekBar_text_size, seekBar_pitch, seekBar_speech_rate, seekBar_store_days;
-    Button button_add_keywords;
-    CheckBox checkBox_vibro_at_load_sound, checkBox_vibro_after_pause, checkBox_keywords,
-            checkBox_voicing_emoticons;
-    TextView tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8;
+    Button button_add_keywords, button_save_journal, button_show_guide;
+    Switch switch_vibro_at_load_sound, switch_vibro_after_pause, switch_keywords;
+    TextView tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv9, tv_credits;
     ListView listView_keywords;
     SharedPreferences sharedPreferences;
     public static final String
@@ -40,13 +57,19 @@ public class SettingsActivity extends AppCompatActivity {
             SETTINGS_STORE_DAYS = "store_days",
             SETTINGS_VOICING_EMOTICONS = "sound_signs",
             SETTINGS_LANGUAGE = "language",
+            SETTINGS_SHOW_GUIDE = "show_guide",
             PATH_TO_SETTINGS = "settings";
     public int TEXT_SIZE = 10;
     SQLWords sqlWords;
+    SQLJournal sqlJournal;
     public String[] columns_words = {"_ID",
             SQLWords.COLUMN_WHAT_IS_IT,
             SQLWords.COLUMN_WORD,
             SQLWords.COLUMN_RATING};
+    public String[] columns_journal = {"_ID",
+            SQLJournal.COLUMN_WHAT_IS_IT,
+            SQLJournal.COLUMN_DATE,
+            SQLJournal.COLUMN_CONTENT};
     SQLiteDatabase db;
     Cursor cursor;
     DialogFragment dialogEditWord;
@@ -68,11 +91,12 @@ public class SettingsActivity extends AppCompatActivity {
         seekBar_pitch = (SeekBar)findViewById(R.id.sb_pitch_settings);
         seekBar_speech_rate = (SeekBar)findViewById(R.id.sb_speech_rate_settings);
         seekBar_store_days = (SeekBar)findViewById(R.id.sb_store_days_settings);
-        checkBox_vibro_at_load_sound = (CheckBox)findViewById(R.id.cb_vibro_at_loud_sounds_settings);
-        checkBox_vibro_after_pause = (CheckBox)findViewById(R.id.cb_vibro_after_pause_settings);
-        checkBox_keywords = (CheckBox)findViewById(R.id.cb_keywords_settings);
-        checkBox_voicing_emoticons = (CheckBox)findViewById(R.id.cb_voicing_emoticons_settings);
+        switch_vibro_at_load_sound = (Switch)findViewById(R.id.sw_vibro_at_loud_sounds_settings);
+        switch_vibro_after_pause = (Switch)findViewById(R.id.sw_vibro_after_pause_settings);
+        switch_keywords = (Switch)findViewById(R.id.sw_keywords_settings);
         button_add_keywords = (Button)findViewById(R.id.btn_add_keyword_settings);
+        button_save_journal = (Button)findViewById(R.id.btn_save_journal);
+        button_show_guide = (Button)findViewById(R.id.btn_show_guide);
         listView_keywords = (ListView)findViewById(R.id.lv_keywords);
         tv1 = (TextView)findViewById(R.id.tv1_settings);
         tv2 = (TextView)findViewById(R.id.tv2_settings);
@@ -81,7 +105,9 @@ public class SettingsActivity extends AppCompatActivity {
         tv5 = (TextView)findViewById(R.id.tv5_settings);
         tv6 = (TextView)findViewById(R.id.tv6_settings);
         tv7 = (TextView)findViewById(R.id.tv7_settings);
-        tv8 = (TextView)findViewById(R.id.tv8_settings);
+        tv9 = (TextView)findViewById(R.id.tv9_settings);
+        tv_credits = (TextView)findViewById(R.id.tv_credits);
+        tv_credits.setText(getString(R.string.credits));
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -105,10 +131,23 @@ public class SettingsActivity extends AppCompatActivity {
                             }catch (Exception e){}
                         }
                         break;
+                    case R.id.btn_save_journal:
+                        //записываю журнал
+                        ClipboardManager clipboard = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("", getJournal());
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(getApplicationContext(),
+                                getString(R.string.saved_clipboard), Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.btn_show_guide:
+                        showGuide();
+                        break;
                 }
             }
         };
         button_add_keywords.setOnClickListener(listener);
+        button_save_journal.setOnClickListener(listener);
+        button_show_guide.setOnClickListener(listener);
 
         seekBar_text_size.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -160,6 +199,7 @@ public class SettingsActivity extends AppCompatActivity {
         //загружаю
         loadSettings();
         fillKeywords();
+        getOrientation();
     }
 
     public void loadSettings(){
@@ -178,12 +218,11 @@ public class SettingsActivity extends AppCompatActivity {
                     break;
             }
             setTextSize();
-            checkBox_vibro_at_load_sound.setChecked(sharedPreferences.getBoolean(SETTINGS_VIBRO_AT_LOAD_SOUND, false));
-            checkBox_vibro_after_pause.setChecked(sharedPreferences.getBoolean(SETTINGS_VIBRO_AFTER_PAUSE, false));
-            checkBox_voicing_emoticons.setChecked(sharedPreferences.getBoolean(SETTINGS_VOICING_EMOTICONS, false));
+            switch_vibro_at_load_sound.setChecked(sharedPreferences.getBoolean(SETTINGS_VIBRO_AT_LOAD_SOUND, false));
+            switch_vibro_after_pause.setChecked(sharedPreferences.getBoolean(SETTINGS_VIBRO_AFTER_PAUSE, false));
             seekBar_pitch.setProgress(sharedPreferences.getInt(SETTINGS_PITCH, 0));
             seekBar_speech_rate.setProgress(sharedPreferences.getInt(SETTINGS_SPEECH_RATE, 0));
-            checkBox_keywords.setChecked(sharedPreferences.getBoolean(SETTINGS_KEYWORDS, false));
+            switch_keywords.setChecked(sharedPreferences.getBoolean(SETTINGS_KEYWORDS, false));
         }catch (Exception e){ Toast.makeText(this, "NO", Toast.LENGTH_SHORT).show();}
     }
 
@@ -192,12 +231,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         editor.putInt(SETTINGS_STORE_DAYS, seekBar_store_days.getProgress());
         editor.putInt(SETTINGS_TEXT_SIZE, seekBar_text_size.getProgress());
-        editor.putBoolean(SETTINGS_VIBRO_AT_LOAD_SOUND, checkBox_vibro_at_load_sound.isChecked());
-        editor.putBoolean(SETTINGS_VIBRO_AFTER_PAUSE, checkBox_vibro_after_pause.isChecked());
+        editor.putBoolean(SETTINGS_VIBRO_AT_LOAD_SOUND, switch_vibro_at_load_sound.isChecked());
+        editor.putBoolean(SETTINGS_VIBRO_AFTER_PAUSE, switch_vibro_after_pause.isChecked());
         editor.putInt(SETTINGS_PITCH, seekBar_pitch.getProgress());
         editor.putInt(SETTINGS_SPEECH_RATE, seekBar_speech_rate.getProgress());
-        editor.putBoolean(SETTINGS_KEYWORDS, checkBox_keywords.isChecked());
-        editor.putBoolean(SETTINGS_VOICING_EMOTICONS, checkBox_voicing_emoticons.isChecked());
+        editor.putBoolean(SETTINGS_KEYWORDS, switch_keywords.isChecked());
 
         editor.commit();
 //        Toast.makeText(this, getString(R.string.saved), Toast.LENGTH_SHORT).show();
@@ -211,8 +249,10 @@ public class SettingsActivity extends AppCompatActivity {
         tv5.setTextSize(TEXT_SIZE);
         tv6.setTextSize(TEXT_SIZE);
         tv7.setTextSize(TEXT_SIZE);
-        tv8.setTextSize(TEXT_SIZE);
-//        button_add_keywords.setTextSize(TEXT_SIZE);
+        tv9.setTextSize(TEXT_SIZE);
+        button_save_journal.setTextSize(TEXT_SIZE);
+        button_add_keywords.setTextSize(TEXT_SIZE);
+        button_show_guide.setTextSize(TEXT_SIZE);
     }
 
     public void fillKeywords(){
@@ -241,5 +281,50 @@ public class SettingsActivity extends AppCompatActivity {
                 return view;
             }
         });
+    }
+    public String getJournal(){
+        String journal = "";
+        sqlJournal = new SQLJournal(this, sqlJournal.NAME_TABLE, null,
+                sqlJournal.VERSION_TABLE);
+        db = sqlJournal.getReadableDatabase();
+        cursor = db.query(sqlJournal.NAME_TABLE, columns_journal, null, null,
+                null, null, columns_journal[2]);
+        int index_id = cursor.getColumnIndex("_ID");
+        int index_what_is_it = cursor.getColumnIndex(columns_journal[1]);
+        int index_date = cursor.getColumnIndex(columns_journal[2]);
+        int index_content = cursor.getColumnIndex(columns_journal[3]);
+        while (cursor.moveToNext()) {
+            int what_is_it = cursor.getInt(index_what_is_it);
+            String date = cursor.getString(index_date);
+            String content = cursor.getString(index_content);
+            switch (what_is_it) {
+                case 0:
+                    journal+=(" \n"+"---"+date+"-"+content);
+                    break;
+                case 1:
+                    journal+=(" \n"+"<<<"+date+"\n"+content);
+                    break;
+                case 2:
+                    journal+=(" \n"+">>>"+date+"\n"+content);
+                    break;
+            }
+        }
+        cursor.close();
+        db.close();
+        return journal;
+    }
+    public void getOrientation(){
+        if (MainActivity.REVERSE_ORIENTATION){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+        }else{
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+    }
+    public void showGuide(){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SETTINGS_SHOW_GUIDE, true);
+        editor.commit();
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
     }
 }

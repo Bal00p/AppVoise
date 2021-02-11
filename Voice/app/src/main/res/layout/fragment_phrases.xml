@@ -28,6 +28,18 @@
 >>>>>>> watercolor_dev
                 ]]>
 
+                <EditText
+                    android:id="@+id/et_search_phrases"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/search_phrases"
+                    android:inputType="textPersonName"
+                    app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <Button
                     android:id="@+id/btn_add_phrase"
                     style="@style/button_add"
@@ -36,6 +48,7 @@
                     app:layout_constraintEnd_toEndOf="parent" />
 
                 <LinearLayout
+                    android:id="@+id/linearLayout2"
                     style="@style/LinerLayot_Fragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

@@ -44,4 +44,19 @@
     <string name="phrase_1">Hello, i have hearing problems</string>
     <string name="phrase_2">With this application we will be able to communicate</string>
     <string name="phrase_3">Please speak loudly and clearly into the device</string>
+    <string name="save_dialog">Save dialogue</string>
+    <string name="saved_clipboard">Saved to clipboard</string>
+    <string name="search">Search</string>
+    <string name="search_phrases">Search by phrases</string>
+    <string name="mute_assistant">To mute the assistant, you must add the device to the "Silent" or "Vibration" mode</string>
+    <string name="guide_swipe">Swipe right to open phrases</string>
+    <string name="guide_long_click">Long click to change the speaking language</string>
+    <string name="guide_reverse">Click to flip the microphone to the interlocutor</string>
+    <string name="guide_pause">Click to freeze the screen to finish reading</string>
+    <string name="guide_text">Send to speak</string>
+    <string name="next">Next</string>
+    <string name="show_guide">Show guide</string>
+    <string name="credits"> Developed by Ilya Bogdan\n
+        Designed by Polina Emelyanova\n
+        With the support of Jorge Gonzalez-Ushakov</string>
 </resources>

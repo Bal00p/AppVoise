@@ -129,7 +129,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <Button
-                            android:id="@+id/button"
+                            android:id="@+id/btn_rotation"
                             style="@style/button_two"
                             android:layout_width="30dp"
                             android:layout_height="30dp"

@@ -1,6 +1,7 @@
 package com.ilya.voice;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -9,7 +10,10 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,14 +21,17 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class PhrasesFragment extends Fragment {
 
     Button button_add, button_back;
+    EditText editText_search;
     ListView listView_phrases;
     SQLWords sqlWords;
     Cursor cursor;
@@ -59,8 +66,9 @@ public class PhrasesFragment extends Fragment {
                 null, SQLWords.VERSION_TABLE);
         button_add = (Button)view.findViewById(R.id.btn_add_phrase);
         button_back = (Button)view.findViewById(R.id.btn_back_fragment);
+        editText_search = (EditText) view.findViewById(R.id.et_search_phrases);
         listView_phrases = (ListView)view.findViewById(R.id.lv_phrases);
-        fillPhrases();
+        fillPhrases("");
 
         listView_phrases.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -116,26 +124,70 @@ public class PhrasesFragment extends Fragment {
                 return false;
             }
         });
+
+//        editText_search.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                fillPhrases(editText_search.getText().toString());
+//                return false;
+//            }
+//        });
+        editText_search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                fillPhrases(s.toString());
+            }
+        });
         return view;
     }
 
-    public void fillPhrases(){
+    public void fillPhrases(String criterion){
         ArrayList list_phrases = new ArrayList();
         db = sqlWords.getReadableDatabase();
-        cursor = db.query(sqlWords.NAME_TABLE,new String[]{sqlWords.COLUMN_WORD},
-                SQLWords.COLUMN_WHAT_IS_IT+" = ?", new String[]{"2"},
-                null,null,null);
+        if(criterion.equals("")){
+            cursor = db.query(sqlWords.NAME_TABLE,new String[]{sqlWords.COLUMN_WORD},
+                    SQLWords.COLUMN_WHAT_IS_IT+" = ?", new String[]{"2"},
+                    null,null,null);
+        }else{
+            cursor = db.query(sqlWords.NAME_TABLE,new String[]{sqlWords.COLUMN_WORD},
+                    SQLWords.COLUMN_WHAT_IS_IT+" = ? AND "+
+                            SQLWords.COLUMN_WORD+" LIKE ?", new String[]{"2","%"+criterion+"%"},
+                    null,null,null);
+        }
         int index_word = cursor.getColumnIndex(sqlWords.COLUMN_WORD);
         while (cursor.moveToNext()){
             list_phrases.add(cursor.getString(index_word));
         }
+        if(list_phrases.size()==0 && criterion.equals("")){
+            db = sqlWords.getWritableDatabase();
+            ContentValues row = new ContentValues();
+            row.put(sqlWords.COLUMN_WORD,getString(R.string.phrase_1));
+            row.put(sqlWords.COLUMN_WHAT_IS_IT, 2);
+            row.put(sqlWords.COLUMN_RATING, 0);
+            db.insert(sqlWords.NAME_TABLE, null, row);
+            row = new ContentValues();
+            row.put(sqlWords.COLUMN_WORD,getString(R.string.phrase_2));
+            row.put(sqlWords.COLUMN_WHAT_IS_IT, 2);
+            row.put(sqlWords.COLUMN_RATING, 0);
+            db.insert(sqlWords.NAME_TABLE, null, row);
+            row = new ContentValues();
+            row.put(sqlWords.COLUMN_WORD,getString(R.string.phrase_3));
+            row.put(sqlWords.COLUMN_WHAT_IS_IT, 2);
+            row.put(sqlWords.COLUMN_RATING, 0);
+            db.insert(sqlWords.NAME_TABLE, null, row);
+        }
         cursor.close();
         db.close();
-        if(list_phrases.size()==0){
-            list_phrases.add(getString(R.string.phrase_1));
-            list_phrases.add(getString(R.string.phrase_2));
-            list_phrases.add(getString(R.string.phrase_3));
-        }
         listView_phrases.setAdapter(new ArrayAdapter(getActivity().getApplicationContext(),
                 android.R.layout.simple_list_item_1, list_phrases) {
             @Override

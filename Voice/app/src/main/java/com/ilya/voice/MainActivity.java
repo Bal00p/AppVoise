@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -51,7 +52,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements RecognitionListener, PhrasesFragment.onSomeEventListenerMain {
     //переменные
     EditText editText_text_to_speech;
-    Button button_text_to_speech, button_select_language, button_pause, button_to_settings;
+    Button button_text_to_speech, button_select_language, button_pause, button_to_settings, button_rotation;
     Button button_wave;
 //    Button button_fast_word_1, button_fast_word_2, button_fast_word_3, button_fast_word_4, button_fast_word_5;
     public String[] fast_words = new String[10];
@@ -91,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
     public static boolean VIBRO_AFTER_PAUSE = false;
     public static boolean KEYWORDS = false;
     public static boolean VOICING_EMOTICONS = false;
+    public static boolean SHOW_GUIDE = false;
 
     private SpeechRecognizer speech = null;
     private Intent recognizerIntent;
@@ -106,7 +108,9 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
     public static final int SWIPE_MIN_DISTANCE = 120;
     public static final int SWIPE_THRESHOLD_VELOCITY = 200;
     PhrasesFragment phrasesFragment;
+    GuideFragment guideFragment;
     public static boolean OPEN_FRAGMENT = false;
+    public static boolean REVERSE_ORIENTATION = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
             button_pause = (Button) findViewById(R.id.btn_pause);
             button_to_settings = (Button) findViewById(R.id.btn_to_settings);
             button_wave = (Button)findViewById(R.id.btn_wave);
+            button_rotation = (Button)findViewById(R.id.btn_rotation);
 //        button_fast_word_1 = (Button) findViewById(R.id.btn_fast_word1);
 //        button_fast_word_2 = (Button) findViewById(R.id.btn_fast_word2);
 //        button_fast_word_3 = (Button) findViewById(R.id.btn_fast_word3);
@@ -203,6 +208,10 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
                             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                             startActivity(intent);
                             break;
+                        case R.id.btn_rotation:
+                            //переворачиваю экран на 180
+                            setOrientation();
+                            break;
 //                    case R.id.btn_fast_word1:
 //                        fastWord(fast_words[fast_words.length - 1]);
 //                        break;
@@ -243,6 +252,7 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
             button_select_language.setOnClickListener(listener);
             button_pause.setOnClickListener(listener);
             button_to_settings.setOnClickListener(listener);
+            button_rotation.setOnClickListener(listener);
 //        button_fast_word_1.setOnClickListener(listener);
 //        button_fast_word_2.setOnClickListener(listener);
 //        button_fast_word_3.setOnClickListener(listener);
@@ -271,6 +281,8 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
         super.onResume();
         //применяю настройки
         loadSettings();
+
+        checkShowGuide();
         //заполняю прошедшим
         fillJournal();
 
@@ -347,11 +359,25 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
                 textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
                 editText_text_to_speech.setText("");
 //                                voicingEmoticons(text);
-                addMyMessage(text);
+                addMyMessage(checkRequest(text));
 //                wordsRating(text);
             }
-        } catch (Exception e) {
+        } catch (Exception e) {}
+    }
+
+    public String checkRequest(String text){
+        String[] arr = text.split(" ");
+        String upText = "";
+        for (int i=0; i<arr.length; i++){
+            if (arr[i].equals("DELETE")){
+                arr[i]="DЕLЕТЕ";//ВЕДЕТЕ
+            }
+            if (arr[i].equals("FROM")){
+                arr[i]="FRОМ";//АКОМ
+            }
+            upText+=(arr[i]+" ");
         }
+        return upText;
     }
 
     public void fillJournal() {
@@ -534,6 +560,7 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
             KEYWORDS = sharedPreferences.getBoolean(SettingsActivity.SETTINGS_KEYWORDS, false);
             VOICING_EMOTICONS = sharedPreferences.getBoolean(SettingsActivity.SETTINGS_VOICING_EMOTICONS, false);
             SECOND_LANGUAGE = sharedPreferences.getString(SettingsActivity.SETTINGS_LANGUAGE,"NO");
+            SHOW_GUIDE = sharedPreferences.getBoolean(SettingsActivity.SETTINGS_SHOW_GUIDE, true);
 
             button_text_to_speech.setTextSize(TEXT_SIZE);
             editText_text_to_speech.setTextSize(TEXT_SIZE);
@@ -891,6 +918,9 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.main_container, phrasesFragment).commit();
                 break;
+            case "cloSe_guiDe":
+                getSupportFragmentManager().beginTransaction().remove(guideFragment).commit();
+                break;
             default:
                 speakText(s);
                 getSupportFragmentManager().beginTransaction().remove(phrasesFragment).commit();
@@ -905,6 +935,29 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
             OPEN_FRAGMENT = false;
         }else{
             super.onBackPressed();
+        }
+    }
+    public void setOrientation(){
+        if (REVERSE_ORIENTATION){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            REVERSE_ORIENTATION=false;
+        }else{
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+            REVERSE_ORIENTATION=true;
+        }
+    }
+    public void checkShowGuide(){
+        if (SHOW_GUIDE){
+            //запускаю фрагмент с гайдом
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            guideFragment = new GuideFragment();
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+            ft.add(R.id.main_container, guideFragment);
+            ft.commit();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(SettingsActivity.SETTINGS_SHOW_GUIDE, false);
+            editor.commit();
         }
     }
 }
