@@ -28,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -41,18 +42,18 @@ import java.util.ArrayList;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    SeekBar seekBar_text_size, seekBar_pitch, seekBar_speech_rate, seekBar_store_days;
+    SeekBar seekBar_text_size, seekBar_store_days;
     Button button_add_keywords, button_save_journal, button_show_guide;
+    RadioButton radioButton_male, radioButton_female;
     Switch switch_vibro_at_load_sound, switch_vibro_after_pause, switch_keywords;
-    TextView tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv9, tv_credits;
+    TextView tv1, tv2, tv3, tv6, tv7, tv_credits;
     ListView listView_keywords;
     SharedPreferences sharedPreferences;
     public static final String
             SETTINGS_TEXT_SIZE = "text_size",
             SETTINGS_VIBRO_AT_LOAD_SOUND = "vibro_at_load_sound",
             SETTINGS_VIBRO_AFTER_PAUSE = "vibro_after_pause",
-            SETTINGS_PITCH = "pitch",
-            SETTINGS_SPEECH_RATE = "speech_rate",
+            SETTINGS_GENDER = "gender",
             SETTINGS_KEYWORDS = "keywords",
             SETTINGS_STORE_DAYS = "store_days",
             SETTINGS_VOICING_EMOTICONS = "sound_signs",
@@ -88,8 +89,6 @@ public class SettingsActivity extends AppCompatActivity {
                 SQLWords.VERSION_TABLE);
 
         seekBar_text_size = (SeekBar)findViewById(R.id.sb_text_size_settings);
-        seekBar_pitch = (SeekBar)findViewById(R.id.sb_pitch_settings);
-        seekBar_speech_rate = (SeekBar)findViewById(R.id.sb_speech_rate_settings);
         seekBar_store_days = (SeekBar)findViewById(R.id.sb_store_days_settings);
         switch_vibro_at_load_sound = (Switch)findViewById(R.id.sw_vibro_at_loud_sounds_settings);
         switch_vibro_after_pause = (Switch)findViewById(R.id.sw_vibro_after_pause_settings);
@@ -97,15 +96,14 @@ public class SettingsActivity extends AppCompatActivity {
         button_add_keywords = (Button)findViewById(R.id.btn_add_keyword_settings);
         button_save_journal = (Button)findViewById(R.id.btn_save_journal);
         button_show_guide = (Button)findViewById(R.id.btn_show_guide);
+        radioButton_male = (RadioButton)findViewById(R.id.rb_male_settings);
+        radioButton_female = (RadioButton)findViewById(R.id.rb_female_settings);
         listView_keywords = (ListView)findViewById(R.id.lv_keywords);
         tv1 = (TextView)findViewById(R.id.tv1_settings);
         tv2 = (TextView)findViewById(R.id.tv2_settings);
         tv3 = (TextView)findViewById(R.id.tv3_settings);
-        tv4 = (TextView)findViewById(R.id.tv4_settings);
-        tv5 = (TextView)findViewById(R.id.tv5_settings);
         tv6 = (TextView)findViewById(R.id.tv6_settings);
         tv7 = (TextView)findViewById(R.id.tv7_settings);
-        tv9 = (TextView)findViewById(R.id.tv9_settings);
         tv_credits = (TextView)findViewById(R.id.tv_credits);
         tv_credits.setText(getString(R.string.credits));
 
@@ -142,12 +140,20 @@ public class SettingsActivity extends AppCompatActivity {
                     case R.id.btn_show_guide:
                         showGuide();
                         break;
+                    case R.id.rb_male_settings:
+
+                        break;
+                    case R.id.rb_female_settings:
+
+                        break;
                 }
             }
         };
         button_add_keywords.setOnClickListener(listener);
         button_save_journal.setOnClickListener(listener);
         button_show_guide.setOnClickListener(listener);
+        radioButton_male.setOnClickListener(listener);
+        radioButton_female.setOnClickListener(listener);
 
         seekBar_text_size.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -220,8 +226,8 @@ public class SettingsActivity extends AppCompatActivity {
             setTextSize();
             switch_vibro_at_load_sound.setChecked(sharedPreferences.getBoolean(SETTINGS_VIBRO_AT_LOAD_SOUND, false));
             switch_vibro_after_pause.setChecked(sharedPreferences.getBoolean(SETTINGS_VIBRO_AFTER_PAUSE, false));
-            seekBar_pitch.setProgress(sharedPreferences.getInt(SETTINGS_PITCH, 0));
-            seekBar_speech_rate.setProgress(sharedPreferences.getInt(SETTINGS_SPEECH_RATE, 0));
+            radioButton_female.setChecked(true);
+            radioButton_male.setChecked(sharedPreferences.getBoolean(SETTINGS_GENDER, false));
             switch_keywords.setChecked(sharedPreferences.getBoolean(SETTINGS_KEYWORDS, false));
         }catch (Exception e){ Toast.makeText(this, "NO", Toast.LENGTH_SHORT).show();}
     }
@@ -233,26 +239,23 @@ public class SettingsActivity extends AppCompatActivity {
         editor.putInt(SETTINGS_TEXT_SIZE, seekBar_text_size.getProgress());
         editor.putBoolean(SETTINGS_VIBRO_AT_LOAD_SOUND, switch_vibro_at_load_sound.isChecked());
         editor.putBoolean(SETTINGS_VIBRO_AFTER_PAUSE, switch_vibro_after_pause.isChecked());
-        editor.putInt(SETTINGS_PITCH, seekBar_pitch.getProgress());
-        editor.putInt(SETTINGS_SPEECH_RATE, seekBar_speech_rate.getProgress());
+        editor.putBoolean(SETTINGS_GENDER, radioButton_male.isChecked());
         editor.putBoolean(SETTINGS_KEYWORDS, switch_keywords.isChecked());
 
         editor.commit();
-//        Toast.makeText(this, getString(R.string.saved), Toast.LENGTH_SHORT).show();
     }
 
     public void setTextSize(){
         tv1.setTextSize(TEXT_SIZE);
         tv2.setTextSize(TEXT_SIZE);
         tv3.setTextSize(TEXT_SIZE);
-        tv4.setTextSize(TEXT_SIZE);
-        tv5.setTextSize(TEXT_SIZE);
         tv6.setTextSize(TEXT_SIZE);
         tv7.setTextSize(TEXT_SIZE);
-        tv9.setTextSize(TEXT_SIZE);
         button_save_journal.setTextSize(TEXT_SIZE);
         button_add_keywords.setTextSize(TEXT_SIZE);
         button_show_guide.setTextSize(TEXT_SIZE);
+        radioButton_male.setTextSize(TEXT_SIZE);
+        radioButton_female.setTextSize(TEXT_SIZE);
     }
 
     public void fillKeywords(){

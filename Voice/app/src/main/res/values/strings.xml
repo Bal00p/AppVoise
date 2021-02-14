@@ -59,4 +59,8 @@
     <string name="credits"> Developed by Ilya Bogdan\n
         Designed by Polina Emelyanova\n
         With the support of Jorge Gonzalez-Ushakov</string>
+    <string name="male_voice">Male voice</string>
+    <string name="female_voice">Female voice</string>
+    <string name="stop">Stop</string>
+    <string name="speech">Speech</string>
 </resources>

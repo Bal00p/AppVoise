@@ -165,7 +165,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:text="SPEECH"
+                        android:text="@string/speech"
                         app:layout_constraintBottom_toBottomOf="@+id/et_text_to_speech"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/et_text_to_speech" />
