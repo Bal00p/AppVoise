@@ -12,55 +12,72 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <LinearLayout
-            style="@style/layot"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/imageView"
+                style="@style/image_style"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"><![CDATA[
+                android:layout_weight="1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"><![CDATA[
 
                 =======
 >>>>>>> watercolor_dev
                 ]]>
 
-                <Button
-                    android:id="@+id/btn_add_phrase"
-                    style="@style/button_add"
-                    android:text="@string/add"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-
                 <LinearLayout
+                    android:id="@+id/linearLayout6"
                     style="@style/LinerLayot_Fragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="60dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:orientation="vertical">
 
-                    <ListView
-                        android:id="@+id/lv_phrases"
+                    <LinearLayout
+                        android:id="@+id/linearLayout5"
                         style="@style/stule_phrases"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="50dp"
-                        android:layout_weight="100">
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                    </ListView>
+                        <ListView
+                            android:id="@+id/lv_phrases"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="50dp"
+                            android:layout_weight="100">
 
+                        </ListView>
+
+                    </LinearLayout>
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_add_phrase"
+                    style="@style/button_add"
+                    android:layout_marginEnd="13dp"
+                    android:text="@string/add"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/linearLayout6" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/btn_back_fragment"

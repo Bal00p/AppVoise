@@ -52,9 +52,7 @@
         <item name="android:layout_width">@dimen/btn_add</item>
     </style>
     <style name="LinerLayot_Fragment">
-        <item name="android:paddingLeft">10dp</item>
-        <item name="android:paddingRight">10dp</item>
-        <item name="android:paddingTop">50dp</item>
+        <item name="android:background">@drawable/linerlayot_fragments</item>
     </style>
     <style name="conslayot_frag">
         <item name="android:background">@drawable/conslayout_fragment</item>
@@ -69,5 +67,12 @@
         <item name="android:layout_height">@dimen/wave_radius</item>
         <item name="android:layout_width">@dimen/wave_radius</item>
         <item name="android:background">@drawable/background_wave</item>
+    </style>
+    <style name="image_style">
+        <item name="android:src">@drawable/light_theme</item>
+        <item name="android:scaleType">centerCrop</item>
+    </style>
+    <style name="textviev_listviev">
+        <item name="android:background">@drawable/textviev</item>
     </style>
    </resources>

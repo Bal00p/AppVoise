@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 public class PhrasesFragment extends Fragment {
 
+
     Button button_add, button_back;
     ListView listView_phrases;
     SQLWords sqlWords;
@@ -137,7 +138,7 @@ public class PhrasesFragment extends Fragment {
             list_phrases.add(getString(R.string.phrase_3));
         }
         listView_phrases.setAdapter(new ArrayAdapter(getActivity().getApplicationContext(),
-                android.R.layout.simple_list_item_1, list_phrases) {
+                R.layout.textviev, list_phrases) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
