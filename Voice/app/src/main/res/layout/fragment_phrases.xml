@@ -34,13 +34,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"><![CDATA[
-
-                =======
->>>>>>> watercolor_dev
-                ]]>
-
-<<<<<<< HEAD
+                app:layout_constraintTop_toTopOf="parent">
                 <EditText
                     android:id="@+id/et_search_phrases"
                     android:layout_width="match_parent"
@@ -53,19 +47,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <Button
-                    android:id="@+id/btn_add_phrase"
-                    style="@style/button_add"
-                    android:text="@string/add"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-
                 <LinearLayout
                     android:id="@+id/linearLayout2"
-=======
-                <LinearLayout
-                    android:id="@+id/linearLayout6"
->>>>>>> watercolor_1
                     style="@style/LinerLayot_Fragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -97,7 +80,7 @@
                     android:layout_marginEnd="13dp"
                     android:text="@string/add"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/linearLayout6" />
+                    app:layout_constraintEnd_toEndOf="@+id/linearLayout2" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
