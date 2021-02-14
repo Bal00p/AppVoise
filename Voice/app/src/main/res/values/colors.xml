@@ -18,9 +18,11 @@
     <color name="btn_empty">#00FFFFFF</color>
     <color name="btn_add">#9E05699C</color>
     <color name="linerlayot_frag">#B22F6771</color>
-    <color name="phrases_color">#B9FFFFFF</color>
+    <color name="phrases_color">#B9534F4F</color>
     <color name="layout">#609CB3</color>
     <color name="wave_center">#60ffff</color>
     <color name="wave_wave">#7760ffff</color>
     <color name="wave_stroke">#0060ffff</color>
+    <color name="textviev">#B4000000</color>
+    <color name="textviev_stroke">#00FFFFFF</color>
 </resources>

@@ -19,11 +19,15 @@
     <dimen name="btn_add">60dp</dimen>
     <dimen name="radius_linerlayot_frag">50dp</dimen>
     <dimen name="padding_top_ll_frag">50dp</dimen>
-    <dimen name="padding_ll_frag">30dp</dimen>
+    <dimen name="padding_ll_frag">10dp</dimen>
     <dimen name="layout_height_edittext">30dp</dimen>
     <dimen name="padding_edittext">10dp</dimen>
     <dimen name="radius_phrases">30dp</dimen>
     <dimen name="wave_radius">120dp</dimen>
     <dimen name="wave_center">60dp</dimen>
-
+    <dimen name="phrases_padding">3dp</dimen>
+    <dimen name="textviev_padding">20dp</dimen>
+    <dimen name="textviev_stroke_left">10dp</dimen>
+    <dimen name="text_viev_stroke">10dp</dimen>
+    <dimen name="textviev_radius">20dp</dimen>
 </resources>

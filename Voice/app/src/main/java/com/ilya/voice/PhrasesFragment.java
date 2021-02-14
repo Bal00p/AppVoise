@@ -30,6 +30,7 @@ import java.util.ArrayList;
 
 public class PhrasesFragment extends Fragment {
 
+
     Button button_add, button_back;
     EditText editText_search;
     ListView listView_phrases;
@@ -189,7 +190,7 @@ public class PhrasesFragment extends Fragment {
         cursor.close();
         db.close();
         listView_phrases.setAdapter(new ArrayAdapter(getActivity().getApplicationContext(),
-                android.R.layout.simple_list_item_1, list_phrases) {
+                R.layout.textviev, list_phrases) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
