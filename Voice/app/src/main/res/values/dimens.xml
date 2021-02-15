@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="corners_on_layout">100dp</dimen>
-    <dimen name="height_button_pause">70dp</dimen>
-    <dimen name="width_button_pause">70dp</dimen>
+    <dimen name="height_button_pause">65dp</dimen>
+    <dimen name="width_button_pause">65dp</dimen>
     <dimen name="height_button">40dp</dimen>
     <dimen name="width_button">40dp</dimen>
     <dimen name="radius_button_pause">60dp</dimen>
     <dimen name="radius_button_language">60dp</dimen>
-    <dimen name="stroke_button_pause">10dp</dimen>
+    <dimen name="stroke_button_pause">15dp</dimen>
     <dimen name="stroke_button_speesh">10dp</dimen>
     <dimen name="radius_btn_speesh">30dp</dimen>
     <dimen name="radius_edittext">20dp</dimen>
@@ -30,4 +30,11 @@
     <dimen name="textviev_stroke_left">10dp</dimen>
     <dimen name="text_viev_stroke">10dp</dimen>
     <dimen name="textviev_radius">20dp</dimen>
+    <dimen name="radius_et_search">40dp</dimen>
+    <dimen name="padding_et_search">10dp</dimen>
+    <dimen name="radius_message">25dp</dimen>
+    <dimen name="padding_message">25dp</dimen>
+    <dimen name="stroke_message">20dp</dimen>
+    <dimen name="btn_white_radius">60dp</dimen>
+    <dimen name="height_button_white_pause">35dp</dimen>
 </resources>

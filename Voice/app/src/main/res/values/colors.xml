@@ -8,8 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="color_for_layout">#FF669944</color>
-    <color name="stroke_button_pause">#FFFFFF</color>
-    <color name="color_button_pause">#036FA6</color>
+    <color name="stroke_button_pause">#00FFFFFF</color>
+    <color name="color_button_pause">#B0036FA6</color>
     <color name="stroke_btn_speesh">#05699C</color>
     <color name="color_edittext">#C9FFFFFF</color>
     <color name="constrainltayuots_color">#609CB3</color>
@@ -25,4 +25,9 @@
     <color name="wave_stroke">#0060ffff</color>
     <color name="textviev">#B4000000</color>
     <color name="textviev_stroke">#00FFFFFF</color>
+    <color name="solid_et_search">#90512424</color>
+    <color name="solid_my_message">#706BD1FF</color>
+    <color name="stroke_message">#00FFFFFF</color>
+    <color name="solid_outside_message">#7E2F5598</color>
+    <color name="btn_white_color">#FFFFFF</color>
 </resources>
