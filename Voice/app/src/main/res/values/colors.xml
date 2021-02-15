@@ -25,13 +25,10 @@
     <color name="wave_stroke">#0060ffff</color>
     <color name="textviev">#B4000000</color>
     <color name="textviev_stroke">#00FFFFFF</color>
-<<<<<<< HEAD
     <color name="notify_color">#2196F3</color>
-=======
     <color name="solid_et_search">#90512424</color>
     <color name="solid_my_message">#706BD1FF</color>
     <color name="stroke_message">#00FFFFFF</color>
     <color name="solid_outside_message">#7E2F5598</color>
     <color name="btn_white_color">#FFFFFF</color>
->>>>>>> watercolor_2
 </resources>

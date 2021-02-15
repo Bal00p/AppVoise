@@ -33,7 +33,8 @@
     <dimen name="radius_et_search">40dp</dimen>
     <dimen name="padding_et_search">10dp</dimen>
     <dimen name="radius_message">25dp</dimen>
-    <dimen name="padding_message">25dp</dimen>
+    <dimen name="padding_message">15dp</dimen>
+    <dimen name="padding_message_right_and_left">17dp</dimen>
     <dimen name="stroke_message">20dp</dimen>
     <dimen name="btn_white_radius">60dp</dimen>
     <dimen name="height_button_white_pause">35dp</dimen>
