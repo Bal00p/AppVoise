@@ -101,7 +101,7 @@ public class PhrasesFragment extends Fragment {
                         dialogEditPhrase.show(manager, "addPhrase");
                         break;
                     case R.id.btn_back_fragment:
-                        someEventListenerMain.someEvent("");
+                        someEventListenerMain.someEvent("cloSe_phrAses");
                         break;
                 }
             }
@@ -198,7 +198,7 @@ public class PhrasesFragment extends Fragment {
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             if(e1.getX() - e2.getX() > MainActivity.SWIPE_MIN_DISTANCE &&
                     Math.abs(velocityX) > MainActivity.SWIPE_THRESHOLD_VELOCITY) {
-                someEventListenerMain.someEvent("");
+                someEventListenerMain.someEvent("cloSe_phrAses");
                 return false; // справа налево
             }
             return false;

@@ -889,6 +889,10 @@ public class MainActivity extends AppCompatActivity
             case "cloSe_guiDe":
                 getSupportFragmentManager().beginTransaction().remove(guideFragment).commit();
                 break;
+            case "cloSe_phrAses":
+                getSupportFragmentManager().beginTransaction().remove(phrasesFragment).commit();
+                OPEN_FRAGMENT = false;
+                break;
             default:
                 speakText(s);
                 getSupportFragmentManager().beginTransaction().remove(phrasesFragment).commit();
