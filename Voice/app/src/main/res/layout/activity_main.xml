@@ -71,11 +71,24 @@
                         android:orientation="vertical" />
                 </ScrollView>
 
-                <TextView
-                    android:id="@+id/tv_my_partial_result"
+                <LinearLayout
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_my_partial_result"
+                        style="@style/outside_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100" />
+                </LinearLayout>
 
             </LinearLayout>
 
