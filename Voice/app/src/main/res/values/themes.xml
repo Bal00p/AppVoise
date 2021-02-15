@@ -75,4 +75,18 @@
     <style name="textviev_listviev">
         <item name="android:background">@drawable/textviev</item>
     </style>
+    <style name="et__spearch_style">
+        <item name="android:background">@drawable/et_search_drawable</item>
+    </style>
+    <style name="my_message">
+        <item name="android:background">@drawable/my_message_drawable</item>
+    </style>
+    <style name="outside_message">
+        <item name="android:background">@drawable/outside_drawable</item>
+    </style>
+    <style name="btn_white_pause">
+        <item name="android:background">@drawable/button_white</item>
+        <item name="android:layout_width">@dimen/width_button_pause</item>
+        <item name="android:layout_height">@dimen/height_button_white_pause</item>
+    </style>
    </resources>

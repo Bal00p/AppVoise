@@ -35,17 +35,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
-                <EditText
-                    android:id="@+id/et_search_phrases"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="@string/search_phrases"
-                    android:inputType="textPersonName"
-                    app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
 
                 <LinearLayout
                     android:id="@+id/linearLayout2"
@@ -62,11 +51,22 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
 
+                        <EditText
+                            android:id="@+id/et_search_phrases"
+                            style="@style/et__spearch_style"
+                            android:layout_width="match_parent"
+                            android:layout_height="36dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:hint="@string/search_phrases"
+                            android:inputType="textPersonName" />
+
                         <ListView
                             android:id="@+id/lv_phrases"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginTop="50dp"
+                            android:layout_marginTop="15dp"
                             android:layout_weight="100">
 
                         </ListView>
@@ -91,7 +91,9 @@
             style="@style/button_empty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="2" />
+            android:layout_weight="2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
 
 </FrameLayout>
