@@ -2,6 +2,9 @@ package com.ilya.voice;
 
 import android.Manifest;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,20 +14,26 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.speech.tts.Voice;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -43,6 +52,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -115,6 +126,12 @@ public class MainActivity extends AppCompatActivity
     public static boolean REVERSE_ORIENTATION = false;
     public static boolean SPEAKING = false;
 
+    TelephonyManager mTelephonyManager;
+    PhoneStateListener mPhoneStateListener;
+    public static final int NOTIFY_ID = 101;
+    DialogPhone dialogPhone;
+    public static int VALUE_SOUND = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -123,10 +140,41 @@ public class MainActivity extends AppCompatActivity
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 String requiredPermission = Manifest.permission.RECORD_AUDIO;
-                if (checkCallingOrSelfPermission(requiredPermission) == PackageManager.PERMISSION_DENIED) {
+                if (checkCallingOrSelfPermission(requiredPermission) ==
+                        PackageManager.PERMISSION_DENIED) {
                     requestPermissions(new String[]{requiredPermission}, 101);
                 }
             }
+            Intent resultIntent = new Intent(this, MainActivity.class);
+            PendingIntent resultPendingIntent = PendingIntent.getActivity(this,
+                    0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                    getApplicationContext(),"default")
+                    .setSmallIcon(android.R.drawable.ic_menu_view)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setContentTitle(getString(R.string.notify_title))
+                    .setOngoing(true)
+                    .setChannelId(getPackageName())
+                    .setShowWhen(false)
+                    .setNotificationSilent()
+                    .setColor(getColor(R.color.notify_color))
+                    .setColorized(true)
+                    .setContentIntent(resultPendingIntent);
+
+            NotificationManager notificationManager = (NotificationManager)
+                    getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationChannel channel = new NotificationChannel(
+                    getPackageName(),
+                    getString(R.string.app_name),
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+            notificationManager.notify(NOTIFY_ID,builder.build());
+
+            mTelephonyManager = (TelephonyManager) getSystemService(getApplicationContext().TELEPHONY_SERVICE);
             gestureDetector = new GestureDetector(new GestureListener());
 
             recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -184,7 +232,8 @@ public class MainActivity extends AppCompatActivity
                             }
                             break;
                         case R.id.btn_to_settings:
-                            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                            Intent intent = new Intent(MainActivity.this,
+                                    SettingsActivity.class);
                             startActivity(intent);
                             break;
                         case R.id.btn_rotation:
@@ -231,6 +280,36 @@ public class MainActivity extends AppCompatActivity
                     return false;
                 }
             });
+
+            mPhoneStateListener = new PhoneStateListener() {
+                @Override
+                public void onCallStateChanged(int state, String incomingNumber) {
+                    super.onCallStateChanged(state, incomingNumber);
+
+                    switch (state) {
+                        case TelephonyManager.CALL_STATE_IDLE:
+//                            Toast.makeText(MainActivity.this, "ожидание звонка", Toast.LENGTH_SHORT).show();
+                            AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+                            audioManager.setMode(AudioManager.MODE_IN_CALL);
+                            if(VALUE_SOUND!=-1){
+                                audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+                                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, VALUE_SOUND, 0);
+                                audioManager.setSpeakerphoneOn(false);
+                                VALUE_SOUND=-1;
+                            }
+                            break;
+                        case TelephonyManager.CALL_STATE_RINGING:
+//                            Toast.makeText(MainActivity.this, "входящий звонок", Toast.LENGTH_SHORT).show();
+                            break;
+                        case TelephonyManager.CALL_STATE_OFFHOOK:
+//                            Toast.makeText(MainActivity.this, "на удержании", Toast.LENGTH_SHORT).show();
+                            dialogPhone = new DialogPhone();
+                            FragmentManager manager = getSupportFragmentManager();
+                            dialogPhone.show(manager, "addPhrase");
+                            break;
+                    }
+                }
+            };
 
         }catch (Exception e){}
     }
@@ -311,6 +390,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         //применяю настройки
         loadSettings();
 
@@ -334,6 +414,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
+        mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
         if (speech != null) {
             speech.destroy();
             Log.i(LOG_TAG, "destroy");

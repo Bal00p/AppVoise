@@ -18,7 +18,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class GuideFragment extends Fragment {
 
     LinearLayout linearLayout_guide1, linearLayout_guide2, linearLayout_guide3, linearLayout_guide4,
-            linearLayout_guide5;
+            linearLayout_guide5, linearLayout_guide6;
     Button button_next;
     public static int COUNT_NEXT = 0;
 
@@ -41,6 +41,7 @@ public class GuideFragment extends Fragment {
         linearLayout_guide3 = (LinearLayout) view.findViewById(R.id.ll_guide_3);
         linearLayout_guide4 = (LinearLayout) view.findViewById(R.id.ll_guide_4);
         linearLayout_guide5 = (LinearLayout) view.findViewById(R.id.ll_guide_5);
+        linearLayout_guide6 = (LinearLayout) view.findViewById(R.id.ll_guide_6);
         button_next = (Button)view.findViewById(R.id.btn_next);
         next();
         View.OnClickListener listener = new View.OnClickListener() {
@@ -105,6 +106,14 @@ public class GuideFragment extends Fragment {
                         0,
                         ViewGroup.LayoutParams.MATCH_PARENT));
                 linearLayout_guide5.setLayoutParams(new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
+                break;
+            case 5:
+                linearLayout_guide5.setLayoutParams(new LinearLayout.LayoutParams(
+                        0,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
+                linearLayout_guide6.setLayoutParams(new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT));
                 break;

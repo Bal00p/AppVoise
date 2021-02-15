@@ -54,6 +54,7 @@
     <string name="guide_reverse">Click to flip the microphone to the interlocutor</string>
     <string name="guide_pause">Click to freeze the screen to finish reading</string>
     <string name="guide_text">Send to speak</string>
+    <string name="guide_phone">Turn on the speakerphone and raise the media sound to chat a call using the app</string>
     <string name="next">Next</string>
     <string name="show_guide">Show guide</string>
     <string name="credits"> Developed by Ilya Bogdan\n
@@ -63,4 +64,8 @@
     <string name="female_voice">Female voice</string>
     <string name="stop">Stop</string>
     <string name="speech">Speech</string>
+    <string name="notify_title">Click to run the application</string>
+    <string name="dialog_phone_message">To turn on speakerphone and increase the Multimedia sound for communication on a call</string>
+    <string name="turn_on">Turn on</string>
+    <string name="toast_phone_sound">Speakerphone is on and multimedia sound is raised</string>
 </resources>

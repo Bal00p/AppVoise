@@ -125,14 +125,6 @@ public class PhrasesFragment extends Fragment {
                 return false;
             }
         });
-
-//        editText_search.setOnKeyListener(new View.OnKeyListener() {
-//            @Override
-//            public boolean onKey(View v, int keyCode, KeyEvent event) {
-//                fillPhrases(editText_search.getText().toString());
-//                return false;
-//            }
-//        });
         editText_search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
