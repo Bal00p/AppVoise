@@ -9,6 +9,7 @@
     tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -17,8 +18,7 @@
             style="@style/wave_style"
             android:layout_width="@dimen/wave_center"
             android:layout_height="@dimen/wave_center"
-            android:layout_marginBottom="576dp"
-            app:layout_constraintBottom_toTopOf="@+id/btn_pause"
+            app:layout_constraintBottom_toTopOf="@+id/main_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -81,13 +81,8 @@
                         android:id="@+id/tv_my_partial_result"
                         style="@style/outside_message"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
+                        android:layout_height="wrap_content" />
 
-                    <Space
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="100" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -221,5 +216,15 @@
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/main_layout2"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="90dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

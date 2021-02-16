@@ -68,4 +68,5 @@
     <string name="dialog_phone_message">To turn on speakerphone and increase the Multimedia sound for communication on a call</string>
     <string name="turn_on">Turn on</string>
     <string name="toast_phone_sound">Speakerphone is on and multimedia sound is raised</string>
+    <string name="channel_notify_open_app">Permanent notification</string>
 </resources>

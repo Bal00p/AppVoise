@@ -1,7 +1,6 @@
 package com.ilya.voice;
 
 import android.Manifest;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -14,18 +13,12 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RectShape;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.provider.Settings;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -53,14 +46,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
@@ -73,7 +64,7 @@ public class MainActivity extends AppCompatActivity
     Button button_wave;public String[] fast_words = new String[10];
     public String[] keywords = new String[10];
     SQLWords sqlWords;
-    LinearLayout container_journal, main_layout;
+    LinearLayout container_journal, main_layout, main_layout2;
     ConstraintLayout main_container;
     ScrollView scrollView;
     View tableRow;
@@ -115,7 +106,7 @@ public class MainActivity extends AppCompatActivity
     public static String SECOND_LANGUAGE = "";
 
     public static boolean PAUSE = false;
-    public static int countRmsChanged = 0;
+    public static float lastRmsChanged = 0;
 
     GestureDetector gestureDetector;
     public static final int SWIPE_MIN_DISTANCE = 120;
@@ -155,7 +146,7 @@ public class MainActivity extends AppCompatActivity
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setContentTitle(getString(R.string.notify_title))
                     .setOngoing(true)
-                    .setChannelId(getPackageName())
+                    .setChannelId(getString(R.string.channel_notify_open_app))
                     .setShowWhen(false)
                     .setNotificationSilent()
                     .setColor(getColor(R.color.notify_color))
@@ -165,7 +156,7 @@ public class MainActivity extends AppCompatActivity
             NotificationManager notificationManager = (NotificationManager)
                     getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationChannel channel = new NotificationChannel(
-                    getPackageName(),
+                    getString(R.string.channel_notify_open_app),
                     getString(R.string.app_name),
                     NotificationManager.IMPORTANCE_DEFAULT
             );
@@ -181,7 +172,6 @@ public class MainActivity extends AppCompatActivity
             recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
             recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getPackageName());
             recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, new Long(3000));
             recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
             startListening();
 
@@ -203,6 +193,7 @@ public class MainActivity extends AppCompatActivity
             container_journal = (LinearLayout) findViewById(R.id.container_journal);
             main_container = (ConstraintLayout) findViewById(R.id.main_container);
             main_layout = (LinearLayout) findViewById(R.id.main_layout);
+            main_layout2 = (LinearLayout) findViewById(R.id.main_layout2);
             scrollView = (ScrollView) findViewById(R.id.sv_journal);
             scrollView.getViewTreeObserver().addOnGlobalLayoutListener(keyboardLayoutListener);
             //устанавливаю текущую дату и время сеанса
@@ -210,6 +201,13 @@ public class MainActivity extends AppCompatActivity
             removeOldJournal();
 
             main_layout.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    gestureDetector.onTouchEvent(event);
+                    return true;
+                }
+            });
+            main_layout2.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     gestureDetector.onTouchEvent(event);
@@ -226,6 +224,7 @@ public class MainActivity extends AppCompatActivity
                                 SPEAKING = false;
                                 textToSpeech.stop();
                                 button_text_to_speech.setText(getString(R.string.speech));
+                                startListening();
                             }else{
                                 String text = editText_text_to_speech.getText().toString();
                                 speakText(text);
@@ -246,13 +245,11 @@ public class MainActivity extends AppCompatActivity
                             } else {
                                 HOME_LANGUAGE = true;
                             }
-                            selectLanguage();
+                            selectLanguageAndUpTTSAndSTT();
                             speech.startListening(recognizerIntent);
                             break;
                         case R.id.btn_pause:
                             if (PAUSE) {
-                                //показываю всё то, что не показывал
-
                                 PAUSE = false;
                             } else {
                                 PAUSE = true;
@@ -348,14 +345,21 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onInit(int initStatus) {
+        String language_tag;
+        if(HOME_LANGUAGE){
+            language_tag = SECOND_LANGUAGE;
+        }else{
+            language_tag = Locale.getDefault().toLanguageTag();
+        }
         if (initStatus == TextToSpeech.SUCCESS) {
-            if (textToSpeech.isLanguageAvailable(new Locale(Locale.getDefault().getLanguage()))
+            if (textToSpeech.isLanguageAvailable(new Locale(
+                    Locale.forLanguageTag(language_tag).getLanguage()))
                     == TextToSpeech.LANG_AVAILABLE) {
-                textToSpeech.setLanguage(new Locale(Locale.getDefault().getLanguage()));
+                textToSpeech.setLanguage(new Locale(Locale.forLanguageTag(language_tag).getLanguage()));
             } else {
                 textToSpeech.setLanguage(Locale.US);
             }
-            String l = Locale.getDefault().getLanguage();
+            String l = Locale.forLanguageTag(language_tag).getLanguage();
             String gender2 = (MALE_GENDER? "male_1-local" : "female_1-local");
             String gender5 = (MALE_GENDER? l+"f" : l+"c");
             for(Voice x: textToSpeech.getVoices()){
@@ -363,7 +367,7 @@ public class MainActivity extends AppCompatActivity
                 String[] r = v[0].split("-");
                 if(v.length>1){
                     if(v[1].equals(gender2)&&r[0].equals(l)){
-                        Voice voice = new Voice(x.getName(),Locale.getDefault(),
+                        Voice voice = new Voice(x.getName(),Locale.forLanguageTag(language_tag),
                                 Voice.QUALITY_VERY_HIGH, Voice.LATENCY_VERY_LOW,
                                 true,null);
                         textToSpeech.setVoice(voice);
@@ -372,7 +376,7 @@ public class MainActivity extends AppCompatActivity
                     if(r.length==5){
                         //ruf - male, ruc - female
                         if(r[0].equals(l)&&r[4].equals("local")&&r[3].equals(gender5)){
-                            Voice voice = new Voice(x.getName(),Locale.getDefault(),
+                            Voice voice = new Voice(x.getName(),Locale.forLanguageTag(language_tag),
                                     Voice.QUALITY_VERY_HIGH, Voice.LATENCY_VERY_LOW,
                                     true,null);
                             textToSpeech.setVoice(voice);
@@ -400,15 +404,13 @@ public class MainActivity extends AppCompatActivity
 
         fillKeyWords();
 
-        selectLanguage();
+        selectLanguageAndUpTTSAndSTT();
         startListening();
 
         if(OPEN_FRAGMENT){
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.main_container, phrasesFragment).commit();
         }
-        textToSpeech = new TextToSpeech(this, this);
-        textToSpeech.setOnUtteranceProgressListener(utteranceProgressListener);
     }
 
     @Override
@@ -473,10 +475,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void speakText(String text){
-        addOutsideMessage(partialResult);
-        textView_partial_result.setText("");
-        textView_partial_result.setLayoutParams(new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,0));
+        if(!partialResult.equals("")){
+            addOutsideMessage(partialResult);
+            textView_partial_result.setText("");
+            textView_partial_result.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,0));
+        }
         speech.destroy();
         try {
             if (!text.equals("")) {
@@ -660,7 +664,6 @@ public class MainActivity extends AppCompatActivity
             VIBRO_AT_LOAD_SOUND = sharedPreferences.getBoolean(SettingsActivity.SETTINGS_VIBRO_AT_LOAD_SOUND, false);
             VIBRO_AFTER_PAUSE = sharedPreferences.getBoolean(SettingsActivity.SETTINGS_VIBRO_AFTER_PAUSE, false);
             KEYWORDS = sharedPreferences.getBoolean(SettingsActivity.SETTINGS_KEYWORDS, false);
-            VOICING_EMOTICONS = sharedPreferences.getBoolean(SettingsActivity.SETTINGS_VOICING_EMOTICONS, false);
             SECOND_LANGUAGE = sharedPreferences.getString(SettingsActivity.SETTINGS_LANGUAGE,"NO");
             SHOW_GUIDE = sharedPreferences.getBoolean(SettingsActivity.SETTINGS_SHOW_GUIDE, true);
             MALE_GENDER = sharedPreferences.getBoolean(SettingsActivity.SETTINGS_GENDER, false);
@@ -699,7 +702,7 @@ public class MainActivity extends AppCompatActivity
         LAST_MILLIS = CALENDAR_MILLIS.getTimeInMillis();
     }
 
-    public void selectLanguage(){
+    public void selectLanguageAndUpTTSAndSTT(){
         speech.stopListening();
         if(HOME_LANGUAGE){
             //изменяю на второй
@@ -709,21 +712,32 @@ public class MainActivity extends AppCompatActivity
             }else{
                 recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,
                         Locale.forLanguageTag(SECOND_LANGUAGE).toString());
+                textToSpeech = new TextToSpeech(this, this);
+                textToSpeech.setOnUtteranceProgressListener(utteranceProgressListener);
                 button_select_language.setText(Locale.forLanguageTag(SECOND_LANGUAGE).getDisplayLanguage());
             }
         }else{
             //возвращаю родной
             recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().toString());
+            textToSpeech = new TextToSpeech(this, this);
+            textToSpeech.setOnUtteranceProgressListener(utteranceProgressListener);
             button_select_language.setText(Locale.getDefault().getDisplayLanguage());
         }
     }
 
     public void onLoadSound(){
-        Toast.makeText(getApplicationContext(), getString(R.string.warning_load_sound), Toast.LENGTH_SHORT).show();
         Vibrator vibratorManager = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (vibratorManager != null) {
             VibrationEffect effect = VibrationEffect.createOneShot(
-                    500, VibrationEffect.DEFAULT_AMPLITUDE);
+                    300, VibrationEffect.DEFAULT_AMPLITUDE);
+            vibratorManager.vibrate(effect);
+        }
+    }
+    public void onLongLoadSound(){
+        Vibrator vibratorManager = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibratorManager != null) {
+            VibrationEffect effect = VibrationEffect.createOneShot(
+                    700, VibrationEffect.DEFAULT_AMPLITUDE);
             vibratorManager.vibrate(effect);
         }
     }
@@ -800,21 +814,15 @@ public class MainActivity extends AppCompatActivity
         gradientDrawable.setStroke(size, getColor(R.color.wave_stroke));
         button_wave.setBackground(gradientDrawable);
 
-        if (rmsdB==10.0 && countRmsChanged==0) {
-            countRmsChanged++;
+        if(VIBRO_AT_LOAD_SOUND){
+            if (rmsdB==10.0 && lastRmsChanged <=0) {
+                onLoadSound();
+            }
+            if (rmsdB>=9.5 && lastRmsChanged >=9.5) {
+                onLongLoadSound();
+            }
         }
-        if (rmsdB<10.0 && rmsdB>7.0 && countRmsChanged==1){
-            countRmsChanged++;
-        }else{
-            countRmsChanged=0;
-        }
-        if (rmsdB<8.0 && countRmsChanged==2){
-            //резкий громкий звук
-            onLoadSound();
-            countRmsChanged=0;
-        }else{
-            countRmsChanged=0;
-        }
+        lastRmsChanged=rmsdB;
     }
 
     public static String getErrorText(int errorCode) {

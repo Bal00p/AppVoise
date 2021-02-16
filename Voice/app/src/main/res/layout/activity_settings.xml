@@ -16,159 +16,177 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/tv6_settings"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="100"
-                android:text="@string/store_days" />
+                android:orientation="vertical" >
 
-            <SeekBar
-                android:id="@+id/sb_store_days_settings"
-                style="@style/Widget.AppCompat.SeekBar.Discrete"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:max="4"
-                android:progress="1" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv1_settings"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="100"
-                android:text="@string/text_size" />
-
-            <SeekBar
-                android:id="@+id/sb_text_size_settings"
-                style="@style/Widget.AppCompat.SeekBar.Discrete"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:max="2"
-                android:progress="1" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv2_settings"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="100"
-                android:text="@string/vibro_at_loud_sounds" />
-
-            <Switch
-                android:id="@+id/sw_vibro_at_loud_sounds_settings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv3_settings"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="100"
-                android:text="@string/vibro_after_pause" />
-
-            <Switch
-                android:id="@+id/sw_vibro_after_pause_settings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/rb_male_settings"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/male_voice" />
+                    android:orientation="horizontal">
 
-                <RadioButton
-                    android:id="@+id/rb_female_settings"
+                    <TextView
+                        android:id="@+id/tv6_settings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:text="@string/store_days" />
+
+                    <SeekBar
+                        android:id="@+id/sb_store_days_settings"
+                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:max="4"
+                        android:progress="1" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/female_voice" />
-            </RadioGroup>
+                    android:orientation="horizontal">
 
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv2_settings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:text="@string/vibro_at_loud_sounds" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                    <Switch
+                        android:id="@+id/sw_vibro_at_loud_sounds_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+                </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv7_settings"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="100"
-                android:text="@string/keywords" />
+                <Button
+                    android:id="@+id/btn_save_journal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/save_dialog" />
 
-            <Switch
-                android:id="@+id/sw_keywords_settings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_save_journal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/save_dialog" />
+                    <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_show_guide"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/show_guide" />
+                        <RadioButton
+                            android:id="@+id/rb_male_settings"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/male_voice" />
 
-        <Button
-            android:id="@+id/btn_add_keyword_settings"
-            style="@style/button_add"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/add" />
+                        <RadioButton
+                            android:id="@+id/rb_female_settings"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/female_voice" />
+                    </RadioGroup>
 
-        <ListView
-            android:id="@+id/lv_keywords"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_show_guide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/show_guide" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv1_settings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:text="@string/text_size" />
+
+                    <SeekBar
+                        android:id="@+id/sb_text_size_settings"
+                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:max="2"
+                        android:progress="1" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv3_settings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:text="@string/vibro_after_pause" />
+
+                    <Switch
+                        android:id="@+id/sw_vibro_after_pause_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv7_settings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:text="@string/keywords" />
+
+                    <Switch
+                        android:id="@+id/sw_keywords_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_add_keyword_settings"
+                    style="@style/button_add"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:orientation="vertical">
+
+                    <ListView
+                        android:id="@+id/lv_keywords"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
 

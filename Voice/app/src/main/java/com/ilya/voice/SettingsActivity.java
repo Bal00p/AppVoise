@@ -125,7 +125,6 @@ public class SettingsActivity extends AppCompatActivity {
                                 FragmentManager manager = getSupportFragmentManager();
                                 dialogEditWord.setArguments(argument);
                                 dialogEditWord.show(manager, "addWord");
-                                Toast.makeText(getApplicationContext(), "YES", Toast.LENGTH_SHORT).show();
                             }catch (Exception e){}
                         }
                         break;

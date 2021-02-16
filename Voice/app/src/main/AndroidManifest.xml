@@ -23,11 +23,14 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-        <activity android:name=".LanguageActivity"></activity>
-        <activity android:name=".SettingsActivity" />
+        <activity android:name=".LanguageActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".SettingsActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
