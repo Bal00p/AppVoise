@@ -32,6 +32,7 @@ import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -923,7 +924,12 @@ public class MainActivity extends AppCompatActivity
             REVERSE_ORIENTATION=false;
         }else{
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
-            REVERSE_ORIENTATION=true;
+            if(getRotateOrientation()){
+                REVERSE_ORIENTATION=true;
+            }else{
+                Toast.makeText(getApplicationContext(), getString(R.string.enable_auto_rotate),
+                        Toast.LENGTH_SHORT).show();
+            }
         }
     }
     public void checkShowGuide(){
@@ -939,6 +945,14 @@ public class MainActivity extends AppCompatActivity
             editor.putBoolean(SettingsActivity.SETTINGS_SHOW_GUIDE, false);
             editor.commit();
         }
+    }
+
+    public boolean getRotateOrientation() {
+        int rotate = getWindowManager().getDefaultDisplay().getRotation();
+        if (rotate==Surface.ROTATION_180){
+            return true;
+        }
+        return false;
     }
 }
 //Toast.makeText(getApplicationContext(), "YES", Toast.LENGTH_SHORT).show();
