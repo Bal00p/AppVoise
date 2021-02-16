@@ -12,21 +12,12 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
@@ -34,10 +25,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -46,8 +33,7 @@ public class SettingsActivity extends AppCompatActivity {
     Button button_add_keywords, button_save_journal, button_show_guide;
     RadioButton radioButton_male, radioButton_female;
     Switch switch_vibro_at_load_sound, switch_vibro_after_pause, switch_keywords;
-    TextView tv1, tv2, tv3, tv6, tv7, tv_credits;
-    ListView listView_keywords;
+    TextView tv1, tv2, tv3, tv6, tv_credits;
     SharedPreferences sharedPreferences;
     public static final String
             SETTINGS_TEXT_SIZE = "text_size",
@@ -56,17 +42,11 @@ public class SettingsActivity extends AppCompatActivity {
             SETTINGS_GENDER = "gender",
             SETTINGS_KEYWORDS = "keywords",
             SETTINGS_STORE_DAYS = "store_days",
-            SETTINGS_VOICING_EMOTICONS = "sound_signs",
             SETTINGS_LANGUAGE = "language",
             SETTINGS_SHOW_GUIDE = "show_guide",
             PATH_TO_SETTINGS = "settings";
     public int TEXT_SIZE = 10;
-    SQLWords sqlWords;
     SQLJournal sqlJournal;
-    public String[] columns_words = {"_ID",
-            SQLWords.COLUMN_WHAT_IS_IT,
-            SQLWords.COLUMN_WORD,
-            SQLWords.COLUMN_RATING};
     public String[] columns_journal = {"_ID",
             SQLJournal.COLUMN_WHAT_IS_IT,
             SQLJournal.COLUMN_DATE,
@@ -85,25 +65,21 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         sharedPreferences = getSharedPreferences(PATH_TO_SETTINGS, MODE_PRIVATE);
-        sqlWords = new SQLWords(this, SQLWords.NAME_TABLE, null,
-                SQLWords.VERSION_TABLE);
 
         seekBar_text_size = (SeekBar)findViewById(R.id.sb_text_size_settings);
         seekBar_store_days = (SeekBar)findViewById(R.id.sb_store_days_settings);
         switch_vibro_at_load_sound = (Switch)findViewById(R.id.sw_vibro_at_loud_sounds_settings);
         switch_vibro_after_pause = (Switch)findViewById(R.id.sw_vibro_after_pause_settings);
         switch_keywords = (Switch)findViewById(R.id.sw_keywords_settings);
-        button_add_keywords = (Button)findViewById(R.id.btn_add_keyword_settings);
+        button_add_keywords = (Button)findViewById(R.id.btn_open_keyword_settings);
         button_save_journal = (Button)findViewById(R.id.btn_save_journal);
         button_show_guide = (Button)findViewById(R.id.btn_show_guide);
         radioButton_male = (RadioButton)findViewById(R.id.rb_male_settings);
         radioButton_female = (RadioButton)findViewById(R.id.rb_female_settings);
-        listView_keywords = (ListView)findViewById(R.id.lv_keywords);
         tv1 = (TextView)findViewById(R.id.tv1_settings);
         tv2 = (TextView)findViewById(R.id.tv2_settings);
         tv3 = (TextView)findViewById(R.id.tv3_settings);
         tv6 = (TextView)findViewById(R.id.tv6_settings);
-        tv7 = (TextView)findViewById(R.id.tv7_settings);
         tv_credits = (TextView)findViewById(R.id.tv_credits);
         tv_credits.setText(getString(R.string.credits));
 
@@ -111,22 +87,10 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 switch (v.getId()){
-                    case R.id.btn_add_keyword_settings:
-                        if(FULL_KEYWORDS){
-                            Toast.makeText(getApplicationContext(),
-                                    getString(R.string.keyword_limit),Toast.LENGTH_SHORT).show();
-                        }else{
-                            try{
-                                //вызов диалога для создания нового слова
-                                Bundle argument = new Bundle();
-                                argument.putInt(KEY_FOR_DIALOG, ADD_WORD);
-                                argument.putString(INFO_FOR_DIALOG, "NO");
-                                dialogEditWord = new DialogEditWord();
-                                FragmentManager manager = getSupportFragmentManager();
-                                dialogEditWord.setArguments(argument);
-                                dialogEditWord.show(manager, "addWord");
-                            }catch (Exception e){}
-                        }
+                    case R.id.btn_open_keyword_settings:
+                        //открываю активити с ключевыми словами
+                        Intent intent = new Intent(SettingsActivity.this, KeywordsActivity.class);
+                        startActivity(intent);
                         break;
                     case R.id.btn_save_journal:
                         //записываю журнал
@@ -139,20 +103,12 @@ public class SettingsActivity extends AppCompatActivity {
                     case R.id.btn_show_guide:
                         showGuide();
                         break;
-                    case R.id.rb_male_settings:
-
-                        break;
-                    case R.id.rb_female_settings:
-
-                        break;
                 }
             }
         };
         button_add_keywords.setOnClickListener(listener);
         button_save_journal.setOnClickListener(listener);
         button_show_guide.setOnClickListener(listener);
-        radioButton_male.setOnClickListener(listener);
-        radioButton_female.setOnClickListener(listener);
 
         seekBar_text_size.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -169,27 +125,11 @@ public class SettingsActivity extends AppCompatActivity {
                         break;
                 }
                 setTextSize();
-                fillKeywords();
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-
-        listView_keywords.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                //вызвать диалог с полным редактированием данного слова
-                Bundle argument = new Bundle();
-                argument.putInt(KEY_FOR_DIALOG, EDIT_WORD);
-                argument.putString(INFO_FOR_DIALOG, ((TextView)view).getText().toString());
-                dialogEditWord = new DialogEditWord();
-                FragmentManager manager = getSupportFragmentManager();
-                dialogEditWord.setArguments(argument);
-                dialogEditWord.show(manager, "editWord");
-                return true;
-            }
         });
     }
     @Override
@@ -203,7 +143,6 @@ public class SettingsActivity extends AppCompatActivity {
         super.onResume();
         //загружаю
         loadSettings();
-        fillKeywords();
         getOrientation();
     }
 
@@ -249,7 +188,6 @@ public class SettingsActivity extends AppCompatActivity {
         tv2.setTextSize(TEXT_SIZE);
         tv3.setTextSize(TEXT_SIZE);
         tv6.setTextSize(TEXT_SIZE);
-        tv7.setTextSize(TEXT_SIZE);
         button_save_journal.setTextSize(TEXT_SIZE);
         button_add_keywords.setTextSize(TEXT_SIZE);
         button_show_guide.setTextSize(TEXT_SIZE);
@@ -257,33 +195,6 @@ public class SettingsActivity extends AppCompatActivity {
         radioButton_female.setTextSize(TEXT_SIZE);
     }
 
-    public void fillKeywords(){
-        ArrayList list_keywords = new ArrayList();
-        db = sqlWords.getReadableDatabase();
-        cursor = db.query(sqlWords.NAME_TABLE,new String[]{columns_words[2]},
-                SQLWords.COLUMN_WHAT_IS_IT+" = ?", new String[]{"1"},
-                null,null,null);
-        int index_word = cursor.getColumnIndex(columns_words[2]);
-        while (cursor.moveToNext()){
-            list_keywords.add(cursor.getString(index_word));
-        }
-        if (list_keywords.size()==10){
-            FULL_KEYWORDS=true;
-        }
-        cursor.close();
-        db.close();
-        listView_keywords.setAdapter(new ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, list_keywords) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                if (view instanceof TextView) {
-                    ((TextView) view).setTextSize(TEXT_SIZE);
-                }
-                return view;
-            }
-        });
-    }
     public String getJournal(){
         String journal = "";
         sqlJournal = new SQLJournal(this, sqlJournal.NAME_TABLE, null,

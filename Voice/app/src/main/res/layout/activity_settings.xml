@@ -153,8 +153,9 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/tv7_settings"
+                    <Button
+                        android:id="@+id/btn_open_keyword_settings"
+                        style="@style/button_add"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="100"
@@ -165,24 +166,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/btn_add_keyword_settings"
-                    style="@style/button_add"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/add" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:orientation="vertical">
-
-                    <ListView
-                        android:id="@+id/lv_keywords"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
                 </LinearLayout>
 
             </LinearLayout>

@@ -85,7 +85,7 @@ public class DialogEditWord extends DialogFragment {
         row.put(SQLWords.COLUMN_WORD,editText_keyword.getText().toString());
         db.insert(SQLWords.NAME_TABLE,null,row);
         db.close();
-        Intent i = new Intent(getActivity().getApplicationContext(), SettingsActivity.class);
+        Intent i = new Intent(getActivity().getApplicationContext(), KeywordsActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(i);
     }
@@ -98,7 +98,7 @@ public class DialogEditWord extends DialogFragment {
         db.update(SQLWords.NAME_TABLE,row,SQLWords.COLUMN_WORD+" = ?",
                 new String[]{word});
         db.close();
-        Intent i = new Intent(getActivity().getApplicationContext(), SettingsActivity.class);
+        Intent i = new Intent(getActivity().getApplicationContext(), KeywordsActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(i);
     }
@@ -107,7 +107,7 @@ public class DialogEditWord extends DialogFragment {
         db.delete(SQLWords.NAME_TABLE, SQLWords.COLUMN_WORD+" = ?",
                 new String[]{word});
         db.close();
-        Intent i = new Intent(getActivity().getApplicationContext(), SettingsActivity.class);
+        Intent i = new Intent(getActivity().getApplicationContext(), KeywordsActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(i);
     }
