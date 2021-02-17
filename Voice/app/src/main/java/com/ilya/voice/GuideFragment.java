@@ -72,6 +72,9 @@ public class GuideFragment extends Fragment {
                 linearLayout_guide5.setLayoutParams(new LinearLayout.LayoutParams(
                         0,
                         ViewGroup.LayoutParams.MATCH_PARENT));
+                linearLayout_guide6.setLayoutParams(new LinearLayout.LayoutParams(
+                        0,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
 
                 linearLayout_guide1.setLayoutParams(new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,

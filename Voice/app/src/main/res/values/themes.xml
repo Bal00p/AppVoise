@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
+        <item name="colorAccent">@color/widgets_settings</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
@@ -88,5 +89,23 @@
         <item name="android:background">@drawable/button_white</item>
         <item name="android:layout_width">@dimen/width_button_pause</item>
         <item name="android:layout_height">@dimen/height_button_white_pause</item>
+    </style>
+    <style name="settinga_drawable">
+        <item name="android:background">@drawable/settings_drawable</item>
+    </style>
+    <style name="settings_item_style">
+        <item name="android:background">@drawable/settings_item_drawable</item>
+    </style>
+    <style name="btn_show_guide_style">
+        <item name="android:background">@drawable/backgroud_btn_show_guide</item>
+    </style>
+    <style name="divider_settings">
+        <item name="android:background">@drawable/background_divider</item>
+    </style>
+    <style name="btn_keywords">
+        <item name="android:background">@drawable/background_keywords</item>
+    </style>
+    <style name="guide_style">
+        <item name="android:background">@drawable/background_guide_layout</item>
     </style>
    </resources>
