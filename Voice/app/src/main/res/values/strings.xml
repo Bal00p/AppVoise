@@ -69,9 +69,6 @@
     <string name="turn_on">Turn on</string>
     <string name="toast_phone_sound">Speakerphone is on and multimedia sound is raised</string>
     <string name="channel_notify_open_app">Permanent notification</string>
-<<<<<<< HEAD
     <string name="voice_gender_chose">Voice acting</string>
-=======
     <string name="enable_auto_rotate">Enable auto-rotate on your phone</string>
->>>>>>> baloop_dev
 </resources>

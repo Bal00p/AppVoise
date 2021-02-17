@@ -71,4 +71,5 @@
     <string name="toast_phone_sound">Включена громкая связь, и повышен звук мультимедиа</string>
     <string name="channel_notify_open_app">Постоянное уведомление</string>
     <string name="voice_gender_chose">Голос озвучивания</string>
+    <string name="enable_auto_rotate">Включите автоповорот экрана телефона</string>
 </resources>
