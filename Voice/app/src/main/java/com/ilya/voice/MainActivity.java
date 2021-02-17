@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity
     //переменные
     EditText editText_text_to_speech;
     Button button_text_to_speech, button_select_language, button_pause, button_to_settings, button_rotation;
-    Button button_wave;public String[] fast_words = new String[10];
+    Button button_wave;
     public String[] keywords = new String[10];
     SQLWords sqlWords;
     LinearLayout container_journal, main_layout, main_layout2;
@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity
     public static boolean VIBRO_AT_LOAD_SOUND = false;
     public static boolean VIBRO_AFTER_PAUSE = false;
     public static boolean KEYWORDS = false;
-    public static boolean VOICING_EMOTICONS = false;
     public static boolean SHOW_GUIDE = false;
     public static boolean MALE_GENDER = false;
 
