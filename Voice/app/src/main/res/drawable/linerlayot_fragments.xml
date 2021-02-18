@@ -2,7 +2,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 <item>
     <shape android:shape="rectangle">
-        <padding android:top="@dimen/padding_top_ll_frag" android:right="@dimen/padding_ll_frag" android:left="@dimen/padding_ll_frag"/>
+        <padding android:top="@dimen/padding_top_ll_frag" android:left="@dimen/phrases_padding" android:right="@dimen/phrases_padding"/>
+        <solid android:color="@color/linerlayout_fragment_color"/>
     </shape>
 </item>
 </selector>

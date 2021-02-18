@@ -10,6 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
+        style="@style/main_style"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -51,50 +52,59 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="100"
-                android:orientation="vertical">
-
-                <ScrollView
-                    android:id="@+id/sv_journal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="100">
-
-                    <LinearLayout
-                        android:id="@+id/container_journal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:orientation="vertical" />
-                </ScrollView>
+                android:layout_weight="100">
 
                 <LinearLayout
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:id="@+id/linearLayout9"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="100"
+                    android:orientation="vertical"
+                    tools:layout_editor_absoluteY="335dp">
 
-                    <TextView
-                        android:id="@+id/tv_my_partial_result"
-                        style="@style/outside_message"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                    <ScrollView
+                        android:id="@+id/sv_journal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="100">
+
+                        <LinearLayout
+                            android:id="@+id/container_journal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:orientation="vertical" />
+                    </ScrollView>
+
+                    <LinearLayout
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_my_partial_result"
+                            style="@style/outside_message"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
+                style="@style/constrainLtayuots_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    style="@style/conslayot"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
@@ -112,7 +122,6 @@
 
                     <LinearLayout
                         android:id="@+id/linearLayout"
-                        style="@style/constrainLtayuots_style"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -154,7 +163,7 @@
 
                             <Button
                                 android:id="@+id/btn_rotation"
-                                style="@style/button_two"
+                                style="@style/button_three"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
                                 android:layout_marginTop="15dp"

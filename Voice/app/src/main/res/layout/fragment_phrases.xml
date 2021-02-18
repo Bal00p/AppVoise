@@ -17,72 +17,63 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <ImageView
-                android:id="@+id/imageView"
-                style="@style/image_style"
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                style="@style/LinerLayot_Fragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
-                    android:id="@+id/linearLayout2"
-                    style="@style/LinerLayot_Fragment"
+                    android:id="@+id/linearLayout5"
+                    style="@style/stule_phrases"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        android:id="@+id/linearLayout5"
-                        style="@style/stule_phrases"
+                    <EditText
+                        android:id="@+id/et_search_phrases"
+                        style="@style/et__spearch_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:hint="@string/search_phrases"
+                        android:inputType="textPersonName" />
+
+                    <View
+                        android:id="@+id/divider11"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="?android:attr/listDivider" />
+
+                    <ListView
+                        android:id="@+id/lv_phrases"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:layout_marginTop="15dp"
+                        android:layout_weight="100">
 
-                        <EditText
-                            android:id="@+id/et_search_phrases"
-                            style="@style/et__spearch_style"
-                            android:layout_width="match_parent"
-                            android:layout_height="36dp"
-                            android:layout_marginTop="20dp"
-                            android:layout_weight="1"
-                            android:ems="10"
-                            android:hint="@string/search_phrases"
-                            android:inputType="textPersonName" />
+                    </ListView>
 
-                        <ListView
-                            android:id="@+id/lv_phrases"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="15dp"
-                            android:layout_weight="100">
-
-                        </ListView>
-
-                    </LinearLayout>
                 </LinearLayout>
+            </LinearLayout>
 
-                <Button
-                    android:id="@+id/btn_add_phrase"
-                    style="@style/button_add"
-                    android:layout_marginEnd="13dp"
-                    android:text="@string/add"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/linearLayout2" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/btn_add_phrase"
+                style="@style/button_add"
+                android:layout_marginStart="180dp"
+                android:text="@string/add"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

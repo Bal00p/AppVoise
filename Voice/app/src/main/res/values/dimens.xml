@@ -8,6 +8,7 @@
     <dimen name="radius_button_pause">60dp</dimen>
     <dimen name="radius_button_language">60dp</dimen>
     <dimen name="stroke_button_pause">15dp</dimen>
+    <dimen name="stroke_btn_color">1dp</dimen>
     <dimen name="stroke_button_speesh">10dp</dimen>
     <dimen name="radius_btn_speesh">30dp</dimen>
     <dimen name="radius_edittext">20dp</dimen>
@@ -18,7 +19,7 @@
     <dimen name="radius_btn_add">50dp</dimen>
     <dimen name="btn_add">60dp</dimen>
     <dimen name="radius_linerlayot_frag">50dp</dimen>
-    <dimen name="padding_top_ll_frag">50dp</dimen>
+    <dimen name="padding_top_ll_frag">55dp</dimen>
     <dimen name="padding_ll_frag">10dp</dimen>
     <dimen name="layout_height_edittext">30dp</dimen>
     <dimen name="padding_edittext">10dp</dimen>
@@ -26,7 +27,7 @@
     <dimen name="wave_radius">120dp</dimen>
     <dimen name="wave_center">60dp</dimen>
     <dimen name="phrases_padding">10dp</dimen>
-    <dimen name="phrases_padding_top">40dp</dimen>
+    <dimen name="phrases_padding_top">20dp</dimen>
     <dimen name="textviev_padding">20dp</dimen>
     <dimen name="textviev_stroke_left">10dp</dimen>
     <dimen name="text_viev_stroke">10dp</dimen>
@@ -39,8 +40,8 @@
     <dimen name="stroke_message">20dp</dimen>
     <dimen name="btn_white_radius">60dp</dimen>
     <dimen name="height_button_white_pause">35dp</dimen>
-    <dimen name="settings_padding_top">40dp</dimen>
-    <dimen name="settings_padding">20dp</dimen>
+    <dimen name="settings_padding_top">20dp</dimen>
+    <dimen name="settings_padding">10dp</dimen>
     <dimen name="settings_item_padding">5dp</dimen>
     <dimen name="settings_item_radius">20dp</dimen>
     <dimen name="settings_item_stroke">15dp</dimen>
