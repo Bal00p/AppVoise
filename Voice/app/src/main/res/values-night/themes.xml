@@ -33,7 +33,7 @@
         <item name="android:textColor">@color/textviev_main</item>
         <item name="android:textSize">@dimen/textviev_main</item>
     </style>
-    <style name="btn_speesh">
+    <style name="btn_speech">
         <item name="android:background">@drawable/background_btn_speech</item>
 
     </style>

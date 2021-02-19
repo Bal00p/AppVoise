@@ -186,37 +186,22 @@
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        style="@style/constrainLtayuots_style"
+                    <EditText
+                        android:id="@+id/et_text_to_speech"
+                        style="@style/EditText_style"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="100">
+                        android:layout_weight="100"
+                        android:ems="10"
+                        android:gravity="start|top"
+                        android:inputType="textMultiLine" />
 
-                        <Button
-                            android:id="@+id/btn_text_to_speech"
-                            style="@style/btn_speesh"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:text="@string/speech"
-                            app:layout_constraintBottom_toBottomOf="@+id/et_text_to_speech"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/et_text_to_speech" />
-
-                        <EditText
-                            android:id="@+id/et_text_to_speech"
-                            style="@style/EditText_style"
-                            android:layout_width="match_parent"
-
-                            android:layout_weight="100"
-                            android:ems="10"
-                            android:gravity="start|top"
-                            android:inputType="textMultiLine"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <ImageButton
+                        android:id="@+id/btn_text_to_speech"
+                        style="@style/btn_speech"
+                        android:layout_width="50dp"
+                        android:layout_height="@dimen/layout_height_edittext"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/image_button_speech_speech" />
 
                 </LinearLayout>
 
