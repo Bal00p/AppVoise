@@ -38,4 +38,6 @@
     <color name="widgets_settings">#90caf9</color>
     <color name="guide_back">#aa000000</color>
     <color name="color_main">#1C1C1C</color>
+    <color name="btn_add_keywords">#8E8E8E</color>
+    <color name="solid_guide_background">#2B2B2B</color>
 </resources>

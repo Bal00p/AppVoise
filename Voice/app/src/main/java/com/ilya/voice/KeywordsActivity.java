@@ -116,7 +116,7 @@ public class KeywordsActivity extends AppCompatActivity {
         cursor.close();
         db.close();
         listView_keywords.setAdapter(new ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, list_keywords) {
+                R.layout.texviev_keywords, list_keywords) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);

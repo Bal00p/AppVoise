@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<item>
+    <shape android:shape="rectangle">
+        <solid android:color="@color/solid_guide_background"/>
+        <corners android:radius="@dimen/guide_background_corners"/>
+    </shape>
+</item>
+</selector>

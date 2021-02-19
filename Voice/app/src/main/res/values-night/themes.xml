@@ -107,4 +107,13 @@
     <style name="main_style">
         <item name="android:background">@drawable/background_main</item>
     </style>
+    <style name="background_keywords_style">
+        <item name="android:background">@drawable/background_keyword</item>
+    </style>
+    <style name="btn_keywords_add">
+        <item name="android:background">@drawable/background_btn_keywords</item>
+    </style>
+    <style name="guide">
+        <item name="android:background">@drawable/background_guide</item>
+    </style>
 </resources>

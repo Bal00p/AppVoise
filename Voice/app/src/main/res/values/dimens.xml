@@ -47,4 +47,5 @@
     <dimen name="settings_item_stroke">15dp</dimen>
     <dimen name="space_settings">15dp</dimen>
     <dimen name="padding_btn_show_guide">15dp</dimen>
+    <dimen name="guide_background_corners">30dp</dimen>
 </resources>
