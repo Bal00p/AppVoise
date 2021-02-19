@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
@@ -22,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +33,8 @@ import java.util.ArrayList;
 public class PhrasesFragment extends Fragment {
 
 
-    Button button_add, button_back;
+    Button button_back;
+    ImageButton button_add;
     EditText editText_search;
     ListView listView_phrases;
     SQLWords sqlWords;
@@ -65,9 +68,13 @@ public class PhrasesFragment extends Fragment {
 
         sqlWords = new SQLWords(getActivity().getApplicationContext(), SQLWords.NAME_TABLE,
                 null, SQLWords.VERSION_TABLE);
-        button_add = (Button)view.findViewById(R.id.btn_add_phrase);
+        button_add = (ImageButton)view.findViewById(R.id.btn_add_phrase);
         button_back = (Button)view.findViewById(R.id.btn_back_fragment);
         editText_search = (EditText) view.findViewById(R.id.et_search_phrases);
+        Drawable img = getResources().getDrawable(android.R.drawable.ic_menu_search);
+        img.setBounds(0, 0, 50, 50);
+        editText_search.setCompoundDrawables(img, null, null, null);
+        
         listView_phrases = (ListView)view.findViewById(R.id.lv_phrases);
         fillPhrases("");
 

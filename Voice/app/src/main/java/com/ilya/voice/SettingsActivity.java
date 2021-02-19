@@ -131,6 +131,39 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
+
+        seekBar_store_days.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                switch (progress) {
+                    case 0:
+                        tv6.setText(getString(R.string.store_days)+
+                                " ("+getString(R.string.store_days_1)+")");
+                        break;
+                    case 1:
+                        tv6.setText(getString(R.string.store_days)+
+                                " ("+getString(R.string.store_days_3)+")");
+                        break;
+                    case 2:
+                        tv6.setText(getString(R.string.store_days)+
+                                " ("+getString(R.string.store_days_7)+")");
+                        break;
+                    case 3:
+                        tv6.setText(getString(R.string.store_days)+
+                                " ("+getString(R.string.store_days_30)+")");
+                        break;
+                    case 4:
+                        tv6.setText(getString(R.string.store_days)+
+                                " ("+getString(R.string.store_days_always)+")");
+                        break;
+                }
+                setTextSize();
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
     }
     @Override
     protected void onPause() {
@@ -149,6 +182,28 @@ public class SettingsActivity extends AppCompatActivity {
     public void loadSettings(){
         try{
             seekBar_store_days.setProgress(sharedPreferences.getInt(SETTINGS_STORE_DAYS, 0));
+            switch (sharedPreferences.getInt(SETTINGS_STORE_DAYS, 0)) {
+                case 0:
+                    tv6.setText(getString(R.string.store_days)+
+                            " ("+getString(R.string.store_days_1)+")");
+                    break;
+                case 1:
+                    tv6.setText(getString(R.string.store_days)+
+                            " ("+getString(R.string.store_days_3)+")");
+                    break;
+                case 2:
+                    tv6.setText(getString(R.string.store_days)+
+                            " ("+getString(R.string.store_days_7)+")");
+                    break;
+                case 3:
+                    tv6.setText(getString(R.string.store_days)+
+                            " ("+getString(R.string.store_days_30)+")");
+                    break;
+                case 4:
+                    tv6.setText(getString(R.string.store_days)+
+                            " ("+getString(R.string.store_days_always)+")");
+                    break;
+            }
             seekBar_text_size.setProgress(sharedPreferences.getInt(SETTINGS_TEXT_SIZE, 0));
             switch (sharedPreferences.getInt(SETTINGS_TEXT_SIZE, 0)) {
                 case 0:

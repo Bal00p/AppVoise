@@ -72,4 +72,9 @@
     <string name="channel_notify_open_app">Постоянное уведомление</string>
     <string name="voice_gender_chose">Голос озвучивания</string>
     <string name="enable_auto_rotate">Включите автоповорот экрана телефона</string>
+    <string name="store_days_1">1 день</string>
+    <string name="store_days_3">3 дня</string>
+    <string name="store_days_7">1 неделю</string>
+    <string name="store_days_30">1 месяц</string>
+    <string name="store_days_always">всегда</string>
 </resources>

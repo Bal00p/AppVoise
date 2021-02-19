@@ -71,4 +71,9 @@
     <string name="channel_notify_open_app">Permanent notification</string>
     <string name="voice_gender_chose">Voice acting</string>
     <string name="enable_auto_rotate">Enable auto-rotate on your phone</string>
+    <string name="store_days_1">1 day</string>
+    <string name="store_days_3">3 days</string>
+    <string name="store_days_7">1 week</string>
+    <string name="store_days_30">1 month</string>
+    <string name="store_days_always">always</string>
 </resources>

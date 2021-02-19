@@ -39,6 +39,7 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -61,7 +62,8 @@ public class MainActivity extends AppCompatActivity
         PhrasesFragment.onSomeEventListenerMain {
     //переменные
     EditText editText_text_to_speech;
-    Button button_text_to_speech, button_select_language, button_pause, button_to_settings, button_rotation;
+    Button button_text_to_speech, button_select_language;
+    ImageButton button_pause, button_to_settings, button_rotation;
     Button button_wave;
     public String[] keywords = new String[10];
     SQLWords sqlWords;
@@ -182,10 +184,10 @@ public class MainActivity extends AppCompatActivity
                     SQLWords.VERSION_TABLE);
             button_text_to_speech = (Button) findViewById(R.id.btn_text_to_speech);
             button_select_language = (Button) findViewById(R.id.btn_select_language);
-            button_pause = (Button) findViewById(R.id.btn_pause);
-            button_to_settings = (Button) findViewById(R.id.btn_to_settings);
+            button_pause = (ImageButton) findViewById(R.id.btn_pause);
+            button_to_settings = (ImageButton) findViewById(R.id.btn_to_settings);
             button_wave = (Button)findViewById(R.id.btn_wave);
-            button_rotation = (Button)findViewById(R.id.btn_rotation);
+            button_rotation = (ImageButton)findViewById(R.id.btn_rotation);
             editText_text_to_speech = (EditText) findViewById(R.id.et_text_to_speech);
             textView_partial_result = (TextView) findViewById(R.id.tv_my_partial_result);
             textView_partial_result.setLayoutParams(new LinearLayout.LayoutParams(
@@ -251,8 +253,10 @@ public class MainActivity extends AppCompatActivity
                         case R.id.btn_pause:
                             if (PAUSE) {
                                 PAUSE = false;
+                                button_pause.setImageResource(R.drawable.image_button_pause_pause);
                             } else {
                                 PAUSE = true;
+                                button_pause.setImageResource(R.drawable.image_button_pause_continue);
                             }
                             break;
                     }
@@ -670,9 +674,7 @@ public class MainActivity extends AppCompatActivity
 
             button_text_to_speech.setTextSize(TEXT_SIZE);
             editText_text_to_speech.setTextSize(TEXT_SIZE);
-            button_to_settings.setTextSize(TEXT_SIZE);
             button_select_language.setTextSize(TEXT_SIZE);
-            button_pause.setTextSize(TEXT_SIZE);
             textView_partial_result.setTextSize(TEXT_SIZE);
         } catch (Exception e) {
             Toast.makeText(this, "NO", Toast.LENGTH_SHORT).show();
