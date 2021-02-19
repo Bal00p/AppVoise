@@ -52,6 +52,7 @@
 
                                 <TextView
                                     android:id="@+id/tv7_settings"
+                                    style="@style/textviev_main"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
@@ -102,6 +103,7 @@
 
                                 <TextView
                                     android:id="@+id/tv1_settings"
+                                    style="@style/textviev_main"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
@@ -131,6 +133,7 @@
 
                                 <TextView
                                     android:id="@+id/tv6_settings"
+                                    style="@style/textviev_main"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
@@ -181,6 +184,7 @@
 
                                 <TextView
                                     android:id="@+id/tv2_settings"
+                                    style="@style/textviev_main"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="100"
@@ -214,6 +218,7 @@
 
                                 <TextView
                                     android:id="@+id/tv3_settings"
+                                    style="@style/textviev_main"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="100"

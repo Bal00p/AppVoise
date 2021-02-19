@@ -12,8 +12,8 @@
     <dimen name="stroke_button_speesh">10dp</dimen>
     <dimen name="radius_btn_speesh">30dp</dimen>
     <dimen name="radius_edittext">20dp</dimen>
-    <dimen name="width_btn_language">50dp</dimen>
-    <dimen name="height_btn_language">50dp</dimen>
+    <dimen name="width_btn_language">110dp</dimen>
+    <dimen name="height_btn_language">35dp</dimen>
     <dimen name="main_bkg">10dp</dimen>
     <dimen name="main_bkg_top">10dp</dimen>
     <dimen name="radius_btn_add">50dp</dimen>
@@ -48,4 +48,8 @@
     <dimen name="space_settings">15dp</dimen>
     <dimen name="padding_btn_show_guide">15dp</dimen>
     <dimen name="guide_background_corners">30dp</dimen>
+    <dimen name="textviev_gude">20dp</dimen>
+    <dimen name="guide_wight">10dp</dimen>
+    <dimen name="guide_height">10dp</dimen>
+    <dimen name="textviev_main">15dp</dimen>
 </resources>
