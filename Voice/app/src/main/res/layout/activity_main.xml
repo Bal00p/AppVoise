@@ -138,13 +138,19 @@
                             <ImageButton
                                 android:id="@+id/btn_to_settings"
                                 style="@style/button_three"
+<<<<<<< HEAD
                                 app:srcCompat="@drawable/image_button_settings"
                                 android:scaleType="centerCrop"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
                                 android:layout_marginTop="15dp"
+=======
+                                android:layout_width="@dimen/height_btn_language"
+                                android:layout_height="@dimen/height_btn_language"
+                                android:layout_marginTop="12dp"
+>>>>>>> watercolor_6
                                 android:layout_marginEnd="50dp"
-                                android:layout_marginBottom="15dp"
+                                android:layout_marginBottom="12dp"
                                 android:text="Button"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -154,11 +160,15 @@
                                 android:id="@+id/btn_select_language"
                                 style="@style/button_language"
 
-                                android:layout_width="wrap_content"
-                                android:layout_height="30dp"
                                 android:layout_marginStart="20dp"
+<<<<<<< HEAD
                                 android:layout_marginTop="15dp"
                                 android:layout_marginBottom="15dp"
+=======
+                                android:layout_marginTop="12dp"
+                                android:layout_marginBottom="12dp"
+                                android:text="Button"
+>>>>>>> watercolor_6
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -166,6 +176,7 @@
                             <ImageButton
                                 android:id="@+id/btn_rotation"
                                 style="@style/button_three"
+<<<<<<< HEAD
                                 app:srcCompat="@drawable/image_button_rotation"
                                 android:scaleType="centerCrop"
                                 android:layout_width="30dp"
@@ -173,6 +184,14 @@
                                 android:layout_marginTop="15dp"
                                 android:layout_marginEnd="5dp"
                                 android:layout_marginBottom="15dp"
+=======
+                                android:layout_width="@dimen/height_btn_language"
+                                android:layout_height="@dimen/height_btn_language"
+                                android:layout_marginTop="12dp"
+                                android:layout_marginEnd="5dp"
+                                android:layout_marginBottom="12dp"
+                                android:text="Button"
+>>>>>>> watercolor_6
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toStartOf="@+id/btn_to_settings"
                                 app:layout_constraintTop_toTopOf="parent"

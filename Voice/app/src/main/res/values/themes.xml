@@ -25,9 +25,13 @@
         <item name="android:background">@drawable/background_btn_language</item>
         <item name="android:layout_height">@dimen/height_btn_language</item>
         <item name="android:layout_width">@dimen/width_btn_language</item>
+        <item name="android:textColor">@color/textviev_main</item>
+        <item name="android:textSize">@dimen/textviev_main</item>
     </style>
     <style name="button_three">
         <item name="android:background">@drawable/button_three</item>
+        <item name="android:textColor">@color/textviev_main</item>
+        <item name="android:textSize">@dimen/textviev_main</item>
     </style>
     <style name="btn_speesh">
         <item name="android:background">@drawable/background_btn_speech</item>
@@ -115,5 +119,16 @@
     </style>
     <style name="guide">
         <item name="android:background">@drawable/background_guide</item>
+    </style>
+    <style name="guide_textviev">
+        <item name="android:textSize">@dimen/textviev_gude</item>
+        <item name="android:textColor">@color/textviev_gudi</item>
+    </style>
+    <style name="textviev_main">
+        <item name="android:textColor">@color/textviev_main</item>
+        <item name="android:textSize">@dimen/textviev_main</item>
+    </style>
+    <style name="textviev_separator">
+        <item name="android:textColor">@color/textviev_separator</item>
     </style>
    </resources>
