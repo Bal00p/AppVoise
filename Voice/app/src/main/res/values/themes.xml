@@ -29,7 +29,7 @@
     <style name="button_three">
         <item name="android:background">@drawable/button_three</item>
     </style>
-    <style name="btn_speesh">
+    <style name="btn_speech">
         <item name="android:background">@drawable/background_btn_speech</item>
 
     </style>

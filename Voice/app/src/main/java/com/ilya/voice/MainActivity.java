@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity
         PhrasesFragment.onSomeEventListenerMain {
     //переменные
     EditText editText_text_to_speech;
-    Button button_text_to_speech, button_select_language;
-    ImageButton button_pause, button_to_settings, button_rotation;
+    Button button_select_language;
+    ImageButton button_pause, button_to_settings, button_rotation, button_text_to_speech;
     Button button_wave;
     public String[] keywords = new String[10];
     SQLWords sqlWords;
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity
                     sqlJournal.VERSION_TABLE);
             sqlWords = new SQLWords(this, SQLWords.NAME_TABLE, null,
                     SQLWords.VERSION_TABLE);
-            button_text_to_speech = (Button) findViewById(R.id.btn_text_to_speech);
+            button_text_to_speech = (ImageButton) findViewById(R.id.btn_text_to_speech);
             button_select_language = (Button) findViewById(R.id.btn_select_language);
             button_pause = (ImageButton) findViewById(R.id.btn_pause);
             button_to_settings = (ImageButton) findViewById(R.id.btn_to_settings);
@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity
                             if (SPEAKING){
                                 SPEAKING = false;
                                 textToSpeech.stop();
-                                button_text_to_speech.setText(getString(R.string.speech));
+                                button_text_to_speech.setImageResource(R.drawable.image_button_speech_speech);
                                 startListening();
                             }else{
                                 String text = editText_text_to_speech.getText().toString();
@@ -323,7 +323,7 @@ public class MainActivity extends AppCompatActivity
                     MainActivity.this.runOnUiThread(new Runnable(){
                         public void run(){
                             SPEAKING=true;
-                            button_text_to_speech.setText(getString(R.string.stop));
+                            button_text_to_speech.setImageResource(R.drawable.image_button_speech_stop);
                         }
                     });
                 }
@@ -336,7 +336,7 @@ public class MainActivity extends AppCompatActivity
                     MainActivity.this.runOnUiThread(new Runnable(){
                         public void run(){
                             SPEAKING=false;
-                            button_text_to_speech.setText(getString(R.string.speech));
+                            button_text_to_speech.setImageResource(R.drawable.image_button_speech_speech);
                             startListening();
                         }
                     });
@@ -672,7 +672,6 @@ public class MainActivity extends AppCompatActivity
             SHOW_GUIDE = sharedPreferences.getBoolean(SettingsActivity.SETTINGS_SHOW_GUIDE, true);
             MALE_GENDER = sharedPreferences.getBoolean(SettingsActivity.SETTINGS_GENDER, false);
 
-            button_text_to_speech.setTextSize(TEXT_SIZE);
             editText_text_to_speech.setTextSize(TEXT_SIZE);
             button_select_language.setTextSize(TEXT_SIZE);
             textView_partial_result.setTextSize(TEXT_SIZE);

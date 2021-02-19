@@ -5,6 +5,6 @@
         <solid android:color="@color/color_edittext"/>
         <padding android:left="@dimen/padding_edittext" android:top="@dimen/padding_edittext"/>
         <corners
-            android:topLeftRadius="@dimen/radius_edittext"
-            android:topRightRadius="@dimen/radius_edittext"/>
+            android:topLeftRadius="@dimen/radius_edittext"/>
+<!--            android:topRightRadius="@dimen/radius_edittext"-->
     </shape>
