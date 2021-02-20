@@ -41,6 +41,6 @@
     <color name="btn_add_keywords">#FFFFFF</color>
     <color name="solid_guide_background">#1D8AE3</color>
     <color name= "textviev_gudi">#FFFFFF</color>
-    <color name= "textviev_main">#000000</color>
+    <color name= "textviev_main">#5A5A5A</color>
     <color name="textviev_separator">#8E8E8E</color>
 </resources>

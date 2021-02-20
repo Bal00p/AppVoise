@@ -69,10 +69,6 @@
         <item name="android:layout_width">@dimen/wave_radius</item>
         <item name="android:background">@drawable/background_wave</item>
     </style>
-    <style name="image_style">
-        <item name="android:src">@drawable/light_theme</item>
-        <item name="android:scaleType">centerCrop</item>
-    </style>
     <style name="textviev_listviev">
         <item name="android:background">@drawable/textviev</item>
     </style>
@@ -98,12 +94,14 @@
     </style>
     <style name="btn_show_guide_style">
         <item name="android:background">@drawable/backgroud_btn_show_guide</item>
+        <item name="android:textColor">@color/textviev_main</item>
     </style>
     <style name="divider_settings">
         <item name="android:background">@drawable/background_divider</item>
     </style>
     <style name="btn_keywords">
         <item name="android:background">@drawable/background_keywords</item>
+        <item name="android:textColor">@color/textviev_main</item>
     </style>
     <style name="guide_style">
         <item name="android:background">@drawable/background_guide_layout</item>
@@ -116,6 +114,7 @@
     </style>
     <style name="btn_keywords_add">
         <item name="android:background">@drawable/background_btn_keywords</item>
+        <item name="android:textColor">@color/textviev_main</item>
     </style>
     <style name="guide">
         <item name="android:background">@drawable/background_guide</item>

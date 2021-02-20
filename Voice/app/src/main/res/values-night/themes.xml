@@ -69,10 +69,6 @@
         <item name="android:layout_width">@dimen/wave_radius</item>
         <item name="android:background">@drawable/background_wave</item>
     </style>
-    <style name="image_style">
-        <item name="android:src">@drawable/light_theme</item>
-        <item name="android:scaleType">centerCrop</item>
-    </style>
     <style name="textviev_listviev">
         <item name="android:background">@drawable/textviev</item>
     </style>

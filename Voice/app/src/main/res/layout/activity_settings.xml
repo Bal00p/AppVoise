@@ -73,6 +73,7 @@
 
                                         <RadioButton
                                             android:id="@+id/rb_male_settings"
+                                            style="@style/textviev_main"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
@@ -80,6 +81,7 @@
 
                                         <RadioButton
                                             android:id="@+id/rb_female_settings"
+                                            style="@style/textviev_main"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
