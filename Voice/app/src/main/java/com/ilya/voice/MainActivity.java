@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(
                     getApplicationContext(),"default")
-                    .setSmallIcon(android.R.drawable.ic_menu_view)
+                    .setSmallIcon(R.drawable.voice_notification)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setContentTitle(getString(R.string.notify_title))
                     .setOngoing(true)
