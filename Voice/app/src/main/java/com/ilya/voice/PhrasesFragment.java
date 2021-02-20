@@ -185,6 +185,9 @@ public class PhrasesFragment extends Fragment {
             row.put(sqlWords.COLUMN_WHAT_IS_IT, 2);
             row.put(sqlWords.COLUMN_RATING, 0);
             db.insert(sqlWords.NAME_TABLE, null, row);
+            list_phrases.add(getString(R.string.phrase_1));
+            list_phrases.add(getString(R.string.phrase_2));
+            list_phrases.add(getString(R.string.phrase_3));
         }
         cursor.close();
         db.close();
