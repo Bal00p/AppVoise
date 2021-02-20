@@ -41,4 +41,39 @@
     <string name="keyword_limit">Keyword limit reached</string>
     <string name="add_phrase">Add Phrase</string>
     <string name="edit_phrase">Edit phrase</string>
+    <string name="phrase_1">Hello, i have hearing problems</string>
+    <string name="phrase_2">With this application we will be able to communicate</string>
+    <string name="phrase_3">Please speak loudly and clearly into the device</string>
+    <string name="save_dialog">Save dialogue</string>
+    <string name="saved_clipboard">Saved to clipboard</string>
+    <string name="search">Search</string>
+    <string name="search_phrases">Search by phrases</string>
+    <string name="mute_assistant">To mute the assistant, you must add the device to the "Silent" or "Vibration" mode</string>
+    <string name="guide_swipe">Swipe right to open phrases</string>
+    <string name="guide_long_click">Long click to change the speaking language</string>
+    <string name="guide_reverse">Click to flip the microphone to the interlocutor</string>
+    <string name="guide_pause">Click to freeze the screen to finish reading</string>
+    <string name="guide_text">Send to speak</string>
+    <string name="guide_phone">Turn on the speakerphone and raise the media sound to chat a call using the app</string>
+    <string name="next">Next</string>
+    <string name="show_guide">Show guide</string>
+    <string name="credits"> Developed by Ilya Bogdan\n
+        Designed by Polina Emelyanova\n
+        With the support of Jorge Gonzalez-Ushakov</string>
+    <string name="male_voice">Male voice</string>
+    <string name="female_voice">Female voice</string>
+    <string name="stop">Stop</string>
+    <string name="speech">Speech</string>
+    <string name="notify_title">Click to run the application</string>
+    <string name="dialog_phone_message">To turn on speakerphone and increase the Multimedia sound for communication on a call</string>
+    <string name="turn_on">Turn on</string>
+    <string name="toast_phone_sound">Speakerphone is on and multimedia sound is raised</string>
+    <string name="channel_notify_open_app">Permanent notification</string>
+    <string name="voice_gender_chose">Voice acting</string>
+    <string name="enable_auto_rotate">Enable auto-rotate on your phone</string>
+    <string name="store_days_1">1 day</string>
+    <string name="store_days_3">3 days</string>
+    <string name="store_days_7">1 week</string>
+    <string name="store_days_30">1 month</string>
+    <string name="store_days_always">always</string>
 </resources>

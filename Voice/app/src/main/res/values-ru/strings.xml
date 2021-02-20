@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Голос</string>
+    <string name="prompt">Говорите</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <string name="saved">Сохранено</string>
+    <string name="text_size">Размер шрифта</string>
+    <string name="store_days">Сколько дней хранить записи журнала</string>
+    <string name="vibro_at_loud_sounds">Вибрация после громких звуков</string>
+    <string name="vibro_after_pause">Вибрация после долгой паузы</string>
+    <string name="speech_rate">Скорость речи</string>
+    <string name="pitch">Тембр речи</string>
+    <string name="keywords">Ключевые слова</string>
+    <string name="select_keywords">Укажите слова, при обнаружении которых будет вибрация</string>
+    <string name="add_word">Добавить ключевое слово</string>
+    <string name="edit_word">Изменить ключевое слово</string>
+    <string name="remove">Удалить</string>
+    <string name="cancel">Отмена</string>
+    <string name="add">Добавить</string>
+    <string name="edit">Изменить</string>
+    <string name="fast_word_1">Привет</string>
+    <string name="fast_word_2">Пока</string>
+    <string name="fast_word_3">Как дела?</string>
+    <string name="fast_word_4">Ок</string>
+    <string name="fast_word_5">Спасибо</string>
+    <string name="warning_load_sound">ВНИМАНИЕ!\nБыл продолжительный громкий звук</string>
+    <string name="keyword_limit">Достигнут лимит кючевых слов</string>
+    <string name="add_phrase">Добавить фразу</string>
+    <string name="edit_phrase">Изменить фразу</string>
+    <string name="phrase_1">Привет, у меня проблемы со слухом</string>
+    <string name="phrase_2">Это приложение поможет нам общаться</string>
+    <string name="phrase_3">Пожалуйста, говори громко и четко в телефон</string>
+    <string name="save_dialog">Сохранить диалог</string>
+    <string name="saved_clipboard">Сохранено в буфер обмена</string>
+    <string name="search">Поиск</string>
+    <string name="search_phrases">Поиск фраз</string>
+    <string name="mute_assistant">Для отключения звуков ассистента, переведите телефон в "Бесшумный" режим или "Вибрация"</string>
+    <string name="guide_swipe">Свайп вправо для открытия фраз</string>
+    <string name="guide_long_click">Долгое нажатие для выбора второго языка</string>
+    <string name="guide_reverse">Нажми, чтобы перевернуть микрофон к собеседнику</string>
+    <string name="guide_pause">Нажми заморозить экран, чтобы успеть всё дочитать </string>
+    <string name="guide_text">Напиши, что сказать</string>
+    <string name="guide_phone">Включи громкую связь и повысь звук мультимедиа, чтобы использовать приложение для общения по звонку</string>
+    <string name="next">Далее</string>
+    <string name="show_guide">Показать Гайд</string>
+    <string name="credits"> Developed by Ilya Bogdan\n
+        Designed by Polina Emelyanova\n
+        With the support of Jorge Gonzalez-Ushakov</string>
+    <string name="male_voice">Муж голос</string>
+    <string name="female_voice">Жен голос</string>
+    <string name="stop">Стоп</string>
+    <string name="speech">Говорить</string>
+    <string name="notify_title">Нажми, чтобы открыть приложение</string>
+    <string name="dialog_phone_message">Будет включена громкая связь и повышен звук мультимедии, чтобы общаться по звонку</string>
+    <string name="turn_on">Включить</string>
+    <string name="toast_phone_sound">Включена громкая связь, и повышен звук мультимедиа</string>
+    <string name="channel_notify_open_app">Постоянное уведомление</string>
+    <string name="voice_gender_chose">Голос озвучивания</string>
+    <string name="enable_auto_rotate">Включите автоповорот экрана телефона</string>
+    <string name="store_days_1">1 день</string>
+    <string name="store_days_3">3 дня</string>
+    <string name="store_days_7">1 неделю</string>
+    <string name="store_days_30">1 месяц</string>
+    <string name="store_days_always">всегда</string>
+</resources>

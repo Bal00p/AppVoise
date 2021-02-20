@@ -3,8 +3,8 @@
     <item>
         <shape android:shape="rectangle">
             <corners android:radius="@dimen/radius_button_pause"  />
-            <stroke android:width="@dimen/stroke_button_pause" android:color="@color/stroke_button_pause"></stroke>
-            <solid android:color="@color/color_button_pause"></solid>
+            <stroke android:width="@dimen/stroke_button_pause" android:color="@color/stroke_button_pause"/>
+            <solid android:color="@color/color_button_pause" />
         </shape>
     </item>
 </selector>

@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
-            <corners android:topLeftRadius="@dimen/radius_button_language" android:bottomRightRadius="@dimen/radius_button_language" />
+            <corners android:radius="@dimen/radius_button_language" />
             <solid android:color="@color/btn_color"/>
         </shape>
     </item>

@@ -1,14 +1,20 @@
 package com.ilya.voice;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.GradientDrawable;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
@@ -17,17 +23,23 @@ import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
+import android.speech.tts.Voice;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -35,6 +47,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -43,22 +56,23 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements RecognitionListener, PhrasesFragment.onSomeEventListener{
+public class MainActivity extends AppCompatActivity
+        implements RecognitionListener,
+        TextToSpeech.OnInitListener,
+        PhrasesFragment.onSomeEventListenerMain {
     //переменные
-
     EditText editText_text_to_speech;
-    Button button_text_to_speech, button_select_language, button_pause, button_to_settings;
-//    Button button_fast_word_1, button_fast_word_2, button_fast_word_3, button_fast_word_4, button_fast_word_5;
-    public String[] fast_words = new String[10];
+    Button button_select_language;
+    ImageButton button_pause, button_to_settings, button_rotation, button_text_to_speech;
+    Button button_wave;
     public String[] keywords = new String[10];
     SQLWords sqlWords;
-    LinearLayout container_journal;
+    LinearLayout container_journal, main_layout, main_layout2;
     ConstraintLayout main_container;
     ScrollView scrollView;
     View tableRow;
     TextView textView_my_message, textView_outside_message, textView_time_separator,
             textView_partial_result;
-    public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
     public static boolean readText = false;
     public static String DATE = "", TIME = "", DEAD_DATE = "";
     public static final String DATE_FORMAT = "yyyy/MM/dd", TIME_FORMAT = "H:mm";
@@ -79,13 +93,12 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
             SQLWords.COLUMN_WORD,
             SQLWords.COLUMN_RATING};
     SharedPreferences sharedPreferences = null;
-    public static float PITCH = 1.3f;
-    public static float SPEECH_RATE = 0.7f;
     public static int TEXT_SIZE = 10;
     public static boolean VIBRO_AT_LOAD_SOUND = false;
     public static boolean VIBRO_AFTER_PAUSE = false;
     public static boolean KEYWORDS = false;
-    public static boolean VOICING_EMOTICONS = false;
+    public static boolean SHOW_GUIDE = false;
+    public static boolean MALE_GENDER = false;
 
     private SpeechRecognizer speech = null;
     private Intent recognizerIntent;
@@ -95,179 +108,308 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
     public static String SECOND_LANGUAGE = "";
 
     public static boolean PAUSE = false;
-    public static int countRmsChanged = 0;
+    public static float lastRmsChanged = 0;
 
     GestureDetector gestureDetector;
     public static final int SWIPE_MIN_DISTANCE = 120;
     public static final int SWIPE_THRESHOLD_VELOCITY = 200;
     PhrasesFragment phrasesFragment;
+    GuideFragment guideFragment;
     public static boolean OPEN_FRAGMENT = false;
+    public static boolean REVERSE_ORIENTATION = false;
+    public static boolean SPEAKING = false;
+
+    TelephonyManager mTelephonyManager;
+    PhoneStateListener mPhoneStateListener;
+    public static final int NOTIFY_ID = 101;
+    DialogPhone dialogPhone;
+    public static int VALUE_SOUND = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            String requiredPermission = Manifest.permission.RECORD_AUDIO;
-            if (checkCallingOrSelfPermission(requiredPermission) == PackageManager.PERMISSION_DENIED) {
-                requestPermissions(new String[]{requiredPermission}, 101);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                String requiredPermission = Manifest.permission.RECORD_AUDIO;
+                if (checkCallingOrSelfPermission(requiredPermission) ==
+                        PackageManager.PERMISSION_DENIED) {
+                    requestPermissions(new String[]{requiredPermission}, 101);
+                }
             }
-        }
-        gestureDetector = new GestureDetector(new GestureListener());
+            Intent resultIntent = new Intent(this, MainActivity.class);
+            PendingIntent resultPendingIntent = PendingIntent.getActivity(this,
+                    0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        speech = SpeechRecognizer.createSpeechRecognizer(getApplicationContext(),
-                ComponentName.unflattenFromString("com.google.android.googlequicksearchbox/com.google.android.voicesearch.serviceapi.GoogleRecognitionService"));
-        speech.setRecognitionListener(this);
-        recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
-//        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE,Locale.getDefault());
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,this.getPackageName());
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, new Long(3000));
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.forLanguageTag("de-DE").toString());
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                    getApplicationContext(),"default")
+                    .setSmallIcon(R.drawable.voice_notification)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setContentTitle(getString(R.string.notify_title))
+                    .setOngoing(true)
+                    .setChannelId(getString(R.string.channel_notify_open_app))
+                    .setShowWhen(false)
+                    .setNotificationSilent()
+                    .setColor(getColor(R.color.notify_color))
+                    .setColorized(true)
+                    .setContentIntent(resultPendingIntent);
 
-        sharedPreferences = getSharedPreferences(SettingsActivity.PATH_TO_SETTINGS, MODE_PRIVATE);
-        sqlJournal = new SQLJournal(this, sqlJournal.NAME_TABLE, null,
-                sqlJournal.VERSION_TABLE);
-        sqlWords = new SQLWords(this, SQLWords.NAME_TABLE, null,
-                SQLWords.VERSION_TABLE);
-        button_text_to_speech = (Button) findViewById(R.id.btn_text_to_speech);
-        button_select_language = (Button)findViewById(R.id.btn_select_language);
-        button_pause = (Button)findViewById(R.id.btn_pause);
-        button_to_settings = (Button) findViewById(R.id.btn_to_settings);
-//        button_fast_word_1 = (Button) findViewById(R.id.btn_fast_word1);
-//        button_fast_word_2 = (Button) findViewById(R.id.btn_fast_word2);
-//        button_fast_word_3 = (Button) findViewById(R.id.btn_fast_word3);
-//        button_fast_word_4 = (Button) findViewById(R.id.btn_fast_word4);
-//        button_fast_word_5 = (Button) findViewById(R.id.btn_fast_word5);
-        editText_text_to_speech = (EditText) findViewById(R.id.et_text_to_speech);
-        textView_partial_result = (TextView)findViewById(R.id.tv_my_partial_result);
-        textView_partial_result.setLayoutParams(new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,0));
-        container_journal = (LinearLayout) findViewById(R.id.container_journal);
-        main_container = (ConstraintLayout) findViewById(R.id.main_container);
-        scrollView = (ScrollView) findViewById(R.id.sv_journal);
-        scrollView.getViewTreeObserver().addOnGlobalLayoutListener(keyboardLayoutListener);
-        //устанавливаю текущую дату и время сеанса
-        setDateAndTime();
-        removeOldJournal();
-//        fillFastWords();
-
-        main_container.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                gestureDetector.onTouchEvent(event);
-                return true;
+            NotificationManager notificationManager = (NotificationManager)
+                    getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationChannel channel = new NotificationChannel(
+                    getString(R.string.channel_notify_open_app),
+                    getString(R.string.app_name),
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
             }
-        });
+            notificationManager.notify(NOTIFY_ID,builder.build());
 
-        textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int initStatus) {
-                if (initStatus == TextToSpeech.SUCCESS) {
-                    if (textToSpeech.isLanguageAvailable(new Locale(Locale.getDefault().getLanguage()))
-                            == TextToSpeech.LANG_AVAILABLE) {
-                        textToSpeech.setLanguage(new Locale(Locale.getDefault().getLanguage()));
-                    } else {
-                        textToSpeech.setLanguage(Locale.US);
+            mTelephonyManager = (TelephonyManager) getSystemService(getApplicationContext().TELEPHONY_SERVICE);
+            gestureDetector = new GestureDetector(new GestureListener());
+
+            recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getPackageName());
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+            startListening();
+
+            sharedPreferences = getSharedPreferences(SettingsActivity.PATH_TO_SETTINGS, MODE_PRIVATE);
+            sqlJournal = new SQLJournal(this, sqlJournal.NAME_TABLE, null,
+                    sqlJournal.VERSION_TABLE);
+            sqlWords = new SQLWords(this, SQLWords.NAME_TABLE, null,
+                    SQLWords.VERSION_TABLE);
+            button_text_to_speech = (ImageButton) findViewById(R.id.btn_text_to_speech);
+            button_select_language = (Button) findViewById(R.id.btn_select_language);
+            button_pause = (ImageButton) findViewById(R.id.btn_pause);
+            button_to_settings = (ImageButton) findViewById(R.id.btn_to_settings);
+            button_wave = (Button)findViewById(R.id.btn_wave);
+            button_rotation = (ImageButton)findViewById(R.id.btn_rotation);
+            editText_text_to_speech = (EditText) findViewById(R.id.et_text_to_speech);
+            textView_partial_result = (TextView) findViewById(R.id.tv_my_partial_result);
+            textView_partial_result.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, 0));
+            container_journal = (LinearLayout) findViewById(R.id.container_journal);
+            main_container = (ConstraintLayout) findViewById(R.id.main_container);
+            main_layout = (LinearLayout) findViewById(R.id.main_layout);
+            main_layout2 = (LinearLayout) findViewById(R.id.main_layout2);
+            scrollView = (ScrollView) findViewById(R.id.sv_journal);
+            scrollView.getViewTreeObserver().addOnGlobalLayoutListener(keyboardLayoutListener);
+            //устанавливаю текущую дату и время сеанса
+            setDateAndTime();
+            removeOldJournal();
+
+            main_layout.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    gestureDetector.onTouchEvent(event);
+                    return true;
+                }
+            });
+            main_layout2.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    gestureDetector.onTouchEvent(event);
+                    return true;
+                }
+            });
+
+            View.OnClickListener listener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (v.getId()) {
+                        case R.id.btn_text_to_speech:
+                            if (SPEAKING){
+                                SPEAKING = false;
+                                textToSpeech.stop();
+                                button_text_to_speech.setImageResource(R.drawable.image_button_speech_speech);
+                                startListening();
+                            }else{
+                                String text = editText_text_to_speech.getText().toString();
+                                speakText(text);
+                            }
+                            break;
+                        case R.id.btn_to_settings:
+                            Intent intent = new Intent(MainActivity.this,
+                                    SettingsActivity.class);
+                            startActivity(intent);
+                            break;
+                        case R.id.btn_rotation:
+                            //переворачиваю экран на 180
+                            setOrientation();
+                            break;
+                        case R.id.btn_select_language:
+                            if (HOME_LANGUAGE) {
+                                HOME_LANGUAGE = false;
+                            } else {
+                                HOME_LANGUAGE = true;
+                            }
+                            selectLanguageAndUpTTSAndSTT();
+                            speech.startListening(recognizerIntent);
+                            break;
+                        case R.id.btn_pause:
+                            if (PAUSE) {
+                                PAUSE = false;
+                                button_pause.setImageResource(R.drawable.image_button_pause_pause);
+                            } else {
+                                PAUSE = true;
+                                button_pause.setImageResource(R.drawable.image_button_pause_continue);
+                            }
+                            break;
                     }
-                    textToSpeech.setPitch(PITCH);
-                    textToSpeech.setSpeechRate(SPEECH_RATE);
-                    readText = true;
-                } else if (initStatus == TextToSpeech.ERROR) {
-                    Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
-                    readText = false;
                 }
-            }
-        });
+            };
+            button_text_to_speech.setOnClickListener(listener);
+            button_select_language.setOnClickListener(listener);
+            button_pause.setOnClickListener(listener);
+            button_to_settings.setOnClickListener(listener);
+            button_rotation.setOnClickListener(listener);
 
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.btn_text_to_speech:
-                        String text = editText_text_to_speech.getText().toString();
-                        speakText(text);
-                        break;
-                    case R.id.btn_to_settings:
-                        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                        startActivity(intent);
-                        break;
-//                    case R.id.btn_fast_word1:
-//                        fastWord(fast_words[fast_words.length - 1]);
-//                        break;
-//                    case R.id.btn_fast_word2:
-//                        fastWord(fast_words[fast_words.length - 2]);
-//                        break;
-//                    case R.id.btn_fast_word3:
-//                        fastWord(fast_words[fast_words.length - 3]);
-//                        break;
-//                    case R.id.btn_fast_word4:
-//                        fastWord(fast_words[fast_words.length - 4]);
-//                        break;
-//                    case R.id.btn_fast_word5:
-//                        fastWord(fast_words[fast_words.length - 5]);
-//                        break;
-                    case R.id.btn_select_language:
-                        if (HOME_LANGUAGE) {
-                            HOME_LANGUAGE = false;
-                        } else {
-                            HOME_LANGUAGE = true;
-                        }
-                        selectLanguage();
-                        speech.startListening(recognizerIntent);
-                        break;
-                    case R.id.btn_pause:
-                        if(PAUSE){
-                            //показываю всё то, что не показывал
-
-                            PAUSE = false;
-                        }else{
-                            PAUSE = true;
-                        }
-                        break;
+            button_select_language.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (HOME_LANGUAGE) {
+                        HOME_LANGUAGE = false;
+                    } else {
+                        HOME_LANGUAGE = true;
+                    }
+                    Intent intent = new Intent(MainActivity.this, LanguageActivity.class);
+                    startActivity(intent);
+                    return false;
                 }
-            }
-        };
-        button_text_to_speech.setOnClickListener(listener);
-        button_select_language.setOnClickListener(listener);
-        button_pause.setOnClickListener(listener);
-        button_to_settings.setOnClickListener(listener);
-//        button_fast_word_1.setOnClickListener(listener);
-//        button_fast_word_2.setOnClickListener(listener);
-//        button_fast_word_3.setOnClickListener(listener);
-//        button_fast_word_4.setOnClickListener(listener);
-//        button_fast_word_5.setOnClickListener(listener);
+            });
 
-        button_select_language.setOnLongClickListener(new View.OnLongClickListener(){
-            @Override
-            public boolean onLongClick(View v) {
-                if(HOME_LANGUAGE){
-                    HOME_LANGUAGE = false;
+            mPhoneStateListener = new PhoneStateListener() {
+                @Override
+                public void onCallStateChanged(int state, String incomingNumber) {
+                    super.onCallStateChanged(state, incomingNumber);
+
+                    switch (state) {
+                        case TelephonyManager.CALL_STATE_IDLE:
+//                            Toast.makeText(MainActivity.this, "ожидание звонка", Toast.LENGTH_SHORT).show();
+                            AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+                            audioManager.setMode(AudioManager.MODE_IN_CALL);
+                            if(VALUE_SOUND!=-1){
+                                audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+                                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, VALUE_SOUND, 0);
+                                audioManager.setSpeakerphoneOn(false);
+                                VALUE_SOUND=-1;
+                            }
+                            break;
+                        case TelephonyManager.CALL_STATE_RINGING:
+//                            Toast.makeText(MainActivity.this, "входящий звонок", Toast.LENGTH_SHORT).show();
+                            break;
+                        case TelephonyManager.CALL_STATE_OFFHOOK:
+//                            Toast.makeText(MainActivity.this, "на удержании", Toast.LENGTH_SHORT).show();
+                            dialogPhone = new DialogPhone();
+                            FragmentManager manager = getSupportFragmentManager();
+                            dialogPhone.show(manager, "addPhrase");
+                            break;
+                    }
+                }
+            };
+
+        }catch (Exception e){}
+    }
+
+    UtteranceProgressListener utteranceProgressListener = new UtteranceProgressListener() {
+        @Override
+        public void onStart(String utteranceId) {
+            new Thread(){
+                public void run(){
+                    MainActivity.this.runOnUiThread(new Runnable(){
+                        public void run(){
+                            SPEAKING=true;
+                            button_text_to_speech.setImageResource(R.drawable.image_button_speech_stop);
+                        }
+                    });
+                }
+            }.start();
+        }
+        @Override
+        public void onDone(String utteranceId) {
+            new Thread(){
+                public void run(){
+                    MainActivity.this.runOnUiThread(new Runnable(){
+                        public void run(){
+                            SPEAKING=false;
+                            button_text_to_speech.setImageResource(R.drawable.image_button_speech_speech);
+                            startListening();
+                        }
+                    });
+                }
+            }.start();
+        }
+        @Override
+        public void onError(String utteranceId) {}
+    };
+
+    @Override
+    public void onInit(int initStatus) {
+        String language_tag;
+        if(HOME_LANGUAGE){
+            language_tag = SECOND_LANGUAGE;
+        }else{
+            language_tag = Locale.getDefault().toLanguageTag();
+        }
+        if (initStatus == TextToSpeech.SUCCESS) {
+            if (textToSpeech.isLanguageAvailable(new Locale(
+                    Locale.forLanguageTag(language_tag).getLanguage()))
+                    == TextToSpeech.LANG_AVAILABLE) {
+                textToSpeech.setLanguage(new Locale(Locale.forLanguageTag(language_tag).getLanguage()));
+            } else {
+                textToSpeech.setLanguage(Locale.US);
+            }
+            String l = Locale.forLanguageTag(language_tag).getLanguage();
+            String gender2 = (MALE_GENDER? "male_1-local" : "female_1-local");
+            String gender5 = (MALE_GENDER? l+"f" : l+"c");
+            for(Voice x: textToSpeech.getVoices()){
+                String[] v = x.getName().split("#");
+                String[] r = v[0].split("-");
+                if(v.length>1){
+                    if(v[1].equals(gender2)&&r[0].equals(l)){
+                        Voice voice = new Voice(x.getName(),Locale.forLanguageTag(language_tag),
+                                Voice.QUALITY_VERY_HIGH, Voice.LATENCY_VERY_LOW,
+                                true,null);
+                        textToSpeech.setVoice(voice);
+                    }
                 }else{
-                    HOME_LANGUAGE = true;
+                    if(r.length==5){
+                        //ruf - male, ruc - female
+                        if(r[0].equals(l)&&r[4].equals("local")&&r[3].equals(gender5)){
+                            Voice voice = new Voice(x.getName(),Locale.forLanguageTag(language_tag),
+                                    Voice.QUALITY_VERY_HIGH, Voice.LATENCY_VERY_LOW,
+                                    true,null);
+                            textToSpeech.setVoice(voice);
+                        }
+                    }
                 }
-                Intent intent = new Intent(MainActivity.this, LanguageActivity.class);
-                startActivity(intent);
-                return false;
             }
-        });
+            readText = true;
+        } else if (initStatus == TextToSpeech.ERROR) {
+            Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
+            readText = false;
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         //применяю настройки
         loadSettings();
+
+        checkShowGuide();
         //заполняю прошедшим
         fillJournal();
 
         fillKeyWords();
 
-        selectLanguage();
-        speech.startListening(recognizerIntent);
+        selectLanguageAndUpTTSAndSTT();
+        startListening();
 
         if(OPEN_FRAGMENT){
             getSupportFragmentManager().beginTransaction()
@@ -278,11 +420,18 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
     @Override
     protected void onPause() {
         super.onPause();
-//        saveFastWords();
+        mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
         if (speech != null) {
-            speech.stopListening();
+            speech.destroy();
             Log.i(LOG_TAG, "destroy");
         }
+    }
+
+    public void startListening(){
+        speech = SpeechRecognizer.createSpeechRecognizer(getApplicationContext(),
+                ComponentName.unflattenFromString("com.google.android.googlequicksearchbox/com.google.android.voicesearch.serviceapi.GoogleRecognitionService"));
+        speech.setRecognitionListener(this);
+        speech.startListening(recognizerIntent);
     }
 
     //спускаю вниз после вызова клавиатуры
@@ -330,18 +479,37 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
     }
 
     public void speakText(String text){
-        speech.stopListening();
+        if(!partialResult.equals("")){
+            addOutsideMessage(partialResult);
+            textView_partial_result.setText("");
+            textView_partial_result.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,0));
+        }
+        speech.destroy();
         try {
             if (!text.equals("")) {
-                String utteranceId = this.hashCode() + "";
-                textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
+                Bundle params = new Bundle();
+                params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "");
+                textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, params, "UniqueID");
                 editText_text_to_speech.setText("");
-//                                voicingEmoticons(text);
-                addMyMessage(text);
-//                wordsRating(text);
+                addMyMessage(checkRequest(text));
             }
-        } catch (Exception e) {
+        } catch (Exception e) {}
+    }
+
+    public String checkRequest(String text){
+        String[] arr = text.split(" ");
+        String upText = "";
+        for (int i=0; i<arr.length; i++){
+            if (arr[i].equals("DELETE")){
+                arr[i]="DЕLЕТЕ";//ВЕДЕТЕ
+            }
+            if (arr[i].equals("FROM")){
+                arr[i]="FRОМ";//АКОМ
+            }
+            upText+=(arr[i]+" ");
         }
+        return upText;
     }
 
     public void fillJournal() {
@@ -497,46 +665,15 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
                     TEXT_SIZE = 30;
                     break;
             }
-            switch (sharedPreferences.getInt(SettingsActivity.SETTINGS_PITCH, 0)) {
-                case 0:
-                    PITCH = 0.5f;
-                    break;
-                case 1:
-                    PITCH = 1.3f;
-                    break;
-                case 2:
-                    PITCH = 2.0f;
-                    break;
-            }
-            switch (sharedPreferences.getInt(SettingsActivity.SETTINGS_SPEECH_RATE, 0)) {
-                case 0:
-                    SPEECH_RATE = 0.3f;
-                    break;
-                case 1:
-                    SPEECH_RATE = 0.7f;
-                    break;
-                case 2:
-                    SPEECH_RATE = 1.3f;
-                    break;
-            }
             VIBRO_AT_LOAD_SOUND = sharedPreferences.getBoolean(SettingsActivity.SETTINGS_VIBRO_AT_LOAD_SOUND, false);
             VIBRO_AFTER_PAUSE = sharedPreferences.getBoolean(SettingsActivity.SETTINGS_VIBRO_AFTER_PAUSE, false);
             KEYWORDS = sharedPreferences.getBoolean(SettingsActivity.SETTINGS_KEYWORDS, false);
-            VOICING_EMOTICONS = sharedPreferences.getBoolean(SettingsActivity.SETTINGS_VOICING_EMOTICONS, false);
             SECOND_LANGUAGE = sharedPreferences.getString(SettingsActivity.SETTINGS_LANGUAGE,"NO");
+            SHOW_GUIDE = sharedPreferences.getBoolean(SettingsActivity.SETTINGS_SHOW_GUIDE, true);
+            MALE_GENDER = sharedPreferences.getBoolean(SettingsActivity.SETTINGS_GENDER, false);
 
-            button_text_to_speech.setTextSize(TEXT_SIZE);
             editText_text_to_speech.setTextSize(TEXT_SIZE);
-            textToSpeech.setPitch(PITCH);
-            textToSpeech.setSpeechRate(SPEECH_RATE);
-            button_to_settings.setTextSize(TEXT_SIZE);
-//            button_fast_word_1.setTextSize(TEXT_SIZE);
-//            button_fast_word_2.setTextSize(TEXT_SIZE);
-//            button_fast_word_3.setTextSize(TEXT_SIZE);
-//            button_fast_word_4.setTextSize(TEXT_SIZE);
-//            button_fast_word_5.setTextSize(TEXT_SIZE);
             button_select_language.setTextSize(TEXT_SIZE);
-            button_pause.setTextSize(TEXT_SIZE);
             textView_partial_result.setTextSize(TEXT_SIZE);
         } catch (Exception e) {
             Toast.makeText(this, "NO", Toast.LENGTH_SHORT).show();
@@ -548,137 +685,6 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
             db = sqlJournal.getWritableDatabase();
             db.delete(sqlJournal.NAME_TABLE, sqlJournal.COLUMN_DATE + " < ?",
                     new String[]{DEAD_DATE});
-        }
-    }
-
-    public void fillFastWords() {
-        try {
-            db = sqlWords.getReadableDatabase();
-            cursor = db.query(sqlWords.NAME_TABLE, columns_words,
-                    SQLWords.COLUMN_WHAT_IS_IT + " = ?", new String[]{"0"},
-                    SQLWords.COLUMN_RATING, null, null);
-            int index_id = cursor.getColumnIndex(columns_words[0]);
-            int index_what_it_is = cursor.getColumnIndex(columns_words[1]);
-            int index_word = cursor.getColumnIndex(columns_words[2]);
-            int index_rating = cursor.getColumnIndex(columns_words[3]);
-            for (int i = 0; i < fast_words.length; i++) {
-                if (cursor.moveToNext()) {
-                    fast_words[i] = cursor.getString(index_word);
-                } else {
-                    fast_words[i] = "";
-                }
-            }
-            for(int i=fast_words.length-1; i>=0; i--){
-                if(i==fast_words.length-1) {fast_words[i] = getString(R.string.fast_word_1);}
-                if(i==fast_words.length-2) {fast_words[i] = getString(R.string.fast_word_2);}
-                if(i==fast_words.length-3) {fast_words[i] = getString(R.string.fast_word_3);}
-                if(i==fast_words.length-4) {fast_words[i] = getString(R.string.fast_word_4);}
-                if(i==fast_words.length-5) {fast_words[i] = getString(R.string.fast_word_5);}
-            }
-            cursor.close();
-            db.close();
-//            setFastWord();
-        } catch (Exception e) {
-        }
-    }
-    public void saveFastWords() {
-        db = sqlWords.getWritableDatabase();
-        db.delete(SQLWords.NAME_TABLE, SQLWords.COLUMN_WHAT_IS_IT + " = ?",
-                new String[]{0 + ""});
-        for (int i = 0; i < fast_words.length; i++) {
-            ContentValues row = new ContentValues();
-            row.put(SQLWords.COLUMN_WORD, fast_words[i]);
-            row.put(SQLWords.COLUMN_RATING, i);
-            row.put(SQLWords.COLUMN_WHAT_IS_IT, 0);
-            db.insert(SQLWords.NAME_TABLE, null, row);
-        }
-        db.close();
-    }
-    public void fastWord(String word) {
-        word = word.replace("\n", " ");
-        if (!word.equals("")) {
-            String utteranceId = this.hashCode() + "";
-            textToSpeech.speak(word, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
-            addMyMessage(word);
-        }
-        String temp_word = word.substring(1);
-        for (int i = 0; i < fast_words.length - 1; i++) {
-            if(!fast_words[i].equals("")){
-                if (temp_word.equals(fast_words[i].substring(1))) {
-                    String temp = fast_words[i + 1];
-                    fast_words[i + 1] = fast_words[i];
-                    fast_words[i] = temp;
-                    break;
-                }
-            }
-        }
-//        setFastWord();
-    }
-    public void wordsRating(String word) {
-        word = word.replace("\n", " ");
-        String temp_word = word.substring(1);
-        boolean find = false;
-        for (int i = 0; i < fast_words.length - 1; i++) {
-            if(!fast_words[i].equals("")){
-                if (temp_word.equals(fast_words[i].substring(1))) {
-                    String temp = fast_words[i + 1];
-                    fast_words[i + 1] = fast_words[i];
-                    fast_words[i] = temp;
-                    find = true;
-                    break;
-                }
-            }
-        }
-        if (!find) {
-            for (int i = fast_words.length - 1; i >= 0; i--) {
-                if (fast_words[i].equals("")) {
-                    fast_words[i] = word;
-                    break;
-                }
-                if (i == 0) {
-                    fast_words[i] = word;
-                }
-            }
-        }
-//        setFastWord();
-    }
-    public void setFastWord() {
-//        button_fast_word_1.setText(fast_words[fast_words.length - 1]);
-//        button_fast_word_2.setText(fast_words[fast_words.length - 2]);
-//        button_fast_word_3.setText(fast_words[fast_words.length - 3]);
-//        button_fast_word_4.setText(fast_words[fast_words.length - 4]);
-//        button_fast_word_5.setText(fast_words[fast_words.length - 5]);
-    }
-    public void voicingEmoticons(String text) {
-        if (VOICING_EMOTICONS) {
-            switch (text) {
-                case ":)":
-
-                    break;
-            }
-            String utteranceId = this.hashCode() + "";
-            textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
-        }
-    }
-
-    public void findKeyword(String message) {
-        String[] message_words = message.split(" ");
-        for (int i = 0; i < message_words.length; i++) {
-            //без учета регистра первой буквы
-            message_words[i] = message_words[i].substring(1);
-            for (int j = 0; j < keywords.length; j++) {
-                if(!keywords[j].equals("")){
-                    if (message_words[i].equals(keywords[j])) {
-                        //вибрация
-                        Vibrator vibratorManager = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                        if (vibratorManager != null) {
-                            VibrationEffect effect = VibrationEffect.createOneShot(
-                                    200, VibrationEffect.DEFAULT_AMPLITUDE);
-                            vibratorManager.vibrate(effect);
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -697,7 +703,7 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
         LAST_MILLIS = CALENDAR_MILLIS.getTimeInMillis();
     }
 
-    public void selectLanguage(){
+    public void selectLanguageAndUpTTSAndSTT(){
         speech.stopListening();
         if(HOME_LANGUAGE){
             //изменяю на второй
@@ -707,21 +713,32 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
             }else{
                 recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,
                         Locale.forLanguageTag(SECOND_LANGUAGE).toString());
+                textToSpeech = new TextToSpeech(this, this);
+                textToSpeech.setOnUtteranceProgressListener(utteranceProgressListener);
                 button_select_language.setText(Locale.forLanguageTag(SECOND_LANGUAGE).getDisplayLanguage());
             }
         }else{
             //возвращаю родной
             recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().toString());
+            textToSpeech = new TextToSpeech(this, this);
+            textToSpeech.setOnUtteranceProgressListener(utteranceProgressListener);
             button_select_language.setText(Locale.getDefault().getDisplayLanguage());
         }
     }
 
     public void onLoadSound(){
-        Toast.makeText(getApplicationContext(), getString(R.string.warning_load_sound), Toast.LENGTH_SHORT).show();
         Vibrator vibratorManager = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (vibratorManager != null) {
             VibrationEffect effect = VibrationEffect.createOneShot(
-                    500, VibrationEffect.DEFAULT_AMPLITUDE);
+                    300, VibrationEffect.DEFAULT_AMPLITUDE);
+            vibratorManager.vibrate(effect);
+        }
+    }
+    public void onLongLoadSound(){
+        Vibrator vibratorManager = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibratorManager != null) {
+            VibrationEffect effect = VibrationEffect.createOneShot(
+                    700, VibrationEffect.DEFAULT_AMPLITUDE);
             vibratorManager.vibrate(effect);
         }
     }
@@ -755,6 +772,7 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
         Log.i(LOG_TAG, "onEvent");
     }
 
+    public String partialResult = "";
     @Override
     public void onPartialResults(Bundle arg0) {
         if(!PAUSE){
@@ -764,6 +782,7 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
             ArrayList commandList = arg0.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
             textView_partial_result.setText(commandList.get(0).toString());
             scrollViewDown();
+            partialResult = commandList.get(0).toString();
         }
     }
 
@@ -780,29 +799,33 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
                 ViewGroup.LayoutParams.MATCH_PARENT,0));
         ArrayList commandList = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         addOutsideMessage(commandList.get(0).toString());
-        findKeyword(commandList.get(0).toString());
+//        findKeyword(commandList.get(0).toString());
         speech.startListening(recognizerIntent);
     }
 
     @Override
     public void onRmsChanged(float rmsdB) {
         Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
-        if (rmsdB==10.0 && countRmsChanged==0) {
-            countRmsChanged++;
+
+        int size = (int)(getResources().getDimension(R.dimen.wave_radius)
+                -getResources().getDimension(R.dimen.wave_center)-rmsdB*10);
+        GradientDrawable gradientDrawable = new GradientDrawable();
+        gradientDrawable.setColor(getColor(R.color.wave_wave));
+        gradientDrawable.setCornerRadius(getResources().getDimension(R.dimen.wave_radius));
+        gradientDrawable.setStroke(size, getColor(R.color.wave_stroke));
+        button_wave.setBackground(gradientDrawable);
+
+        if(VIBRO_AT_LOAD_SOUND){
+            if (rmsdB==10.0 && lastRmsChanged <=0) {
+                onLoadSound();
+            }
+            if (rmsdB>=9.5 && lastRmsChanged >=9.5) {
+                onLongLoadSound();
+            }
         }
-        if (rmsdB<10.0 && rmsdB>7.0 && countRmsChanged==1){
-            countRmsChanged++;
-        }else{
-            countRmsChanged=0;
-        }
-        if (rmsdB<8.0 && countRmsChanged==2){
-            //резкий громкий звук
-            onLoadSound();
-            countRmsChanged=0;
-        }else{
-            countRmsChanged=0;
-        }
+        lastRmsChanged=rmsdB;
     }
+
     public static String getErrorText(int errorCode) {
         String message;
         switch (errorCode) {
@@ -868,7 +891,16 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
     public void someEvent(String s) {
         switch (s){
             case "re_Open":
-                getSupportFragmentManager().beginTransaction().replace(R.id.main_container, phrasesFragment).commit();
+                phrasesFragment = new PhrasesFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.main_container, phrasesFragment).commit();
+                break;
+            case "cloSe_guiDe":
+                getSupportFragmentManager().beginTransaction().remove(guideFragment).commit();
+                break;
+            case "cloSe_phrAses":
+                getSupportFragmentManager().beginTransaction().remove(phrasesFragment).commit();
+                OPEN_FRAGMENT = false;
                 break;
             default:
                 speakText(s);
@@ -885,6 +917,42 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
         }else{
             super.onBackPressed();
         }
+    }
+    public void setOrientation(){
+        if (REVERSE_ORIENTATION){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            REVERSE_ORIENTATION=false;
+        }else{
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+            if(getRotateOrientation()){
+                REVERSE_ORIENTATION=true;
+            }else{
+                Toast.makeText(getApplicationContext(), getString(R.string.enable_auto_rotate),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    public void checkShowGuide(){
+        if (SHOW_GUIDE){
+            //запускаю фрагмент с гайдом
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            guideFragment = new GuideFragment();
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+            ft.add(R.id.main_container, guideFragment);
+            ft.commit();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(SettingsActivity.SETTINGS_SHOW_GUIDE, false);
+            editor.commit();
+        }
+    }
+
+    public boolean getRotateOrientation() {
+        int rotate = getWindowManager().getDefaultDisplay().getRotation();
+        if (rotate==Surface.ROTATION_180){
+            return true;
+        }
+        return false;
     }
 }
 //Toast.makeText(getApplicationContext(), "YES", Toast.LENGTH_SHORT).show();

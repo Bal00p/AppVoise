@@ -1,20 +1,130 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Voice" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Voice" parent="Theme.Design.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!--        вот он-->
+        <item name="colorAccent">@color/widgets_settings</item>
+
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
-    <style name="test">
-        <item name="android:paddingTop">50dp</item>
-        <item name="android:background">@color/color_for_layout</item>
+    <style name="button_pause" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:background">@drawable/test_layout</item>
+        <item name="android:layout_height">@dimen/height_button_pause</item>
+        <item name="android:layout_width">@dimen/width_button_pause</item>
+    </style>
+    <style name="button_language" >
+        <item name="android:background">@drawable/background_btn_language</item>
+        <item name="android:layout_height">@dimen/height_btn_language</item>
+        <item name="android:layout_width">@dimen/width_btn_language</item>
+        <item name="android:textColor">@color/textviev_main</item>
+        <item name="android:textSize">@dimen/textviev_main</item>
+    </style>
+    <style name="button_three">
+        <item name="android:background">@drawable/button_three</item>
+        <item name="android:textColor">@color/textviev_main</item>
+        <item name="android:textSize">@dimen/textviev_main</item>
+    </style>
+    <style name="btn_speech">
+        <item name="android:background">@drawable/background_btn_speech</item>
+
+    </style>
+    <style name="EditText_style">
+        <item name="android:background">@drawable/edittext_style</item>
+        <item name="android:layout_height">@dimen/layout_height_edittext</item>
+    </style>
+    <style name="constrainLtayuots_style" >
+        <item name="android:background">@drawable/constrainltayuots</item>
+    </style>
+    <style name="button_empty">
+        <item name="android:background">@color/btn_empty</item>
+    </style>
+    <style name="button_add">
+        <item name="android:background">@drawable/btn_add</item>
+        <item name="android:layout_height">@dimen/btn_add</item>
+        <item name="android:layout_width">@dimen/btn_add</item>
+    </style>
+    <style name="LinerLayot_Fragment">
+        <item name="android:background">@drawable/linerlayot_fragments</item>
+    </style>
+    <style name="conslayot_frag">
+        <item name="android:background">@drawable/conslayout_fragment</item>
+    </style>
+    <style name="stule_phrases">
+        <item name="android:background">@drawable/phrases_drw</item>
+    </style>
+    <style name="layot">
+        <item name="android:background">@color/layout</item>
+    </style>
+    <style name="wave_style">
+        <item name="android:layout_height">@dimen/wave_radius</item>
+        <item name="android:layout_width">@dimen/wave_radius</item>
+        <item name="android:background">@drawable/background_wave</item>
+    </style>
+    <style name="textviev_listviev">
+        <item name="android:background">@drawable/textviev</item>
+    </style>
+    <style name="et__spearch_style">
+        <item name="android:background">@drawable/et_search_drawable</item>
+    </style>
+    <style name="my_message">
+        <item name="android:background">@drawable/my_message_drawable</item>
+    </style>
+    <style name="outside_message">
+        <item name="android:background">@drawable/outside_drawable</item>
+    </style>
+    <style name="btn_white_pause">
+        <item name="android:background">@drawable/button_white</item>
+        <item name="android:layout_width">@dimen/width_button_pause</item>
+        <item name="android:layout_height">@dimen/height_button_white_pause</item>
+    </style>
+    <style name="settinga_drawable">
+        <item name="android:background">@drawable/settings_drawable</item>
+    </style>
+    <style name="settings_item_style">
+        <item name="android:background">@drawable/settings_item_drawable</item>
+    </style>
+    <style name="btn_show_guide_style">
+        <item name="android:background">@drawable/backgroud_btn_show_guide</item>
+    </style>
+    <style name="divider_settings">
+        <item name="android:background">@drawable/background_divider</item>
+    </style>
+    <style name="btn_keywords">
+        <item name="android:background">@drawable/background_keywords</item>
+    </style>
+    <style name="guide_style">
+        <item name="android:background">@drawable/background_guide_layout</item>
+    </style>
+    <style name="main_style">
+        <item name="android:background">@drawable/background_main</item>
+    </style>
+    <style name="background_keywords_style">
+        <item name="android:background">@drawable/background_keyword</item>
+    </style>
+    <style name="btn_keywords_add">
+        <item name="android:background">@drawable/background_btn_keywords</item>
+    </style>
+    <style name="guide">
+        <item name="android:background">@drawable/background_guide</item>
+    </style>
+    <style name="guide_textviev">
+        <item name="android:textSize">@dimen/textviev_gude</item>
+        <item name="android:textColor">@color/textviev_gudi</item>
+    </style>
+    <style name="textviev_main">
+        <item name="android:textColor">@color/textviev_main</item>
+        <item name="android:textSize">@dimen/textviev_main</item>
+    </style>
+    <style name="textviev_separator">
+        <item name="android:textColor">@color/textviev_separator</item>
     </style>
 </resources>
