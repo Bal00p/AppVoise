@@ -21,9 +21,9 @@ public class BootBroadcast extends BroadcastReceiver {
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(
                     context,"default")
-                    .setSmallIcon(android.R.drawable.ic_menu_view)
+                    .setSmallIcon(R.drawable.voice_notification)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
-                    .setContentTitle("Open application")
+                    .setContentTitle("Click to run the application")
                     .setOngoing(true)
                     .setChannelId("BootBroadcast")
                     .setShowWhen(false)

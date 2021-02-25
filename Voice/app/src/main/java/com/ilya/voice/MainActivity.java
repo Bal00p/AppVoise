@@ -13,6 +13,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.os.Build;
@@ -50,6 +51,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -125,6 +133,8 @@ public class MainActivity extends AppCompatActivity
     DialogPhone dialogPhone;
     public static int VALUE_SOUND = -1;
 
+    AdView adView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -175,7 +185,6 @@ public class MainActivity extends AppCompatActivity
             recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getPackageName());
             recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
             recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-            startListening();
 
             sharedPreferences = getSharedPreferences(SettingsActivity.PATH_TO_SETTINGS, MODE_PRIVATE);
             sqlJournal = new SQLJournal(this, sqlJournal.NAME_TABLE, null,
@@ -282,6 +291,8 @@ public class MainActivity extends AppCompatActivity
                 }
             });
 
+            startListening();
+
             mPhoneStateListener = new PhoneStateListener() {
                 @Override
                 public void onCallStateChanged(int state, String incomingNumber) {
@@ -311,6 +322,15 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
             };
+
+            MobileAds.initialize(this, new OnInitializationCompleteListener() {
+                @Override
+                public void onInitializationComplete(InitializationStatus initializationStatus) {
+                }
+            });
+            adView = findViewById(R.id.adView_main);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
 
         }catch (Exception e){}
     }
@@ -428,6 +448,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void startListening(){
+        if(!SpeechRecognizer.isRecognitionAvailable(this)){
+            addErrorMessage();
+        }
         speech = SpeechRecognizer.createSpeechRecognizer(getApplicationContext(),
                 ComponentName.unflattenFromString("com.google.android.googlequicksearchbox/com.google.android.voicesearch.serviceapi.GoogleRecognitionService"));
         speech.setRecognitionListener(this);
@@ -624,6 +647,16 @@ public class MainActivity extends AppCompatActivity
         textView_outside_message.setTextSize(TEXT_SIZE);
         container_journal.addView(tableRow);
         scrollViewDown();
+    }
+
+    public void addErrorMessage(){
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        tableRow = layoutInflater.inflate(R.layout.layout_outside_message, null);
+        textView_outside_message = (TextView) tableRow.findViewById(R.id.tv_outside_message);
+        textView_outside_message.setTextColor(Color.RED);
+        textView_outside_message.setText(getString(R.string.speech_error));
+        textView_outside_message.setTextSize(20);
+        container_journal.addView(tableRow);
     }
 
     public void addTimeSeparator() {

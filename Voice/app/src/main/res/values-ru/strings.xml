@@ -77,4 +77,6 @@
     <string name="store_days_7">1 неделю</string>
     <string name="store_days_30">1 месяц</string>
     <string name="store_days_always">всегда</string>
+    <string name="speech_error">Наше приложение работает только с сервисами Google,
+    пожалуйста, убедитесь, что на Вашем телефоне установлены Сервисы Google и Google Ассистент</string>
 </resources>

@@ -56,7 +56,7 @@ public class LanguageActivity extends AppCompatActivity {
             new Language("sr-RS","Српски"),
             new Language("sk-SK","Slovenčina"),
             new Language("sl-SI","Slovenščina"),
-            new Language("es-ES","Española"),
+            new Language("es-ES","Español"),
             new Language("sv-SE","Svenska"),
             new Language("th-TH","ไทย"),
             new Language("tr-TR","Türk"),

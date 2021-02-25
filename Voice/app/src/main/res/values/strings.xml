@@ -1,4 +1,10 @@
 <resources>
+
+    <string name="app_id_test">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="banner_id_test">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="app_id">ca-app-pub-6323411719551102~4468929098</string>
+    <string name="banner_id">ca-app-pub-6323411719551102/7521278479</string>
+
     <string name="app_name">Voice</string>
     <string name="prompt">Speech please</string>
     <string name="title_activity_settings">SettingsActivity</string>
@@ -76,4 +82,6 @@
     <string name="store_days_7">1 week</string>
     <string name="store_days_30">1 month</string>
     <string name="store_days_always">always</string>
+    <string name="speech_error">Our application only works whit Google services,
+    please make sure you have Google Services and Google Assistant installed on your phone</string>
 </resources>
