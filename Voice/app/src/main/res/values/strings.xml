@@ -41,7 +41,7 @@
     <string name="fast_word_1">Hello</string>
     <string name="fast_word_2">Bye</string>
     <string name="fast_word_3">How are you?</string>
-    <string name="fast_word_4">Ok</string>
+    <string name="fast_word_4">OK</string>
     <string name="fast_word_5">Thanks</string>
     <string name="warning_load_sound">ATTENTION!\nThere was a sharp loud sound</string>
     <string name="keyword_limit">Keyword limit reached</string>

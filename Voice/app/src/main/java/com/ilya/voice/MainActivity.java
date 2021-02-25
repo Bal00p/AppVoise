@@ -827,12 +827,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResults(Bundle results) {
         checkPause();
+        partialResult = "";
         Log.i(LOG_TAG, "onResults");
         textView_partial_result.setLayoutParams(new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,0));
         ArrayList commandList = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         addOutsideMessage(commandList.get(0).toString());
-//        findKeyword(commandList.get(0).toString());
         speech.startListening(recognizerIntent);
     }
 

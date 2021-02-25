@@ -18,8 +18,9 @@
 
             <LinearLayout
                 android:id="@+id/ll_guide_6"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="100"
                 android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -57,8 +58,9 @@
 
             <LinearLayout
                 android:id="@+id/ll_guide_1"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -110,8 +112,9 @@
 
             <LinearLayout
                 android:id="@+id/ll_guide_2"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="100"
                 android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -150,8 +153,9 @@
 
             <LinearLayout
                 android:id="@+id/ll_guide_3"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="100"
                 android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -159,7 +163,6 @@
                     android:layout_height="match_parent">
 
                     <LinearLayout
-                        android:id="@+id/linearLayout6"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
@@ -244,6 +247,7 @@
                 android:id="@+id/ll_guide_4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="100"
                 android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -331,8 +335,9 @@
 
             <LinearLayout
                 android:id="@+id/ll_guide_5"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="100"
                 android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -340,10 +345,11 @@
                     android:layout_height="match_parent">
 
                     <LinearLayout
-                        android:id="@+id/linearLayout6"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <LinearLayout
                             style="@style/guide_style"

@@ -62,63 +62,69 @@ public class GuideFragment extends Fragment {
             case 0:
                 linearLayout_guide2.setLayoutParams(new LinearLayout.LayoutParams(
                         0,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.MATCH_PARENT, 100));
                 linearLayout_guide3.setLayoutParams(new LinearLayout.LayoutParams(
                         0,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.MATCH_PARENT, 100));
                 linearLayout_guide4.setLayoutParams(new LinearLayout.LayoutParams(
                         0,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.MATCH_PARENT, 100));
                 linearLayout_guide5.setLayoutParams(new LinearLayout.LayoutParams(
                         0,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.MATCH_PARENT, 100));
                 linearLayout_guide6.setLayoutParams(new LinearLayout.LayoutParams(
                         0,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.MATCH_PARENT, 100));
 
                 linearLayout_guide1.setLayoutParams(new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        1));
                 break;
             case 1:
                 linearLayout_guide1.setLayoutParams(new LinearLayout.LayoutParams(
                         0,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.MATCH_PARENT, 100));
                 linearLayout_guide2.setLayoutParams(new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        1));
                 break;
             case 2:
                 linearLayout_guide2.setLayoutParams(new LinearLayout.LayoutParams(
                         0,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.MATCH_PARENT, 100));
                 linearLayout_guide3.setLayoutParams(new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        1));
                 break;
             case 3:
                 linearLayout_guide3.setLayoutParams(new LinearLayout.LayoutParams(
                         0,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.MATCH_PARENT, 100));
                 linearLayout_guide4.setLayoutParams(new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        1));
                 break;
             case 4:
                 linearLayout_guide4.setLayoutParams(new LinearLayout.LayoutParams(
                         0,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.MATCH_PARENT, 100));
                 linearLayout_guide5.setLayoutParams(new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        1));
                 break;
             case 5:
                 linearLayout_guide5.setLayoutParams(new LinearLayout.LayoutParams(
                         0,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.MATCH_PARENT, 100));
                 linearLayout_guide6.setLayoutParams(new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        1));
                 break;
             default:
                 //закрываю гайд

@@ -136,12 +136,12 @@
 
                             android:layout_marginBottom="26dp"
                             android:gravity="center"
-                            app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+                            app:layout_constraintBottom_toBottomOf="@+id/LinearLayout"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
 
                         <LinearLayout
-                            android:id="@+id/linearLayout"
+                            android:id="@+id/LinearLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"

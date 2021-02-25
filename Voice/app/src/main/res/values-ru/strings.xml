@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string name="app_id_test">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="banner_id_test">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="app_id">ca-app-pub-6323411719551102~4468929098</string>
+    <string name="banner_id">ca-app-pub-6323411719551102/7521278479</string>
+
     <string name="app_name">Голос</string>
     <string name="prompt">Говорите</string>
     <string name="title_activity_settings">SettingsActivity</string>
