@@ -52,4 +52,5 @@
     <dimen name="guide_wight">10dp</dimen>
     <dimen name="guide_height">10dp</dimen>
     <dimen name="textviev_main">15dp</dimen>
+    <dimen name="textSize">15sp</dimen>
 </resources>

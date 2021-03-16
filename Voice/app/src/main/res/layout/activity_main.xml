@@ -192,7 +192,7 @@
                                     app:layout_constraintEnd_toStartOf="@+id/btn_to_settings"
                                     app:layout_constraintTop_toTopOf="parent"
                                     app:layout_constraintVertical_bias="0.0"
-                                    app:srcCompat="@drawable/image_button_rotation" />
+                                    app:srcCompat="@drawable/btn_save" />
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
 

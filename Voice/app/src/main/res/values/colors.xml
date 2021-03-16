@@ -32,7 +32,7 @@
     <color name="solid_outside_message">#e0e0e0</color>
     <color name="settings_item_solid">#FFFFFF</color>
     <color name="setting_item_stroke">#00FFFFFF</color>
-    <color name="btn_show_guide">#00954A4A</color>
+    <color name="btn_in_settings">#00954A4A</color>
     <color name="solid_divider">#E9393939</color>
     <color name="linerlayout_fragment_color">#bbdefb</color>
     <color name="widgets_settings">#90caf9</color>
@@ -43,4 +43,5 @@
     <color name= "textviev_gudi">#FFFFFF</color>
     <color name= "textviev_main">#5A5A5A</color>
     <color name="textviev_separator">#8E8E8E</color>
+    <color name="textColor_in_settings">#333333</color>
 </resources>

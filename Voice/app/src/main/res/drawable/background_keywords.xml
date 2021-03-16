@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/btn_show_guide"/>
+            <solid android:color="@color/btn_in_settings"/>
             <padding android:left="@dimen/padding_btn_show_guide"/>
             <corners android:topLeftRadius="@dimen/settings_item_radius" />
         </shape>

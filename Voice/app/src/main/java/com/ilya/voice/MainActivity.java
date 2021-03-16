@@ -4,6 +4,8 @@ import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity
             SQLWords.COLUMN_WORD,
             SQLWords.COLUMN_RATING};
     SharedPreferences sharedPreferences = null;
-    public static int TEXT_SIZE = 10;
+    public static int TEXT_SIZE = SettingsActivity.TEXTSIZE_MEDIUM;
     public static boolean VIBRO_AT_LOAD_SOUND = false;
     public static boolean VIBRO_AFTER_PAUSE = false;
     public static boolean KEYWORDS = false;
@@ -124,7 +126,6 @@ public class MainActivity extends AppCompatActivity
     PhrasesFragment phrasesFragment;
     GuideFragment guideFragment;
     public static boolean OPEN_FRAGMENT = false;
-    public static boolean REVERSE_ORIENTATION = false;
     public static boolean SPEAKING = false;
 
     TelephonyManager mTelephonyManager;
@@ -134,6 +135,9 @@ public class MainActivity extends AppCompatActivity
     public static int VALUE_SOUND = -1;
 
     AdView adView;
+
+    AudioManager audioManager;
+    public static int AUDIO_MODE = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,7 +183,7 @@ public class MainActivity extends AppCompatActivity
 
             mTelephonyManager = (TelephonyManager) getSystemService(getApplicationContext().TELEPHONY_SERVICE);
             gestureDetector = new GestureDetector(new GestureListener());
-
+            //настройка намерения для прослушивания голоса
             recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
             recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
             recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getPackageName());
@@ -247,8 +251,12 @@ public class MainActivity extends AppCompatActivity
                             startActivity(intent);
                             break;
                         case R.id.btn_rotation:
-                            //переворачиваю экран на 180
-                            setOrientation();
+                            //записываю журнал
+                            ClipboardManager clipboard = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+                            ClipData clip = ClipData.newPlainText("", getJournal());
+                            clipboard.setPrimaryClip(clip);
+                            Toast.makeText(getApplicationContext(),
+                                    getString(R.string.saved_clipboard), Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.btn_select_language:
                             if (HOME_LANGUAGE) {
@@ -331,10 +339,18 @@ public class MainActivity extends AppCompatActivity
             adView = findViewById(R.id.adView_main);
             AdRequest adRequest = new AdRequest.Builder().build();
             adView.loadAd(adRequest);
-
         }catch (Exception e){}
     }
-
+    //запуск прослушивания голоса
+    public void startListening(){
+        if(!SpeechRecognizer.isRecognitionAvailable(this)){
+            addErrorMessage();
+        }
+        speech = SpeechRecognizer.createSpeechRecognizer(getApplicationContext(),
+                ComponentName.unflattenFromString("com.google.android.googlequicksearchbox/com.google.android.voicesearch.serviceapi.GoogleRecognitionService"));
+        speech.setRecognitionListener(this);
+        speech.startListening(recognizerIntent);
+    }
     UtteranceProgressListener utteranceProgressListener = new UtteranceProgressListener() {
         @Override
         public void onStart(String utteranceId) {
@@ -418,6 +434,24 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        //ставалю на вибро или ничего не делаю
+        audioManager = (AudioManager)getApplicationContext()
+                .getSystemService(Context.AUDIO_SERVICE);
+        switch (audioManager.getRingerMode()) {
+            case AudioManager.RINGER_MODE_SILENT:
+                AUDIO_MODE=0;
+                break;
+            case AudioManager.RINGER_MODE_VIBRATE:
+                AUDIO_MODE=1;
+                break;
+            case AudioManager.RINGER_MODE_NORMAL:
+                audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                AUDIO_MODE=2;
+                break;
+        }
+
+        getOrientation();
+
         mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         //применяю настройки
         loadSettings();
@@ -445,18 +479,10 @@ public class MainActivity extends AppCompatActivity
             speech.destroy();
             Log.i(LOG_TAG, "destroy");
         }
-    }
-
-    public void startListening(){
-        if(!SpeechRecognizer.isRecognitionAvailable(this)){
-            addErrorMessage();
+        if (AUDIO_MODE==2){
+            audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         }
-        speech = SpeechRecognizer.createSpeechRecognizer(getApplicationContext(),
-                ComponentName.unflattenFromString("com.google.android.googlequicksearchbox/com.google.android.voicesearch.serviceapi.GoogleRecognitionService"));
-        speech.setRecognitionListener(this);
-        speech.startListening(recognizerIntent);
     }
-
     //спускаю вниз после вызова клавиатуры
     private int mLastContentHeight = 0;
     private ViewTreeObserver.OnGlobalLayoutListener keyboardLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -502,7 +528,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void speakText(String text){
+        //проверка наналичие промежуточного преобразования голоса
         if(!partialResult.equals("")){
+            //запись промежуточного результата в журнал
             addOutsideMessage(partialResult);
             textView_partial_result.setText("");
             textView_partial_result.setLayoutParams(new LinearLayout.LayoutParams(
@@ -510,11 +538,15 @@ public class MainActivity extends AppCompatActivity
         }
         speech.destroy();
         try {
+            //проверка на наличие текста озвучки
             if (!text.equals("")) {
+                //создание параметров для озвучки
                 Bundle params = new Bundle();
                 params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "");
+                //озвучка текста
                 textToSpeech.speak(text, TextToSpeech.QUEUE_ADD, params, "UniqueID");
                 editText_text_to_speech.setText("");
+                //добавление текста в журнал
                 addMyMessage(checkRequest(text));
             }
         } catch (Exception e) {}
@@ -689,13 +721,13 @@ public class MainActivity extends AppCompatActivity
         try {
             switch (sharedPreferences.getInt(SettingsActivity.SETTINGS_TEXT_SIZE, 0)) {
                 case 0:
-                    TEXT_SIZE = 10;
+                    TEXT_SIZE = SettingsActivity.TEXTSIZE_LOW;
                     break;
                 case 1:
-                    TEXT_SIZE = 20;
+                    TEXT_SIZE = SettingsActivity.TEXTSIZE_MEDIUM;
                     break;
                 case 2:
-                    TEXT_SIZE = 30;
+                    TEXT_SIZE = SettingsActivity.TEXTSIZE_HIGH;
                     break;
             }
             VIBRO_AT_LOAD_SOUND = sharedPreferences.getBoolean(SettingsActivity.SETTINGS_VIBRO_AT_LOAD_SOUND, false);
@@ -951,20 +983,7 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-    public void setOrientation(){
-        if (REVERSE_ORIENTATION){
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            REVERSE_ORIENTATION=false;
-        }else{
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
-            if(getRotateOrientation()){
-                REVERSE_ORIENTATION=true;
-            }else{
-                Toast.makeText(getApplicationContext(), getString(R.string.enable_auto_rotate),
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
+
     public void checkShowGuide(){
         if (SHOW_GUIDE){
             //запускаю фрагмент с гайдом
@@ -980,12 +999,60 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public boolean getRotateOrientation() {
-        int rotate = getWindowManager().getDefaultDisplay().getRotation();
-        if (rotate==Surface.ROTATION_180){
-            return true;
+    public String getJournal(){
+        String journal = "";
+        sqlJournal = new SQLJournal(this, sqlJournal.NAME_TABLE, null,
+                sqlJournal.VERSION_TABLE);
+        db = sqlJournal.getReadableDatabase();
+        cursor = db.query(sqlJournal.NAME_TABLE, columns_journal, null, null,
+                null, null, columns_journal[2]);
+        int index_what_is_it = cursor.getColumnIndex(columns_journal[1]);
+        int index_date = cursor.getColumnIndex(columns_journal[2]);
+        int index_content = cursor.getColumnIndex(columns_journal[3]);
+        int temp = -1;
+        String temp_date = "";
+        while (cursor.moveToNext()) {
+            int what_is_it = cursor.getInt(index_what_is_it);
+            String date = cursor.getString(index_date);
+            String content = cursor.getString(index_content);
+            switch (what_is_it) {
+                case 0:
+                    if(date.equals(temp_date)){
+                        journal+=(" \n"+" "+content);
+                    }else{
+                        journal+=(" \n"+" "+content+" "+date);
+                    }
+                    temp_date=date;
+                    temp=-1;
+                    break;
+                case 1:
+                    if(temp==1){
+                        journal+=("\n"+content);
+                    }else{
+                        journal+=(" \n"+" "+getString(R.string.me)+"\n"+content);
+                    }
+                    temp=1;
+                    break;
+                case 2:
+                    if(temp==2){
+                        journal+=(" \n"+content);
+                    }else{
+                        journal+=(" \n"+" "+getString(R.string.talker)+"\n"+content);
+                    }
+                    temp=2;
+                    break;
+            }
         }
-        return false;
+        cursor.close();
+        db.close();
+        return journal;
+    }
+    public void getOrientation(){
+        if (sharedPreferences.getBoolean(SettingsActivity.SETTINGS_REVERSE_ORIENTATION, false)){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+        }else{
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
     }
 }
 //Toast.makeText(getApplicationContext(), "YES", Toast.LENGTH_SHORT).show();
