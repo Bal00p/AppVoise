@@ -122,6 +122,7 @@ public class KeywordsActivity extends AppCompatActivity {
                 View view = super.getView(position, convertView, parent);
                 if (view instanceof TextView) {
                     ((TextView) view).setTextSize(TEXT_SIZE);
+                    ((TextView) view).setTextColor(getColor(R.color.textColor_in_settings));
                 }
                 return view;
             }
