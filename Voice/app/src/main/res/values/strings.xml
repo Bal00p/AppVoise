@@ -84,4 +84,10 @@
     <string name="store_days_always">always</string>
     <string name="speech_error">Our application only works whit Google services,
     please make sure you have Google Services and Google Assistant installed on your phone</string>
+    <string name="me">ME:</string>
+    <string name="talker">TALKER:</string>
+    <string name="rotate">Turn the microphone to the interlocutor</string>
+    <string name="delete_journal">Clear dialogue</string>
+    <string name="deleted_journal">Dialogue cleared</string>
+    <string name="click_to_confirm">Press again to confirm</string>
 </resources>

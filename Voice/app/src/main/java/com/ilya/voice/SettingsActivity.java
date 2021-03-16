@@ -1,8 +1,6 @@
 package com.ilya.voice;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -13,27 +11,23 @@ import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.Surface;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 public class SettingsActivity extends AppCompatActivity {
 
     SeekBar seekBar_text_size, seekBar_store_days;
-    Button button_add_keywords, button_save_journal, button_show_guide;
+    Button button_add_keywords, button_save_journal, button_show_guide, button_delete_journal;
     RadioButton radioButton_male, radioButton_female;
     Switch switch_vibro_at_load_sound, switch_vibro_after_pause, switch_keywords;
-    TextView tv1, tv2, tv3, tv6, tv_credits;
+    TextView tv1, tv2, tv3, tv6, tv7, tv_credits;
     SharedPreferences sharedPreferences;
     public static final String
             SETTINGS_TEXT_SIZE = "text_size",
@@ -44,20 +38,20 @@ public class SettingsActivity extends AppCompatActivity {
             SETTINGS_STORE_DAYS = "store_days",
             SETTINGS_LANGUAGE = "language",
             SETTINGS_SHOW_GUIDE = "show_guide",
+            SETTINGS_REVERSE_ORIENTATION = "reverse_orientation",
             PATH_TO_SETTINGS = "settings";
-    public int TEXT_SIZE = 10;
+
+    public static final int TEXTSIZE_LOW = 10;
+    public static final int TEXTSIZE_MEDIUM = 20;
+    public static final int TEXTSIZE_HIGH = 28;
+
+    public static int TEXT_SIZE = TEXTSIZE_MEDIUM;
     SQLJournal sqlJournal;
-    public String[] columns_journal = {"_ID",
-            SQLJournal.COLUMN_WHAT_IS_IT,
-            SQLJournal.COLUMN_DATE,
-            SQLJournal.COLUMN_CONTENT};
     SQLiteDatabase db;
-    Cursor cursor;
-    DialogFragment dialogEditWord;
     public static final String KEY_FOR_DIALOG = "key_for_dialog",
             INFO_FOR_DIALOG = "info_for_dialog";
     public static final int ADD_WORD = 0, EDIT_WORD = 1, ADD_PHRASE = 2, EDIT_PHRASE = 3;
-    public static boolean FULL_KEYWORDS = false;
+    public static boolean REVERSE_ORIENTATION = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,14 +66,16 @@ public class SettingsActivity extends AppCompatActivity {
         switch_vibro_after_pause = (Switch)findViewById(R.id.sw_vibro_after_pause_settings);
         switch_keywords = (Switch)findViewById(R.id.sw_keywords_settings);
         button_add_keywords = (Button)findViewById(R.id.btn_open_keyword_settings);
-        button_save_journal = (Button)findViewById(R.id.btn_save_journal);
+        button_save_journal = (Button)findViewById(R.id.btn_rotate_settings);
         button_show_guide = (Button)findViewById(R.id.btn_show_guide);
+        button_delete_journal = (Button)findViewById(R.id.btn_delete_journal);
         radioButton_male = (RadioButton)findViewById(R.id.rb_male_settings);
         radioButton_female = (RadioButton)findViewById(R.id.rb_female_settings);
         tv1 = (TextView)findViewById(R.id.tv1_settings);
         tv2 = (TextView)findViewById(R.id.tv2_settings);
         tv3 = (TextView)findViewById(R.id.tv3_settings);
         tv6 = (TextView)findViewById(R.id.tv6_settings);
+        tv7 = (TextView)findViewById(R.id.tv7_settings);
         tv_credits = (TextView)findViewById(R.id.tv_credits);
         tv_credits.setText(getString(R.string.credits));
 
@@ -92,16 +88,15 @@ public class SettingsActivity extends AppCompatActivity {
                         Intent intent = new Intent(SettingsActivity.this, KeywordsActivity.class);
                         startActivity(intent);
                         break;
-                    case R.id.btn_save_journal:
-                        //записываю журнал
-                        ClipboardManager clipboard = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("", getJournal());
-                        clipboard.setPrimaryClip(clip);
-                        Toast.makeText(getApplicationContext(),
-                                getString(R.string.saved_clipboard), Toast.LENGTH_SHORT).show();
+                    case R.id.btn_rotate_settings:
+                        //вращаю
+                        setOrientation();
                         break;
                     case R.id.btn_show_guide:
                         showGuide();
+                        break;
+                    case R.id.btn_delete_journal:
+                        deleteJournal();
                         break;
                 }
             }
@@ -109,19 +104,20 @@ public class SettingsActivity extends AppCompatActivity {
         button_add_keywords.setOnClickListener(listener);
         button_save_journal.setOnClickListener(listener);
         button_show_guide.setOnClickListener(listener);
+        button_delete_journal.setOnClickListener(listener);
 
         seekBar_text_size.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 switch (progress) {
                     case 0:
-                        TEXT_SIZE = 10;
+                        TEXT_SIZE = TEXTSIZE_LOW;
                         break;
                     case 1:
-                        TEXT_SIZE = 20;
+                        TEXT_SIZE = TEXTSIZE_MEDIUM;
                         break;
                     case 2:
-                        TEXT_SIZE = 30;
+                        TEXT_SIZE = TEXTSIZE_HIGH;
                         break;
                 }
                 setTextSize();
@@ -181,6 +177,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void loadSettings(){
         try{
+            REVERSE_ORIENTATION=sharedPreferences.getBoolean(SETTINGS_REVERSE_ORIENTATION, false);
             seekBar_store_days.setProgress(sharedPreferences.getInt(SETTINGS_STORE_DAYS, 0));
             switch (sharedPreferences.getInt(SETTINGS_STORE_DAYS, 0)) {
                 case 0:
@@ -207,13 +204,13 @@ public class SettingsActivity extends AppCompatActivity {
             seekBar_text_size.setProgress(sharedPreferences.getInt(SETTINGS_TEXT_SIZE, 0));
             switch (sharedPreferences.getInt(SETTINGS_TEXT_SIZE, 0)) {
                 case 0:
-                    TEXT_SIZE = 10;
+                    TEXT_SIZE = TEXTSIZE_LOW;
                     break;
                 case 1:
-                    TEXT_SIZE = 20;
+                    TEXT_SIZE = TEXTSIZE_MEDIUM;
                     break;
                 case 2:
-                    TEXT_SIZE = 30;
+                    TEXT_SIZE = TEXTSIZE_HIGH;
                     break;
             }
             setTextSize();
@@ -234,6 +231,7 @@ public class SettingsActivity extends AppCompatActivity {
         editor.putBoolean(SETTINGS_VIBRO_AFTER_PAUSE, switch_vibro_after_pause.isChecked());
         editor.putBoolean(SETTINGS_GENDER, radioButton_male.isChecked());
         editor.putBoolean(SETTINGS_KEYWORDS, switch_keywords.isChecked());
+        editor.putBoolean(SETTINGS_REVERSE_ORIENTATION,REVERSE_ORIENTATION);
 
         editor.commit();
     }
@@ -243,50 +241,42 @@ public class SettingsActivity extends AppCompatActivity {
         tv2.setTextSize(TEXT_SIZE);
         tv3.setTextSize(TEXT_SIZE);
         tv6.setTextSize(TEXT_SIZE);
+        tv7.setTextSize(TEXT_SIZE);
         button_save_journal.setTextSize(TEXT_SIZE);
         button_add_keywords.setTextSize(TEXT_SIZE);
         button_show_guide.setTextSize(TEXT_SIZE);
+        button_delete_journal.setTextSize(TEXT_SIZE);
         radioButton_male.setTextSize(TEXT_SIZE);
         radioButton_female.setTextSize(TEXT_SIZE);
     }
 
-    public String getJournal(){
-        String journal = "";
-        sqlJournal = new SQLJournal(this, sqlJournal.NAME_TABLE, null,
-                sqlJournal.VERSION_TABLE);
-        db = sqlJournal.getReadableDatabase();
-        cursor = db.query(sqlJournal.NAME_TABLE, columns_journal, null, null,
-                null, null, columns_journal[2]);
-        int index_id = cursor.getColumnIndex("_ID");
-        int index_what_is_it = cursor.getColumnIndex(columns_journal[1]);
-        int index_date = cursor.getColumnIndex(columns_journal[2]);
-        int index_content = cursor.getColumnIndex(columns_journal[3]);
-        while (cursor.moveToNext()) {
-            int what_is_it = cursor.getInt(index_what_is_it);
-            String date = cursor.getString(index_date);
-            String content = cursor.getString(index_content);
-            switch (what_is_it) {
-                case 0:
-                    journal+=(" \n"+"---"+date+"-"+content);
-                    break;
-                case 1:
-                    journal+=(" \n"+"<<<"+date+"\n"+content);
-                    break;
-                case 2:
-                    journal+=(" \n"+">>>"+date+"\n"+content);
-                    break;
+    public void setOrientation(){
+        if (REVERSE_ORIENTATION){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            REVERSE_ORIENTATION=false;
+        }else{
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+            if(getRotateOrientation()){
+                REVERSE_ORIENTATION=true;
+            }else{
+                Toast.makeText(getApplicationContext(), getString(R.string.enable_auto_rotate),
+                        Toast.LENGTH_SHORT).show();
             }
         }
-        cursor.close();
-        db.close();
-        return journal;
     }
     public void getOrientation(){
-        if (MainActivity.REVERSE_ORIENTATION){
+        if (REVERSE_ORIENTATION){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
         }else{
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
+    }
+    public boolean getRotateOrientation() {
+        int rotate = getWindowManager().getDefaultDisplay().getRotation();
+        if (rotate== Surface.ROTATION_180){
+            return true;
+        }
+        return false;
     }
     public void showGuide(){
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -294,5 +284,27 @@ public class SettingsActivity extends AppCompatActivity {
         editor.commit();
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
+    }
+    int count = 0;
+    public void deleteJournal(){
+        count++;
+        if (count > 1) {
+            sqlJournal = new SQLJournal(this, sqlJournal.NAME_TABLE, null,
+                    sqlJournal.VERSION_TABLE);
+            db = sqlJournal.getWritableDatabase();
+            db.delete(SQLJournal.NAME_TABLE,"_ID LIKE ?", new String[]{"%"});
+            db.close();
+            Toast.makeText(this, getString(R.string.deleted_journal), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, getString(R.string.click_to_confirm), Toast.LENGTH_SHORT).show();
+            // resetting the counter in 2s
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    count = 0;
+                }
+            }, 2000);
+        }
     }
 }

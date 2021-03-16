@@ -60,7 +60,7 @@
                 android:id="@+id/ll_guide_1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="100"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -337,7 +337,7 @@
                 android:id="@+id/ll_guide_5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="100"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -399,11 +399,10 @@
                         style="@style/guide"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="46dp"
+                        android:layout_marginBottom="240dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintStart_toStartOf="parent">
 
                         <TextView
                             android:id="@+id/textView6"
@@ -411,31 +410,13 @@
                             android:layout_width="300dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="30dp"
-                            android:layout_marginTop="5dp"
                             android:layout_marginEnd="30dp"
                             android:layout_marginBottom="60dp"
                             android:gravity="center"
                             android:text="@string/guide_pause"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView7" />
-
-                        <TextView
-                            android:id="@+id/textView7"
-                            style="@style/guide_textviev"
-                            android:layout_width="300dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="30dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginEnd="30dp"
-                            android:layout_marginBottom="5dp"
-                            android:gravity="center"
-                            android:text="@string/mute_assistant"
-                            app:layout_constraintBottom_toTopOf="@+id/textView6"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintStart_toStartOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

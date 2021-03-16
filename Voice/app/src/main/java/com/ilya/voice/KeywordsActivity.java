@@ -31,7 +31,7 @@ public class KeywordsActivity extends AppCompatActivity {
             SQLWords.COLUMN_WHAT_IS_IT,
             SQLWords.COLUMN_WORD,
             SQLWords.COLUMN_RATING};
-    public int TEXT_SIZE = 10;
+    public static int TEXT_SIZE = SettingsActivity.TEXTSIZE_MEDIUM;
     SQLWords sqlWords;
     SQLiteDatabase db;
     Cursor cursor;
@@ -130,19 +130,19 @@ public class KeywordsActivity extends AppCompatActivity {
     public void loadSettings(){
         switch (sharedPreferences.getInt(SettingsActivity.SETTINGS_TEXT_SIZE, 0)) {
             case 0:
-                TEXT_SIZE = 10;
+                TEXT_SIZE = SettingsActivity.TEXTSIZE_LOW;
                 break;
             case 1:
-                TEXT_SIZE = 20;
+                TEXT_SIZE = SettingsActivity.TEXTSIZE_MEDIUM;
                 break;
             case 2:
-                TEXT_SIZE = 30;
+                TEXT_SIZE = SettingsActivity.TEXTSIZE_HIGH;
                 break;
         }
         button_add_keywords.setTextSize(TEXT_SIZE);
     }
     public void getOrientation(){
-        if (MainActivity.REVERSE_ORIENTATION){
+        if (sharedPreferences.getBoolean(SettingsActivity.SETTINGS_REVERSE_ORIENTATION, false)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
         }else{
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

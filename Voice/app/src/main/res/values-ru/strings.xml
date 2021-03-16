@@ -85,4 +85,10 @@
     <string name="store_days_always">всегда</string>
     <string name="speech_error">Наше приложение работает только с сервисами Google,
     пожалуйста, убедитесь, что на Вашем телефоне установлены Сервисы Google и Google Ассистент</string>
+    <string name="me">Я:</string>
+    <string name="talker">ГОВОРЯЩИЙ:</string>
+    <string name="rotate">Повернуть микрофон к собеседнику</string>
+    <string name="delete_journal">Отчистить диалог</string>
+    <string name="deleted_journal">Диалог очищен</string>
+    <string name="click_to_confirm">Нажмите еще раз для подтверждения</string>
 </resources>

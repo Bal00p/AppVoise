@@ -160,12 +160,12 @@
                                 android:background="?android:attr/listDivider" />
 
                             <Button
-                                android:id="@+id/btn_save_journal"
+                                android:id="@+id/btn_rotate_settings"
                                 style="@style/btn_show_guide_style"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal|left|center_vertical"
-                                android:text="@string/save_dialog" />
+                                android:text="@string/rotate" />
 
                         </LinearLayout>
 
@@ -293,6 +293,14 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal|left|center_vertical"
                                 android:text="@string/show_guide" />
+
+                            <Button
+                                android:id="@+id/btn_delete_journal"
+                                style="@style/btn_show_guide_style"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal|left|center_vertical"
+                                android:text="@string/delete_journal" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -306,11 +314,11 @@
         android:id="@+id/tv_credits"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="170dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
         android:gravity="right"
         android:text="@string/credits"
         android:textSize="8sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
