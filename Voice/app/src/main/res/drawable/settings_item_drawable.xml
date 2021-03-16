@@ -5,7 +5,7 @@
         <solid android:color="@color/settings_item_solid"/>
         <padding android:top="@dimen/settings_item_padding"  android:bottom="@dimen/settings_item_padding" android:right="@dimen/settings_item_padding" android:left="@dimen/settings_item_padding" />
         <corners android:radius="@dimen/settings_item_radius"/>
-
+        <padding android:left="@dimen/padding_btn_show_guide"/>
     </shape>
 </item>
 </selector>

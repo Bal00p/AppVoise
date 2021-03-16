@@ -426,7 +426,7 @@
 
         <Button
             android:id="@+id/btn_next"
-            style="@style/btn_show_guide_style"
+            style="@style/button_in_settings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="26dp"

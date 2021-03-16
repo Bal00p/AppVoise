@@ -52,7 +52,7 @@
 
                                 <TextView
                                     android:id="@+id/tv7_settings"
-                                    style="@style/textviev_main"
+                                    style="@style/textviev_in_settings"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
@@ -73,7 +73,7 @@
 
                                         <RadioButton
                                             android:id="@+id/rb_male_settings"
-                                            style="@style/textviev_main"
+                                            style="@style/textviev_in_settings"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
@@ -81,7 +81,7 @@
 
                                         <RadioButton
                                             android:id="@+id/rb_female_settings"
-                                            style="@style/textviev_main"
+                                            style="@style/textviev_in_settings"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
@@ -105,7 +105,7 @@
 
                                 <TextView
                                     android:id="@+id/tv1_settings"
-                                    style="@style/textviev_main"
+                                    style="@style/textviev_in_settings"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
@@ -135,7 +135,7 @@
 
                                 <TextView
                                     android:id="@+id/tv6_settings"
-                                    style="@style/textviev_main"
+                                    style="@style/textviev_in_settings"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
@@ -161,7 +161,7 @@
 
                             <Button
                                 android:id="@+id/btn_rotate_settings"
-                                style="@style/btn_show_guide_style"
+                                style="@style/button_in_settings"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal|left|center_vertical"
@@ -186,7 +186,7 @@
 
                                 <TextView
                                     android:id="@+id/tv2_settings"
-                                    style="@style/textviev_main"
+                                    style="@style/textviev_in_settings"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="100"
@@ -220,7 +220,7 @@
 
                                 <TextView
                                     android:id="@+id/tv3_settings"
-                                    style="@style/textviev_main"
+                                    style="@style/textviev_in_settings"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="100"
@@ -259,9 +259,9 @@
 
                                 <Button
                                     android:id="@+id/btn_open_keyword_settings"
-                                    style="@style/btn_keywords"
+                                    style="@style/button_in_settings"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="35dp"
                                     android:layout_weight="100"
                                     android:gravity="center_horizontal|left|center_vertical"
                                     android:text="@string/keywords" />
@@ -288,17 +288,23 @@
 
                             <Button
                                 android:id="@+id/btn_show_guide"
-                                style="@style/btn_show_guide_style"
+                                style="@style/button_in_settings"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="35dp"
                                 android:gravity="center_horizontal|left|center_vertical"
                                 android:text="@string/show_guide" />
 
+                            <View
+                                android:id="@+id/divider12"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="?android:attr/listDivider" />
+
                             <Button
                                 android:id="@+id/btn_delete_journal"
-                                style="@style/btn_show_guide_style"
+                                style="@style/button_in_settings"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="35dp"
                                 android:gravity="center_horizontal|left|center_vertical"
                                 android:text="@string/delete_journal" />
                         </LinearLayout>
