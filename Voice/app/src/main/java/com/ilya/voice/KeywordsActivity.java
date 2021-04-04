@@ -129,7 +129,7 @@ public class KeywordsActivity extends AppCompatActivity {
         });
     }
     public void loadSettings(){
-        switch (sharedPreferences.getInt(SettingsActivity.SETTINGS_TEXT_SIZE, 0)) {
+        switch (sharedPreferences.getInt(SettingsActivity.SETTINGS_TEXT_SIZE, 1)) {
             case 0:
                 TEXT_SIZE = SettingsActivity.TEXTSIZE_LOW;
                 break;
