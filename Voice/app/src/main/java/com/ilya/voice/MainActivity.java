@@ -719,7 +719,7 @@ public class MainActivity extends AppCompatActivity
     //заполняю переменные настройками и применяю их
     public void loadSettings() {
         try {
-            switch (sharedPreferences.getInt(SettingsActivity.SETTINGS_TEXT_SIZE, 0)) {
+            switch (sharedPreferences.getInt(SettingsActivity.SETTINGS_TEXT_SIZE, 1)) {
                 case 0:
                     TEXT_SIZE = SettingsActivity.TEXTSIZE_LOW;
                     break;

@@ -74,6 +74,7 @@ public class LanguageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_language);
 
         sharedPreferences = getSharedPreferences(SettingsActivity.PATH_TO_SETTINGS, MODE_PRIVATE);
+        loadSettings();
         getOrientation();
         listView_languages = (ListView)findViewById(R.id.lv_select_language);
         ArrayList<String> list_language = new ArrayList();
@@ -118,7 +119,7 @@ public class LanguageActivity extends AppCompatActivity {
         }
     }
     public void loadSettings(){
-        switch (sharedPreferences.getInt(SettingsActivity.SETTINGS_TEXT_SIZE, 0)) {
+        switch (sharedPreferences.getInt(SettingsActivity.SETTINGS_TEXT_SIZE, 1)) {
             case 0:
                 TEXT_SIZE = SettingsActivity.TEXTSIZE_LOW;
                 break;

@@ -41,9 +41,9 @@ public class SettingsActivity extends AppCompatActivity {
             SETTINGS_REVERSE_ORIENTATION = "reverse_orientation",
             PATH_TO_SETTINGS = "settings";
 
-    public static final int TEXTSIZE_LOW = 10;
-    public static final int TEXTSIZE_MEDIUM = 20;
-    public static final int TEXTSIZE_HIGH = 28;
+    public static final int TEXTSIZE_LOW = 14;
+    public static final int TEXTSIZE_MEDIUM = 18;
+    public static final int TEXTSIZE_HIGH = 22;
 
     public static int TEXT_SIZE = TEXTSIZE_MEDIUM;
     SQLJournal sqlJournal;
@@ -201,8 +201,8 @@ public class SettingsActivity extends AppCompatActivity {
                             " ("+getString(R.string.store_days_always)+")");
                     break;
             }
-            seekBar_text_size.setProgress(sharedPreferences.getInt(SETTINGS_TEXT_SIZE, 0));
-            switch (sharedPreferences.getInt(SETTINGS_TEXT_SIZE, 0)) {
+            seekBar_text_size.setProgress(sharedPreferences.getInt(SETTINGS_TEXT_SIZE, 1));
+            switch (sharedPreferences.getInt(SETTINGS_TEXT_SIZE, 1)) {
                 case 0:
                     TEXT_SIZE = TEXTSIZE_LOW;
                     break;
