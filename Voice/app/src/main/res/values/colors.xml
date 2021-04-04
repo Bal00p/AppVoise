@@ -36,12 +36,13 @@
     <color name="solid_divider">#E9393939</color>
     <color name="linerlayout_fragment_color">#bbdefb</color>
     <color name="widgets_settings">#90caf9</color>
-    <color name="guide_back">#aa000000</color>
+    <color name="guide_back">#cc000000</color>
     <color name="color_main">#FFFFFF</color>
     <color name="btn_add_keywords">#FFFFFF</color>
     <color name="solid_guide_background">#1D8AE3</color>
     <color name= "textviev_gudi">#FFFFFF</color>
-    <color name= "textviev_main">#5A5A5A</color>
+    <color name= "textviev_main">#2A2A2A</color>
     <color name="textviev_separator">#8E8E8E</color>
     <color name="textColor_in_settings">#333333</color>
+    <color name="textColor_btn_in_guide">#cfcfcf</color>
 </resources>

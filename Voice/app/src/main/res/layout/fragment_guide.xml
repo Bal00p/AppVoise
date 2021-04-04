@@ -345,6 +345,7 @@
                     android:layout_height="match_parent">
 
                     <LinearLayout
+                        android:id="@+id/linearLayout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
@@ -399,10 +400,11 @@
                         style="@style/guide"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="240dp"
+                        android:layout_marginTop="60dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent">
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
                             android:id="@+id/textView6"
@@ -426,7 +428,7 @@
 
         <Button
             android:id="@+id/btn_next"
-            style="@style/button_in_settings"
+            style="@style/button_in_guide"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="26dp"

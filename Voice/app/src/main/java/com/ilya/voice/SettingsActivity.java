@@ -41,9 +41,9 @@ public class SettingsActivity extends AppCompatActivity {
             SETTINGS_REVERSE_ORIENTATION = "reverse_orientation",
             PATH_TO_SETTINGS = "settings";
 
-    public static final int TEXTSIZE_LOW = 10;
-    public static final int TEXTSIZE_MEDIUM = 14;
-    public static final int TEXTSIZE_HIGH = 20;
+    public static final int TEXTSIZE_LOW = 14;
+    public static final int TEXTSIZE_MEDIUM = 18;
+    public static final int TEXTSIZE_HIGH = 22;
 
     public static int TEXT_SIZE = TEXTSIZE_MEDIUM;
     SQLJournal sqlJournal;
