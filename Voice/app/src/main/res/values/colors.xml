@@ -42,6 +42,8 @@
     <color name="solid_guide_background">#1D8AE3</color>
     <color name= "textviev_gudi">#FFFFFF</color>
     <color name= "textviev_main">#2A2A2A</color>
+    <color name="textview_main_2">#2A2A2A</color>
+    <color name="button_language">#ffffff</color>
     <color name="textviev_separator">#8E8E8E</color>
     <color name="textColor_in_settings">#333333</color>
     <color name="textColor_btn_in_guide">#cfcfcf</color>
