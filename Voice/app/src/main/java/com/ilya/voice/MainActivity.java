@@ -134,8 +134,6 @@ public class MainActivity extends AppCompatActivity
     DialogPhone dialogPhone;
     public static int VALUE_SOUND = -1;
 
-    AdView adView;
-
     AudioManager audioManager;
     public static int AUDIO_MODE = -1;
 
@@ -331,14 +329,6 @@ public class MainActivity extends AppCompatActivity
                 }
             };
 
-            MobileAds.initialize(this, new OnInitializationCompleteListener() {
-                @Override
-                public void onInitializationComplete(InitializationStatus initializationStatus) {
-                }
-            });
-            adView = findViewById(R.id.adView_main);
-            AdRequest adRequest = new AdRequest.Builder().build();
-            adView.loadAd(adRequest);
         }catch (Exception e){}
     }
     //запуск прослушивания голоса
@@ -510,21 +500,24 @@ public class MainActivity extends AppCompatActivity
         switch (sharedPreferences.getInt(SettingsActivity.SETTINGS_STORE_DAYS, 4)) {
             case 0:
                 c.add(Calendar.DAY_OF_YEAR, -1);
+                DEAD_DATE = dateFormat.format(c.getTime());
                 break;
             case 1:
                 c.add(Calendar.DAY_OF_YEAR, -3);
+                DEAD_DATE = dateFormat.format(c.getTime());
                 break;
             case 2:
                 c.add(Calendar.DAY_OF_YEAR, -7);
+                DEAD_DATE = dateFormat.format(c.getTime());
                 break;
             case 3:
                 c.add(Calendar.DAY_OF_YEAR, -30);
+                DEAD_DATE = dateFormat.format(c.getTime());
                 break;
             case 4:
                 DEAD_DATE = "NO";
                 break;
         }
-        DEAD_DATE = dateFormat.format(c.getTime());
     }
 
     public void speakText(String text){
@@ -571,7 +564,6 @@ public class MainActivity extends AppCompatActivity
         try {
             container_journal.removeAllViews();
             db = sqlJournal.getReadableDatabase();
-            /**потом для быстроты убрать все лишние столбцы, сейчас это ID и DATE*/
             cursor = db.query(sqlJournal.NAME_TABLE, columns_journal, null, null,
                     null, null, columns_journal[2]);
             int index_id = cursor.getColumnIndex("_ID");
@@ -679,6 +671,7 @@ public class MainActivity extends AppCompatActivity
         textView_outside_message.setTextSize(TEXT_SIZE);
         container_journal.addView(tableRow);
         scrollViewDown();
+        checkKeyWords(content);
     }
 
     public void addErrorMessage(){
@@ -799,14 +792,6 @@ public class MainActivity extends AppCompatActivity
             vibratorManager.vibrate(effect);
         }
     }
-    public void onLongLoadSound(){
-        Vibrator vibratorManager = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        if (vibratorManager != null) {
-            VibrationEffect effect = VibrationEffect.createOneShot(
-                    700, VibrationEffect.DEFAULT_AMPLITUDE);
-            vibratorManager.vibrate(effect);
-        }
-    }
 
     @Override
     public void onBeginningOfSpeech() {
@@ -881,11 +866,8 @@ public class MainActivity extends AppCompatActivity
         button_wave.setBackground(gradientDrawable);
 
         if(VIBRO_AT_LOAD_SOUND){
-            if (rmsdB==10.0 && lastRmsChanged <=0) {
+            if (rmsdB==10.0 && lastRmsChanged <=2.0) {
                 onLoadSound();
-            }
-            if (rmsdB>=9.5 && lastRmsChanged >=9.5) {
-                onLongLoadSound();
             }
         }
         lastRmsChanged=rmsdB;
@@ -1052,6 +1034,28 @@ public class MainActivity extends AppCompatActivity
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
         }else{
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+    }
+
+    public void checkKeyWords(String text){
+        if (KEYWORDS) {
+            String[] arr = text.split(" ");
+            for (int i=0; i<arr.length; i++){
+                arr[i] = arr[i].substring(1);
+                for (int j=0; j<keywords.length; j++){
+                    if(!keywords[j].equals("")){
+                        if(keywords[j].equals(arr[i])){
+                            //vibration
+                            Vibrator vibratorManager = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                            if (vibratorManager != null) {
+                                VibrationEffect effect = VibrationEffect.createOneShot(
+                                        300, VibrationEffect.DEFAULT_AMPLITUDE);
+                                vibratorManager.vibrate(effect);
+                            }
+                        }
+                    }else break;
+                }
+            }
         }
     }
 }

@@ -2,13 +2,9 @@ package com.ilya.voice;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +16,12 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -52,6 +54,8 @@ public class SettingsActivity extends AppCompatActivity {
             INFO_FOR_DIALOG = "info_for_dialog";
     public static final int ADD_WORD = 0, EDIT_WORD = 1, ADD_PHRASE = 2, EDIT_PHRASE = 3;
     public static boolean REVERSE_ORIENTATION = false;
+
+    AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,6 +164,14 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        adView = findViewById(R.id.adView_settings);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
     }
     @Override
     protected void onPause() {
@@ -178,8 +190,8 @@ public class SettingsActivity extends AppCompatActivity {
     public void loadSettings(){
         try{
             REVERSE_ORIENTATION=sharedPreferences.getBoolean(SETTINGS_REVERSE_ORIENTATION, false);
-            seekBar_store_days.setProgress(sharedPreferences.getInt(SETTINGS_STORE_DAYS, 0));
-            switch (sharedPreferences.getInt(SETTINGS_STORE_DAYS, 0)) {
+            seekBar_store_days.setProgress(sharedPreferences.getInt(SETTINGS_STORE_DAYS, 4));
+            switch (sharedPreferences.getInt(SETTINGS_STORE_DAYS, 4)) {
                 case 0:
                     tv6.setText(getString(R.string.store_days)+
                             " ("+getString(R.string.store_days_1)+")");
