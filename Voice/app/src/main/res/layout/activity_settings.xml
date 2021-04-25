@@ -192,14 +192,6 @@
                                     android:layout_weight="100"
                                     android:text="@string/vibro_at_loud_sounds" />
 
-                                <View
-                                    android:id="@+id/divider"
-                                    android:layout_width="1dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:background="?android:attr/listDivider"
-                                    android:foregroundGravity="bottom" />
-
                                 <Switch
                                     android:id="@+id/sw_vibro_at_loud_sounds_settings"
                                     android:layout_width="wrap_content"
@@ -225,13 +217,6 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="100"
                                     android:text="@string/vibro_after_pause" />
-
-                                <View
-                                    android:id="@+id/divider2"
-                                    android:layout_width="1dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:background="?android:attr/listDivider" />
 
                                 <Switch
                                     android:id="@+id/sw_vibro_after_pause_settings"
@@ -272,6 +257,11 @@
                                     android:layout_height="match_parent"
                                     android:layout_weight="1"
                                     android:background="?android:attr/listDivider" />
+
+                                <Space
+                                    android:layout_width="5dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1" />
 
                                 <Switch
                                     android:id="@+id/sw_keywords_settings"
@@ -327,4 +317,16 @@
         android:textSize="8sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView_settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        app:adSize="BANNER"
+        app:adUnitId="@string/banner_id_test"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
